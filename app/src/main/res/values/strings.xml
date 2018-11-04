@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Arrival Notification</string>
+    <string name="scan_barcode_Bmain">Scan Barcode</string>
 </resources>
