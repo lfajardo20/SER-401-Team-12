@@ -12,3 +12,11 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+# local config
+.idea/libraries/Gradle__android_android_27.xml
+.idea/workspace.xml
+SER-401-Team-12.iml
+app/app.iml
+local.properties
+
