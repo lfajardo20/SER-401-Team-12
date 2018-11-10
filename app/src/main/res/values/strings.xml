@@ -4,4 +4,8 @@
     <string name="notification_text">Goto Notifications</string>
     <string name="calendarText">Calendar Stuff</string>
     <string name="appbar_scrolling_view_behavior" />
+    <string name="title_activity_calendar">CalendarActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
