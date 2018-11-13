@@ -6,27 +6,25 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class CalendarActivity extends AppCompatActivity {
+public class NotificationActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-
-
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
+        setContentView(R.layout.activity_notifications);
 
-         BottomNavigationView.OnNavigationItemSelectedListener selectedListener = (MenuItem item) -> {
+        BottomNavigationView.OnNavigationItemSelectedListener selectedListener = (MenuItem item) -> {
             switch (item.getItemId()) {
-                case R.id.navigation_calendar:
+                case R.id.navigation_notifications:
                     return true;
                 case R.id.navigation_barcode:
-                    startScanning(item);
+                    startBarcode(item);
                     return true;
-                case R.id.navigation_notifications:
-                    startNotifications(item);
+                case R.id.navigation_calendar:
+                    startCalendar(item);
                     return true;
                 default:
                     return false;
@@ -37,7 +35,7 @@ public class CalendarActivity extends AppCompatActivity {
         bottomNavigation.setOnNavigationItemSelectedListener(selectedListener);
     }
 
-    public void startScanning(MenuItem menu) {
+    public void startBarcode(MenuItem menu) {
         Intent intent = new Intent(this, MainActivity.class);
         //TextView textView = (TextView) findViewById(R.id.textView);
         // String message = textView.getText().toString();
@@ -45,8 +43,8 @@ public class CalendarActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void startNotifications(MenuItem item) {
-        Intent intent = new Intent(this, NotificationActivity.class);
+    public void startCalendar(MenuItem item) {
+        Intent intent = new Intent(this, CalendarActivity.class);
         intent.putExtra(EXTRA_MESSAGE, "hello notifications");
         startActivity(intent);
     }

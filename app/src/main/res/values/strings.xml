@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">Arrival Notification</string>
-    <string name="calendar_text">Goto Calendar </string>
-    <string name="notification_text">Goto Notifications</string>
-    <string name="calendarText">Calendar Stuff</string>
+    <string name="calendarText">Calendar</string>
     <string name="appbar_scrolling_view_behavior" />
     <string name="title_activity_calendar">CalendarActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="barcodeLabel">Barcode Scanning</string>
+    <string name="calendarLabel">Calendar</string>
+    <string name="notificationsLabel">Notifications</string>
 </resources>
