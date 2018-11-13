@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">Arrival Notification</string>
+    <string name="calendarText">Calendar</string>
+    <string name="appbar_scrolling_view_behavior" />
+    <string name="title_activity_calendar">CalendarActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="barcodeLabel">Barcode Scanning</string>
+    <string name="calendarLabel">Calendar</string>
+    <string name="notificationsLabel">Notifications</string>
+    <string name="sampleCalendar"> *  12:00\n
+        Appendectomy: John Doe\n
+        Location: OP206
+        \n\n\n
+
+
+
+        *   16:00\n
+        Knee Surgery: Jane Doe\n
+        Location: OP141
+    </string>
+    <string name="sampleNotificationTime">11:47\n11/19</string>
+    <string name="sampleSurgery">Appendectomy: John Doe\nLocation: OP206</string>
 </resources>

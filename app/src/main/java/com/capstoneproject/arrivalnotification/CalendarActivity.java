@@ -6,20 +6,24 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class CalendarActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        
-        BottomNavigationView.OnNavigationItemSelectedListener selectedListener = (MenuItem item) -> {
+        setContentView(R.layout.activity_calendar);
+
+         BottomNavigationView.OnNavigationItemSelectedListener selectedListener = (MenuItem item) -> {
             switch (item.getItemId()) {
-                case R.id.navigation_barcode:
-                    return true;
                 case R.id.navigation_calendar:
-                    startCalendar(item);
+                    return true;
+                case R.id.navigation_barcode:
+                    startScanning(item);
                     return true;
                 case R.id.navigation_notifications:
                     startNotifications(item);
@@ -33,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.setOnNavigationItemSelectedListener(selectedListener);
     }
 
-    public void startCalendar(MenuItem menu) {
-        Intent intent = new Intent(this, CalendarActivity.class);
+    public void startScanning(MenuItem menu) {
+        Intent intent = new Intent(this, MainActivity.class);
         //TextView textView = (TextView) findViewById(R.id.textView);
         // String message = textView.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, "hi");
