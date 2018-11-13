@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.Activity;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -28,48 +29,21 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
     private Context context;
-    private CameraDevice cameraDevice;
     private String cameraId;
     private CameraManager cameraManager;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private CameraCharacteristics cameraCharacteristics;
-    TextView bar_scanner;
-    Button btn_camera;
-    //private Handler cameraHandler = new Handler();
-    //private ImageReader jpgReader;
-    //Bitmap bitmap;
-    //private Handler imgHandler = new Handler();
-    //private CameraCaptureSession mSession;
-    /*
-    static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
-    }*/
+    private final Activity actitvity = this;
+    private TextView bar_scanner;
+    private Button btn_camera;
 
-    CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback(){
-        @Override
-        public void onOpened(@NonNull CameraDevice camera){
-            cameraDevice = camera;
-        }
-        @Override
-        public void onDisconnected(@NonNull CameraDevice camera){
-            camera.close();
-        }
-        @Override
-        public void onError(@NonNull CameraDevice camera, int i){
-            camera.close();
-            camera = null;
-        }
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bar_scanner = findViewById(R.id.scanning_view);
-        btn_camera = findViewById(R.id.btn_camera);
+        bar_scanner = (TextView) this.findViewById(R.id.scanning_view);
+        btn_camera = (Button) this.findViewById(R.id.btn_camera);
 
         btn_camera.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -77,7 +51,14 @@ public class MainActivity extends AppCompatActivity {
                 cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
                 context = MainActivity.this.getApplicationContext();
                 openCamera();
-                Log.e("myE", "onClick: e was here");
+                IntentIntegrator intentIntegrator = new IntentIntegrator(actitvity);
+                intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.PRODUCT_CODE_TYPES);
+                intentIntegrator.setPrompt("scan");
+                intentIntegrator.setCameraId(Integer.parseInt(cameraId));
+                intentIntegrator.setBeepEnabled(true);
+                intentIntegrator.setBarcodeImageEnabled(false);
+                intentIntegrator.setOrientationLocked(true);
+                intentIntegrator.initiateScan();
             }
         });
 
@@ -98,32 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
         bottomNavigation.setOnNavigationItemSelectedListener(selectedListener);
-        /*
-        textureView = (TextureView) findViewById(R.id.texture);
-        assert textureView != null;
-        textureView.setSurfaceTextureListener(textureListener);
-        takePictureButton = (Button) findViewById(R.id.btn_takepicture);
-        assert takePictureButton != null;
-        */
-        /*
-        TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
-            @Override
-            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                //open your camera here
-                openCamera();
-            }
-            @Override
-            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                // Transform you image captured size according to the surface width and height
-            }
-            @Override
-            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                return false;
-            }
-            @Override
-            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-            }
-        };*/
     }
 
     private void openCamera(){
@@ -136,9 +91,7 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA_PERMISSION);
                 return;
             }
-            //cameraManager.openCamera(cameraId,stateCallback,null);
-            new IntentIntegrator(this).initiateScan();
-            Log.e("success", "openCamera: camera was opened: " + cameraId );
+            //new IntentIntegrator(this).initiateScan();
         }catch(CameraAccessException e){
             e.printStackTrace();
         }
