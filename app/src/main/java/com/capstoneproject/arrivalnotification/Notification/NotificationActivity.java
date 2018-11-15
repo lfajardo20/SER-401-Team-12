@@ -1,4 +1,4 @@
-package com.capstoneproject.arrivalnotification;
+package com.capstoneproject.arrivalnotification.Notification;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+
+import com.capstoneproject.arrivalnotification.CalendarActivity;
+import com.capstoneproject.arrivalnotification.MainActivity;
+import com.capstoneproject.arrivalnotification.R;
 
 public class NotificationActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -42,7 +46,11 @@ public class NotificationActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        String[] data = {"hi", "hello",};
+        NotificationData[] data = {
+                new NotificationData("hi", "hello", "world"),
+                new NotificationData("hi1", "hello2", "world1"),
+                new NotificationData("hi2", "hello2", "world2")
+        };
         adapter = new NotificationAdapter(data);
         recyclerView.setAdapter(adapter);
     }

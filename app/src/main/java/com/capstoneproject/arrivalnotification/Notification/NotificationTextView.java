@@ -1,4 +1,4 @@
-package com.capstoneproject.arrivalnotification;
+package com.capstoneproject.arrivalnotification.Notification;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -7,11 +7,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+
+import com.capstoneproject.arrivalnotification.R;
 
 /**
  * Helper class for showing and canceling text
@@ -49,10 +49,6 @@ public class NotificationTextView extends android.support.v7.widget.AppCompatTex
                               final String exampleString, final int number) {
         final Resources res = context.getResources();
 
-        // This image is used as the notification's large icon (thumbnail).
-        // TODO: Remove this if your notification has no relevant thumbnail.
-        final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.example_picture);
-
 
         final String ticker = exampleString;
         final String title = res.getString(
@@ -77,10 +73,6 @@ public class NotificationTextView extends android.support.v7.widget.AppCompatTex
                 // Use a default priority (recognized on devices running Android
                 // 4.1 or later)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-                // Provide a large icon, shown with the notification in the
-                // notification drawer on devices running Android 3.0 or later.
-                .setLargeIcon(picture)
 
                 // Set ticker text (preview) information for this notification.
                 .setTicker(ticker)

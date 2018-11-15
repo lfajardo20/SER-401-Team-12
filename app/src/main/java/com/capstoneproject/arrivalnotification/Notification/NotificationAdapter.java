@@ -1,11 +1,11 @@
-package com.capstoneproject.arrivalnotification;
+package com.capstoneproject.arrivalnotification.Notification;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
-    private String[] mDataset;
+    private NotificationData[] data;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -21,8 +21,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public NotificationAdapter(String[] myDataset) {
-        mDataset = myDataset;
+    public NotificationAdapter(NotificationData[] myDataset) {
+        data = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
@@ -40,13 +40,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(mDataset[position]);
+        NotificationData item = data[position];
+        String display = (item.name + ": " + item.type
+                + " \nLocation: " + item.location);
+        holder.mTextView.setText(display);
 
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return data.length;
     }
 }
