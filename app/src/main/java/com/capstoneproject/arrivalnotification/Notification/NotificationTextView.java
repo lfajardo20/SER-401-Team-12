@@ -49,7 +49,6 @@ public class NotificationTextView extends android.support.v7.widget.AppCompatTex
                               final String exampleString, final int number) {
         final Resources res = context.getResources();
 
-
         final String ticker = exampleString;
         final String title = res.getString(
                 R.string.text_notification_title_template, exampleString);
