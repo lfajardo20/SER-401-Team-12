@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
         bottomNavigation.setOnNavigationItemSelectedListener(selectedListener);
-
+        bottomNavigation.setSelectedItemId(R.id.navigation_barcode);
 
         //Notification registration initialized in mainactivity to assure that it always runs
         createNotificationChannel();
