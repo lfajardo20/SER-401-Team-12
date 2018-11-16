@@ -33,6 +33,7 @@ public class NotificationActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
         bottomNavigation.setOnNavigationItemSelectedListener(selectedListener);
+        bottomNavigation.setSelectedItemId(R.id.navigation_notifications);
     }
 
     public void startBarcode(MenuItem menu) {

@@ -35,6 +35,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
         bottomNavigation.setOnNavigationItemSelectedListener(selectedListener);
+        bottomNavigation.setSelectedItemId(R.id.navigation_calendar);
     }
 
     public void startScanning(MenuItem menu) {
