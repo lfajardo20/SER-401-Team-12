@@ -2,7 +2,6 @@ package com.capstoneproject.arrivalnotification.Notification;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
     private NotificationData[] data;
@@ -11,12 +10,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView mTextView;
+        public NotificationView notification;
 
-        public MyViewHolder(TextView v) {
+        public MyViewHolder(NotificationView v) {
             super(v);
-            mTextView = v;
+            notification = v;
         }
     }
 
@@ -30,7 +28,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public NotificationAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
                                                                int viewType) {
         // create a new view
-        TextView v = new NotificationTextView(parent.getContext());
+        NotificationView v = new NotificationView(parent.getContext());
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
     }
@@ -43,8 +41,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         NotificationData item = data[position];
         String display = (item.name + ": " + item.type
                 + " \nLocation: " + item.location);
-        holder.mTextView.setText(display);
-
+        holder.notification.text.setText(display);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

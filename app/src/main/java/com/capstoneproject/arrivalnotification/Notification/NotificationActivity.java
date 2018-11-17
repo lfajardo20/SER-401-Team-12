@@ -93,6 +93,7 @@ public class NotificationActivity extends AppCompatActivity {
         // notificationId is a unique int for each notification that you must define
         notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
+
     public void startBarcode(MenuItem menu) {
         Intent intent = new Intent(this, MainActivity.class);
         //TextView textView = (TextView) findViewById(R.id.textView);

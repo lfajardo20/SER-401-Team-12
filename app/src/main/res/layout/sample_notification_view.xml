@@ -1,0 +1,30 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.capstoneproject.arrivalnotification.Notification.NotificationView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="#ccc"
+        android:paddingLeft="20dp"
+        android:paddingBottom="40dp"
+        app:exampleColor="#33b5e5"
+        app:exampleDimension="10dp"
+        app:exampleDrawable="@drawable/ic_check_black_24dp">
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="115dp"
+            android:layout_height="83dp"
+            android:layout_weight="1"
+            android:text="TextView" />
+    </com.capstoneproject.arrivalnotification.Notification.NotificationView>
+</FrameLayout>
+
+    <!-- example attributes that cause crash when in code
+    app:exampleDimension="24sp"
+
+    app:exampleString="Hello, NotificationView"
+    -->
