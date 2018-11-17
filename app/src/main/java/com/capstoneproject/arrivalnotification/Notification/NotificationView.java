@@ -20,9 +20,14 @@ public class NotificationView extends LinearLayout {
     @StyleableRes
     int index2 = 2;
 
-    TextView artistText;
-    TextView trackText;
-    Button buyButton;
+    protected TextView notificationText;
+    protected Button dismissButton;
+
+    public NotificationView(Context context) {
+        super(context);
+        inflate(context, R.layout.custom_view, this);
+        initComponents();
+    }
 
     public NotificationView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,51 +35,46 @@ public class NotificationView extends LinearLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        inflate(context, R.layout.notification_view, this);
+        inflate(context, R.layout.custom_view, this);
 
         int[] sets = {R.attr.artistText, R.attr.trackText, R.attr.buyButton};
         TypedArray typedArray = context.obtainStyledAttributes(attrs, sets);
         CharSequence artist = typedArray.getText(index0);
-        CharSequence track = typedArray.getText(index1);
         CharSequence buyButton = typedArray.getText(index2);
         typedArray.recycle();
 
         initComponents();
 
-        setArtistText(artist);
-        setTrackText(track);
-        setButton(buyButton);
+        notificationText.setText(artist);
+        dismissButton.setText(buyButton);
+    }
+
+    public NotificationView(Context context, NotificationData dataset) {
+        super(context);
+        init(context, dataset);
+    }
+
+    private void init(Context context, NotificationData item) {
+        inflate(context, R.layout.custom_view, this);
+        initComponents();
+
+        String display = (item.name + ": " + item.type
+                + " \nLocation: " + item.location);
+
+        notificationText.setText(display);
+        dismissButton.setText("Dismiss");
     }
 
     private void initComponents() {
-       /* notificationText = (TextView) findViewById(R.id.artist_Text);
-
-        trackText = (TextView) findViewById(R.id.track_Text);
-
-        dismissButton = (Button) findViewById(R.id.buy_Button);*/
+        notificationText = findViewById(R.id.notification_Text);
+        dismissButton = findViewById(R.id.dismiss_Button);
     }
 
-    public CharSequence getArtistText() {
-        return artistText.getText();
-    }
+    public void setData(NotificationData item) {
+        String display = (item.name + ": " + item.type
+                + " \nLocation: " + item.location);
 
-    public void setArtistText(CharSequence value) {
-        artistText.setText(value);
-    }
-
-    public CharSequence getTrackText() {
-        return trackText.getText();
-    }
-
-    public void setTrackText(CharSequence value) {
-        trackText.setText(value);
-    }
-
-    public CharSequence getButton() {
-        return buyButton.getText();
-    }
-
-    public void setButton(CharSequence value) {
-        buyButton.setText(value);
+        notificationText.setText(display);
+        dismissButton.setText("Dismiss");
     }
 }
