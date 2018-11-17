@@ -2,7 +2,9 @@ package com.capstoneproject.arrivalnotification.Notification;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -17,6 +19,9 @@ import com.capstoneproject.arrivalnotification.CalendarActivity;
 import com.capstoneproject.arrivalnotification.MainActivity;
 import com.capstoneproject.arrivalnotification.R;
 
+import java.time.LocalDateTime;
+import java.util.Calendar;
+
 public class NotificationActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -25,6 +30,7 @@ public class NotificationActivity extends AppCompatActivity {
 
     private final int NOTIFICATION_ID = 307589173;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +60,10 @@ public class NotificationActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        LocalDateTime time =  LocalDateTime.now();
+        //TODO use backend fetches instead of hard coding
         NotificationData[] data = {
-                new NotificationData("hi", "hello", "world"),
-                new NotificationData("hi1", "hello2", "world1"),
-                new NotificationData("hi2", "hello2", "world2")
+                new NotificationData("Appendectomy", "John Doe", "OP206", time),
         };
         adapter = new NotificationAdapter(data);
         recyclerView.setAdapter(adapter);

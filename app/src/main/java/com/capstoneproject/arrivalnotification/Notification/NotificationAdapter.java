@@ -1,14 +1,17 @@
 package com.capstoneproject.arrivalnotification.Notification;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
-    private NotificationData[] data;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
+    private ArrayList<NotificationData> data;
+
+    //each viewholder encapsulates a custom view component and is managed internally by
+    //the recyclerview
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public NotificationView notification;
 
@@ -18,15 +21,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
+    //provides the new adapter with a data set that will determine each item's appearance
     public NotificationAdapter(NotificationData[] myDataset) {
-        data = myDataset;
+        data = new ArrayList<>(Arrays.asList(myDataset));
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public NotificationAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                               int viewType) {
+    public NotificationAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         NotificationView v = new NotificationView(parent.getContext());
         MyViewHolder vh = new MyViewHolder(v);
@@ -38,13 +40,22 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        NotificationData item = data[position];
+        NotificationData item = data.get(position);
         holder.notification.setData(item);
+
+        //removes this item from the list and then notifies the list that it needs to redraw
+        //TODO once backend is up, may need to send a request dismissing this on the server side
+        holder.notification.setOnClick((View v) -> {
+                    int index = data.indexOf(item);
+                    data.remove(index);
+                    this.notifyItemRemoved(index);
+                }
+        );
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return data.length;
+        return data.size();
     }
 }

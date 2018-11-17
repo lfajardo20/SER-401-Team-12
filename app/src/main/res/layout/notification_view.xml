@@ -1,26 +1,37 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.capstoneproject.arrivalnotification.Notification.NotificationView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:background="#ccc"
-        android:paddingLeft="20dp"
-        android:paddingBottom="40dp">
+    android:layout_height="wrap_content"
+    android:background="@color/notificationBackground"
+    android:orientation="horizontal">
 
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="115dp"
-            android:layout_height="83dp"
-            android:layout_weight="1"
-            android:text="TextView" />
-    </com.capstoneproject.arrivalnotification.Notification.NotificationView>
-</FrameLayout>
+    <TextView
+        android:id="@+id/time_Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="@android:color/background_light"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="@tools:sample/date/day_of_week" />
 
-    <!-- example attributes that cause crash when in code
-    app:exampleDimension="24sp"
+    <TextView
+        android:id="@+id/details_Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="@android:color/background_light"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="@tools:sample/date/day_of_week" />
 
-    app:exampleString="Hello, NotificationView"
-    -->
+    <Button
+        android:id="@+id/dismiss_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        tools:text="Dismiss" />
+
+</LinearLayout>
