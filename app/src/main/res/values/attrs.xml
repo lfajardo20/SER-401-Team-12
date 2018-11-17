@@ -6,4 +6,9 @@
         <attr name="exampleDrawable" format="color|reference" />
         <attr name="highlighted" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="CustomView">
+        <attr name="artistText" format="string" />
+        <attr name="trackText" format="string" />
+        <attr name="buyButton" format="string" />
+    </declare-styleable>
 </resources>
