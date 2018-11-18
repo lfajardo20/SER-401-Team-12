@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstoneproject.arrivalnotification.Notification.NotificationActivity;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private final Activity actitvity = this;
     private TextView bar_scanner;
     private Button btn_camera;
+    private FusedLocationProviderClient lastKnownLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         bar_scanner = this.findViewById(R.id.scanning_view);
         btn_camera = this.findViewById(R.id.btn_camera);
+        lastKnownLocation = LocationServices.getFusedLocationProviderClient(this);
 
         btn_camera.setOnClickListener(new View.OnClickListener(){
             @Override

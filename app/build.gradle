@@ -38,4 +38,5 @@ dependencies {
     //Implementing the library ZXING for our barcode scanning
     implementation 'com.journeyapps:zxing-android-embedded:3.3.0@aar'
     implementation 'com.google.zxing:core:3.2.1'
+    implementation 'com.google.android.gms:play-services:11.6.0'
 }
