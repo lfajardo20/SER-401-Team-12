@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/notificationBackground"
-    android:orientation="horizontal">
+    android:layout_marginStart="12sp"
+    android:layout_marginBottom="12sp"
+    android:orientation="horizontal"
+    android:visibility="visible">
 
     <TextView
         android:id="@+id/time_Text"
