@@ -43,6 +43,7 @@ public class CalendarDayAdapter extends RecyclerView.Adapter<CalendarDayAdapter.
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         CalendarDayData item = data.get(position);
+        //holder.calendarDay.ini
         holder.calendarDay.setData(item);
     }
 

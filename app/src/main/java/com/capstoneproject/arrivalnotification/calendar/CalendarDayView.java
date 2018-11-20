@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StyleableRes;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
@@ -14,6 +15,7 @@ import com.capstoneproject.arrivalnotification.R;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 //adapting tutorial from https://medium.com/@otoloye/creating-custom-components-in-android-3d24a2bdaebd
 public class CalendarDayView extends LinearLayout {
@@ -28,12 +30,13 @@ public class CalendarDayView extends LinearLayout {
 
     protected TextView dayText;
     protected RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
 
     //closest to default constructor
     //
     public CalendarDayView(Context context) {
         super(context);
-        inflate(context, R.layout.calendar_item_view, this);
+        inflate(context, R.layout.calendar_day_view, this);
         initComponents();
     }
 
@@ -70,21 +73,26 @@ public class CalendarDayView extends LinearLayout {
 
         LocalDateTime date = item.date;
         String dateDisplay = date.format(DateTimeFormatter.ofPattern("d/m/Y \n H:m"));
-        dayText.setText(dateDisplay);
+        dayText.setText("Hello");
+        // dayText.setText(dateDisplay);
     }
 
     private void initComponents() {
         dayText = findViewById(R.id.day_Text);
         recyclerView = findViewById(R.id.day_Recycler);
+
+        layoutManager = new LinearLayoutManager(this.getContext());
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setData(CalendarDayData item) {
         LocalDateTime date = item.date;
-        String dateDisplay = date.format(DateTimeFormatter.ofPattern("d/m/Y \n H:m"));
+        String dateDisplay = date.format(DateTimeFormatter.ofPattern("E L/d/u"));
         dayText.setText(dateDisplay);
-        //TODO add recycler
-        CalendarItemData[] dataSet = (CalendarItemData[]) item.dataSet.toArray();
+        // dayText.setText(dateDisplay);
+
+        ArrayList<CalendarItemData> dataSet = item.dataSet;
         CalendarItemAdapter adapter = new CalendarItemAdapter(dataSet);
 
         recyclerView.setAdapter(adapter);

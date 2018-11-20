@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapter.MyViewHolder> {
     private ArrayList<CalendarItemData> data;
@@ -23,8 +22,8 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
     }
 
     //provides the new adapter with a dataSet set that will determine each item's appearance
-    public CalendarItemAdapter(CalendarItemData[] myDataset) {
-        data = new ArrayList<>(Arrays.asList(myDataset));
+    public CalendarItemAdapter(ArrayList<CalendarItemData> myDataset) {
+        data = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
