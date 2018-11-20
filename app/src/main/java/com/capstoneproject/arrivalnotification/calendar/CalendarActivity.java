@@ -1,4 +1,4 @@
-package com.capstoneproject.arrivalnotification;
+package com.capstoneproject.arrivalnotification.calendar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,9 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.capstoneproject.arrivalnotification.MainActivity;
 import com.capstoneproject.arrivalnotification.Notification.NotificationActivity;
+import com.capstoneproject.arrivalnotification.R;
 
 public class CalendarActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";

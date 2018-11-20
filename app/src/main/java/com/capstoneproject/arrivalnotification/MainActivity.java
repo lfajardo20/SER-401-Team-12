@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstoneproject.arrivalnotification.Notification.NotificationActivity;
+import com.capstoneproject.arrivalnotification.calendar.CalendarActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
