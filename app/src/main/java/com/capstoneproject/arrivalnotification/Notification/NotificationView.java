@@ -60,7 +60,7 @@ public class NotificationView extends LinearLayout {
     }
 
     //constructor/init combo for programmatic (java) creation of this view item
-    //currently unused since recyclerview items are constructed before they have data
+    //currently unused since recyclerview items are constructed before they have dataSet
     public NotificationView(Context context, NotificationData dataset) {
         super(context);
         init(context, dataset);

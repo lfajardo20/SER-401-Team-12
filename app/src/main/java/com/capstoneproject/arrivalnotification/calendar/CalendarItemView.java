@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import com.capstoneproject.arrivalnotification.R;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 //adapting tutorial from https://medium.com/@otoloye/creating-custom-components-in-android-3d24a2bdaebd
 public class CalendarItemView extends LinearLayout {
 
@@ -31,7 +34,7 @@ public class CalendarItemView extends LinearLayout {
     //
     public CalendarItemView(Context context) {
         super(context);
-        inflate(context, R.layout.calendaritem_view, this);
+        inflate(context, R.layout.calendar_item_view, this);
         initComponents();
     }
 
@@ -42,7 +45,7 @@ public class CalendarItemView extends LinearLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        inflate(context, R.layout.calendaritem_view, this);
+        inflate(context, R.layout.calendar_item_view, this);
 
         int[] sets = {R.attr.artistText, R.attr.trackText, R.attr.buyButton};
         TypedArray typedArray = context.obtainStyledAttributes(attrs, sets);
@@ -57,17 +60,17 @@ public class CalendarItemView extends LinearLayout {
     }
 
     //constructor/init combo for programmatic (java) creation of this view item
-    //currently unused since recyclerview items are constructed before they have data
+    //currently unused since recyclerview items are constructed before they have dataSet
     public CalendarItemView(Context context, CalendarItemData dataset) {
         super(context);
         init(context, dataset);
     }
 
     private void init(Context context, CalendarItemData item) {
-        inflate(context, R.layout.calendaritem_view, this);
+        inflate(context, R.layout.calendar_item_view, this);
         initComponents();
 
-        /* TODO change component attributes based on the data item
+        /* TODO change component attributes based on the dataSet item
         String detailDisplay = (item.name + ": " + item.type
                 + " \nLocation: " + item.location);
 
@@ -82,27 +85,19 @@ public class CalendarItemView extends LinearLayout {
     private void initComponents() {
         detailsText = findViewById(R.id.details_Text);
         timeText = findViewById(R.id.time_Text);
-        dismissButton = findViewById(R.id.dismiss_Button);
-        dismissButton.setText("Dismiss");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setData(CalendarItemData item) {
-          /* TODO change component attributes based on the data item
-        //translates the information of each surgery calendarItem into text
+
+        //translates the information of each surgery calendarDay into text
         String detailDisplay = (item.name + ": " + item.type
                 + " \nLocation: " + item.location);
         LocalDateTime date = item.date;
         String timeDisplay = date.format(DateTimeFormatter.ofPattern("d/m/Y \n H:m"));
-*
 
         detailsText.setText(detailDisplay);
         timeText.setText(timeDisplay);
-        */
-    }
 
-    //allows passing down an eventlistener for this view's button
-    public void setOnClick(Button.OnClickListener listener) {
-        dismissButton.setOnClickListener(listener);
     }
 }
