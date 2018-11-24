@@ -38,52 +38,63 @@ public class MainActivity extends AppCompatActivity {
     private TextView bar_scanner;
     private Button btn_camera;
 
+    //bool that decides if the current user is a doctor or a transporter
+    private boolean isDoctor = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        bar_scanner = this.findViewById(R.id.scanning_view);
-        btn_camera = this.findViewById(R.id.btn_camera);
+        if(!isDoctor) //All camera stuff
+        {
+            //Set layout to transporter
+            setContentView(R.layout.activity_transporter);
 
-        btn_camera.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-                context = MainActivity.this.getApplicationContext();
-                openCamera();
-                IntentIntegrator intentIntegrator = new IntentIntegrator(actitvity);
-                intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.PRODUCT_CODE_TYPES);
-                intentIntegrator.setPrompt("scan");
-                intentIntegrator.setCameraId(Integer.parseInt(cameraId));
-                intentIntegrator.setBeepEnabled(true);
-                intentIntegrator.setBarcodeImageEnabled(false);
-                intentIntegrator.setOrientationLocked(true);
-                intentIntegrator.initiateScan();
-            }
-        });
+            bar_scanner = this.findViewById(R.id.scanning_view);
+            btn_camera = this.findViewById(R.id.btn_camera);
 
-        BottomNavigationView.OnNavigationItemSelectedListener selectedListener = (MenuItem item) -> {
-            switch (item.getItemId()) {
-                case R.id.navigation_barcode:
-                    return true;
-                case R.id.navigation_calendar:
-                    startCalendar(item);
-                    return true;
-                case R.id.navigation_notifications:
-                    startNotifications(item);
-                    return true;
-                default:
-                    return false;
-            }
-        };
+            btn_camera.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+                    context = MainActivity.this.getApplicationContext();
+                    openCamera();
+                    IntentIntegrator intentIntegrator = new IntentIntegrator(actitvity);
+                    intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.PRODUCT_CODE_TYPES);
+                    intentIntegrator.setPrompt("scan");
+                    intentIntegrator.setCameraId(Integer.parseInt(cameraId));
+                    intentIntegrator.setBeepEnabled(true);
+                    intentIntegrator.setBarcodeImageEnabled(false);
+                    intentIntegrator.setOrientationLocked(true);
+                    intentIntegrator.initiateScan();
+                }
+            });
+        }
+        else if(isDoctor) //all notification and schedule stuff
+        {
+            //set layout to doctor
+            setContentView(R.layout.activity_calendar);
 
-        BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
-        bottomNavigation.setOnNavigationItemSelectedListener(selectedListener);
+            BottomNavigationView.OnNavigationItemSelectedListener selectedListener = (MenuItem item) -> {
+                switch (item.getItemId()) {
+                    case R.id.navigation_calendar:
+                        startCalendar(item);
+                        return true;
+                    case R.id.navigation_notifications:
+                        startNotifications(item);
+                        return true;
+                    default:
+                        return false;
+                }
+            };
+
+            BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
+            bottomNavigation.setOnNavigationItemSelectedListener(selectedListener);
 
 
-        //Notification registration initialized in mainactivity to assure that it always runs
-        createNotificationChannel();
+            //Notification registration initialized in mainactivity to assure that it always runs
+            createNotificationChannel();
+        }
     }
 
     private void createNotificationChannel() {
