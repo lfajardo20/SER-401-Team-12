@@ -2,14 +2,13 @@
   "name": "arrival",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "basicAuthentication.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "eslint": "^5.9.0",
     "mysql": "^2.16.0"
   }
 }

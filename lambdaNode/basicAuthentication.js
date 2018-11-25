@@ -1,48 +1,50 @@
 var mysql = require('mysql');
+var AWS = require('aws-sdk');
 
-exports.handler = async (event) => {
-    // TODO implement
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify('Hello from Lambda!'),
-    };
-    return response;
-};
-
-var connection = mysql.createConnection({
-  host: "arrival.c5mhqvi6mxwz.us-west-1.rds.amazonaws.com",
-  user: "master",
-  password: "password"
-});
-
-//Checks for correct login name and password
-function checkLogin(inputName, inputPassword)
-{    
-    var quaryStr = "SELECT * FROM app.user WHERE userName ='" + inputName + "'"; 
-
-    //connect to Database
-    connection.connect(function(err) 
+var pool  = mysql.createPool({
+    host: "24.56.49.110",
+    user: 'db',
+    password: 'password',
+    port: "3306",
+    database: 'user',
+  });
+  
+exports.handler = async (event, context, callback) => {
+  //prevent timeout from waiting event loop
+  
+  var queryStr = "SELECT * FROM user.user WHERE userName ='" + event.userName + "'"; 
+  
+    context.callbackWaitsForEmptyEventLoop = false;
+    return new Promise(function(resolve, reject)
     {
-        if (err) throw err;
-            connection.query(quaryStr, function (err, result, fields) 
+        pool.getConnection(function(err, connection) 
+        {
+            // Use the connection
+            connection.query(queryStr, function (error, results, fields) 
             {
-                //if username dosent exist in database throw error
-                if (err)
+                // And done with the connection.
+                connection.release();
+                //if Error reject promise
+                if (error)
                 {
-                    throw err;
-                    //Output for debugging
-                    console.log("Incorrect username")
-                }
-                
-                //Check if passwords match
-                if(inputPassword === result[0].userPassword)
-                {
-                    console.log("correct Login")
+                    reject(error);   
                 }
                 else
                 {
-                    console.log("Incorrect Password")
+                    //Check if passwords match
+                    if(event.password == results[0].userPassword)
+                    {
+                        resolve(true);
+                    }
+                    else
+                    {
+                        reject(false);
+                    }
                 }
-        }   )
+
+                //Can end event now that call is finished    
+                context.callbackWaitsForEmptyEventLoop = false;
+            });
+        });
     });
 }
