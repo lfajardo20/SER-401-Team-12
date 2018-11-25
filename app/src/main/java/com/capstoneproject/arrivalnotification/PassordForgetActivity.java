@@ -5,84 +5,59 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.List;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PassordForgetActivity extends AppCompatActivity {
 
-    private Button btn_send_email;
     private TextView txt_email;
+    private Button send;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_passord_forget);
 
-        btn_send_email = (Button) findViewById(R.id.btn_sendEmail);
-        txt_email = (TextView) findViewById(R.id.etxt_email);
-/*
-        final RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = "http://localhost:8008/postdata"; // your URL
-
-        queue.start();*/
-
-        btn_send_email.setOnClickListener(new View.OnClickListener() {
-
+        txt_email = (TextView) findViewById(R.id.txt_email);
+        send = (Button) findViewById(R.id.btn_send);
+        send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //get request to server, gennerate token and send email to user
-                /*
-                HashMap<String, String> params = new HashMap<String,String>();
-                params.put("data", DataField.getText().toString()); // the entered data as the JSON body.
-
-                JsonObjectRequest jsObjRequest = new
-                        JsonObjectRequest(Request.Method.POST,
-                        url,
-                        new JSONObject(params),
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    DisplayText.setText(response.getString("message"));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
+                Retrofit.Builder builder = new Retrofit.Builder()
+                                .baseUrl("https://10.0.2.2:8008/")
+                                .addConverterFactory(GsonConverterFactory.create());
+                Retrofit retrofit = builder.build();
+                IPassword response = retrofit.create(IPassword.class);
+                Call<ServerResponse> call = response.serverResponse(txt_email.getText().toString());
+                call.enqueue(new Callback<ServerResponse>() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        DisplayText.setText("That didn't work!");
+                    public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                        ServerResponse res = response.body();
+                        txt_email.setText(res.getResult());
+                    }
+
+                    @Override
+                    public void onFailure(Call<ServerResponse> call, Throwable t) {
+                        Toast.makeText(PassordForgetActivity.this,"error(:",Toast.LENGTH_LONG).show();
                     }
                 });
-                queue.add(jsObjRequest);*/
-                String urlString = "localhost:8008/";
-                try{
-                    JSONObject jsonObject = getJSONObjectFromURL(urlString);
-                    //
-                    // Parse your json here
-                    //
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
         });
     }
-
+    /*
     public static JSONObject getJSONObjectFromURL(String urlString) throws IOException, JSONException {
         HttpURLConnection urlConnection = null;
         URL url = new URL(urlString);
         urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
-        urlConnection.setReadTimeout(10000 /* milliseconds */ );
-        urlConnection.setConnectTimeout(15000 /* milliseconds */ );
+        urlConnection.setReadTimeout(10000 );
+        urlConnection.setConnectTimeout(15000 );
         urlConnection.setDoOutput(true);
         urlConnection.connect();
 
@@ -99,5 +74,5 @@ public class PassordForgetActivity extends AppCompatActivity {
         System.out.println("JSON: " + jsonString);
 
         return new JSONObject(jsonString);
-    }
+    }*/
 }
