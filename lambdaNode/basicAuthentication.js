@@ -39,7 +39,7 @@ exports.handler = async (event, context, callback) => {
                         }
                         else
                         {
-                            reject("Incorrect Password");
+                            reject("Incorrect Password!");
                         }
                     }
     
@@ -51,7 +51,7 @@ exports.handler = async (event, context, callback) => {
         catch(e)
         {
             //If server is down return null
-            callback(null,null);
+            reject("Database is down.");
         }
     });
 }
