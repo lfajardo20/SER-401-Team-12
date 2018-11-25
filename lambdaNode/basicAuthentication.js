@@ -17,34 +17,41 @@ exports.handler = async (event, context, callback) => {
     context.callbackWaitsForEmptyEventLoop = false;
     return new Promise(function(resolve, reject)
     {
-        pool.getConnection(function(err, connection) 
-        {
-            // Use the connection
-            connection.query(queryStr, function (error, results, fields) 
+        try{
+            pool.getConnection(function(err, connection) 
             {
-                // And done with the connection.
-                connection.release();
-                //if Error reject promise
-                if (error)
+                // Use the connection
+                connection.query(queryStr, function (error, results, fields) 
                 {
-                    reject(error);   
-                }
-                else
-                {
-                    //Check if passwords match
-                    if(event.password == results[0].userPassword)
+                    // And done with the connection.
+                    connection.release();
+                    //if Error reject promise
+                    if (error || results[0] == undefined)
                     {
-                        resolve(true);
+                        reject("User does not exist!");   
                     }
                     else
                     {
-                        reject(false);
+                        //Check if passwords match
+                        if(event.password == results[0].userPassword)
+                        {
+                            resolve(results[0].userType);
+                        }
+                        else
+                        {
+                            reject("Incorrect Password");
+                        }
                     }
-                }
-
-                //Can end event now that call is finished    
-                context.callbackWaitsForEmptyEventLoop = false;
+    
+                    //Can end event now that call is finished    
+                    context.callbackWaitsForEmptyEventLoop = false;
+                });
             });
-        });
+        }
+        catch(e)
+        {
+            //If server is down return null
+            callback(null,null);
+        }
     });
 }
