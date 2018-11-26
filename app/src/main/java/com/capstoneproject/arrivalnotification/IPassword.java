@@ -1,9 +1,13 @@
 package com.capstoneproject.arrivalnotification;
 
+import org.json.JSONObject;
+
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 
 public interface IPassword {
-    @GET("/sendEmail")
-    Call<ServerResponse> serverResponse(String email);
+    @POST("/")
+    Call<ServerResponse> serverResponse(@Body ServerResponse res);
 }

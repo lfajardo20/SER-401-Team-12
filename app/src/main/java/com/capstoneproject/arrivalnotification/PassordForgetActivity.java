@@ -2,13 +2,16 @@ package com.capstoneproject.arrivalnotification;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
+import org.json.JSONObject;
 
+import java.util.List;
+import org.json.JSONException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,24 +32,43 @@ public class PassordForgetActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(txt_email.getText() == null || txt_email.getText() == ""){
+                    Toast.makeText(PassordForgetActivity.this,"please input your email!",Toast.LENGTH_LONG).show();
+                }
+                String json = "{" + "\"email\":" + "\"" + txt_email.getText().toString() + "\"" + "}";
+                String localhost = "http://192.168.1.11:8008";
+
                 Retrofit.Builder builder = new Retrofit.Builder()
-                                .baseUrl("https://10.0.2.2:8008/")
+                                .baseUrl(localhost)
                                 .addConverterFactory(GsonConverterFactory.create());
                 Retrofit retrofit = builder.build();
                 IPassword response = retrofit.create(IPassword.class);
-                Call<ServerResponse> call = response.serverResponse(txt_email.getText().toString());
-                call.enqueue(new Callback<ServerResponse>() {
-                    @Override
-                    public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                        ServerResponse res = response.body();
-                        txt_email.setText(res.getResult());
-                    }
+                System.out.println("=================already in =====3=============");
 
-                    @Override
-                    public void onFailure(Call<ServerResponse> call, Throwable t) {
-                        Toast.makeText(PassordForgetActivity.this,"error(:",Toast.LENGTH_LONG).show();
-                    }
-                });
+                try {
+                    JSONObject obj = new JSONObject(json);
+                    //System.out.println("====json string is=====");
+                    Call<ServerResponse> call = response.serverResponse(new ServerResponse(txt_email.getText().toString()));
+                    System.out.println("=================already in =====4=============");
+                    call.enqueue(new Callback<ServerResponse>() {
+                        @Override
+                        public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                            ServerResponse res = response.body();
+                            if(response.isSuccessful() && response.code() == 200){
+                                Toast.makeText(PassordForgetActivity.this,res.getResult() + "please check your email box!",Toast.LENGTH_LONG).show();
+                            }else if(response.isSuccessful() && response.code() != 200){
+                                Toast.makeText(PassordForgetActivity.this,res.getResult() + "email failed to send!",Toast.LENGTH_LONG).show();
+                            }
+                            System.out.println("=======" + response.isSuccessful()+ ", " + response.body().getResult()+"=============");
+                        }
+                        @Override
+                        public void onFailure(Call<ServerResponse> call, Throwable t) {
+                            Toast.makeText(PassordForgetActivity.this,"error(:"+t.getMessage(),Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }catch (Throwable tx){
+                    Log.e("My App", "Could not parse malformed JSON: " + json);
+                }
             }
         });
     }
