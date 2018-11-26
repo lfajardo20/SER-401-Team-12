@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class login extends AppCompatActivity {
+
+    private Button btn_forget_pwd;
 
     public void loginUser (View view) {
 
@@ -29,5 +32,13 @@ public class login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        btn_forget_pwd = findViewById(R.id.btn_forgetPwd);
+        btn_forget_pwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),PassordForgetActivity.class));
+            }
+        });
     }
 }
