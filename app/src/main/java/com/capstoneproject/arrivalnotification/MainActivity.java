@@ -11,11 +11,14 @@ import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +28,7 @@ import android.widget.Toast;
 import com.capstoneproject.arrivalnotification.Notification.NotificationActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView bar_scanner;
     private Button btn_camera;
     private FusedLocationProviderClient lastKnownLocation;
+    public String loco;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,19 @@ public class MainActivity extends AppCompatActivity {
         bar_scanner = this.findViewById(R.id.scanning_view);
         btn_camera = this.findViewById(R.id.btn_camera);
         lastKnownLocation = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            lastKnownLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null){
+                        loco = this.toString();
+                    }
+                }
+            });
+        } else {
+            Log.i("Location", "This aint it chief");
+        }
 
         btn_camera.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -134,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             if (res.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG);
             } else {
-                updateText(res.getContents());
+                updateText(res.getContents() + "\n" + loco);
             }
         } else {
             super.onActivityResult(reqCode, resCode, data);
