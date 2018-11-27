@@ -7,21 +7,23 @@ import android.support.v7.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     //Used for testing, Will be used By Login when implemented.
-    private boolean isDoctor = false;
+    private boolean isDoctor = true;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Starts Activity Based off isDoctor bool.
-        if(!isDoctor) //All camera stuff
+        if(isDoctor)
         {
-            Intent Doctor = new Intent(this, TransporterActivity.class);
+            Intent Doctor = new Intent(this, DoctorActivity.class);
             startActivity(Doctor);
+            super.finish();
         }
-        else if(isDoctor) //all notification and schedule stuff
+        else if(!isDoctor)
         {
-            Intent Transporter = new Intent(this, DoctorActivity.class);
+            Intent Transporter = new Intent(this, TransporterActivity.class);
             startActivity(Transporter);
+            super.finish();
         }
     }
 }
