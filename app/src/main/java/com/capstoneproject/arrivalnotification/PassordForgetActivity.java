@@ -23,7 +23,7 @@ public class PassordForgetActivity extends AppCompatActivity {
 
     private TextView txt_email;
     private Button send;
-    final private String url = "http://192.168.1.11:8008";
+    final private String url = "http://10.0.2.2:8008";//use emulator to test the server-side
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +45,7 @@ public class PassordForgetActivity extends AppCompatActivity {
                 }
                 //String json = "{" + "\"email\":" + "\"" + txt_email.getText().toString() + "\"" + "}";
                 //connect to remote host by using retrofit
-                //String localhost = "http://192.168.1.11:8008";
+                //String localhost = "http://192.168.1.11:8008"; //use my localhost to test the server-side
 
                 Retrofit.Builder builder = new Retrofit.Builder()
                                 .baseUrl(url)//load url
