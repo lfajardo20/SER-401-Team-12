@@ -62,7 +62,8 @@ public class DoctorActivity extends AppCompatActivity
     {
         super.onRestart();
         Intent Pin = new Intent(this, lockScreen.class);
-        startActivity(Pin);
+        //Uncomment for lockscreen
+        //startActivity(Pin);
     }
 
     private void createNotificationChannel() {

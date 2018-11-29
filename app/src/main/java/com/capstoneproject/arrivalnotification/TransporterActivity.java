@@ -60,6 +60,14 @@ public class TransporterActivity extends AppCompatActivity {
         });
     }
 
+    protected void onRestart()
+    {
+        super.onRestart();
+        Intent Pin = new Intent(this, lockScreen.class);
+        //Uncomment for lockscreen
+        //startActivity(Pin);
+    }
+
     private void openCamera(){
         try{
             cameraId = cameraManager.getCameraIdList()[0];//get camera 1
