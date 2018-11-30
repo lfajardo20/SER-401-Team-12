@@ -44,9 +44,13 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     Toast.makeText(ResetPasswordActivity.this,"password can't be empty!",Toast.LENGTH_LONG).show();
                     return;
                 }
+                if(con_pwd.isEmpty()){
+                    Toast.makeText(ResetPasswordActivity.this,"confirm password can't be empty!",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 //check pwd and con_pwd is matched or not
                 if(!pwd.matches(con_pwd)){
-                    Toast.makeText(ResetPasswordActivity.this,"confirm password and confirm password do not match!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(ResetPasswordActivity.this,"password and confirm password do not match!",Toast.LENGTH_LONG).show();
                     return;
                 }
                 //send post request to server to reset password
