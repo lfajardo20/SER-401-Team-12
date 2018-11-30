@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         btn_camera.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                startActivity(new Intent(MainActivity.this,PassordForgetActivity.class));
                 cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
                 context = MainActivity.this.getApplicationContext();
                 openCamera();
