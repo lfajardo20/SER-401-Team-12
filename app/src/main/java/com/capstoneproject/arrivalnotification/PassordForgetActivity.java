@@ -1,5 +1,6 @@
 package com.capstoneproject.arrivalnotification;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +24,7 @@ public class PassordForgetActivity extends AppCompatActivity {
 
     private TextView txt_email;
     private Button send;
-    final private String url = "http://10.0.2.2:8008";//use emulator to test the server-side
+    //final private String url = "http://10.0.2.2:8008";//use emulator to test the server-side
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +44,9 @@ public class PassordForgetActivity extends AppCompatActivity {
                     Toast.makeText(PassordForgetActivity.this,"email format is invalid!",Toast.LENGTH_LONG).show();
                     return;
                 }
-                //String json = "{" + "\"email\":" + "\"" + txt_email.getText().toString() + "\"" + "}";
+                //String json = "{" + "\"email\":" + "\"" + txt_email.getText().toSString() + "\"" + "}";
                 //connect to remote host by using retrofit
-                //String localhost = "http://192.168.1.11:8008"; //use my localhost to test the server-side
+                String url = "http://192.168.1.9:8008"; //use my localhost to test the server-side
 
                 Retrofit.Builder builder = new Retrofit.Builder()
                                 .baseUrl(url)//load url
@@ -60,9 +61,12 @@ public class PassordForgetActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {//get response
                         ServerResponse res = response.body();
-                        if(response.isSuccessful() && response.code() == 200) {
-                            Toast.makeText(PassordForgetActivity.this,res.getResult() + "please check your email box!",Toast.LENGTH_LONG).show();
-                        } else if(response.isSuccessful() && response.code() != 200){/*get response successfully*/
+                        if(response.isSuccessful() && response.code() == 200) {/*get response successfully*/
+                            Toast.makeText(PassordForgetActivity.this,res.getResult() + " has been sent to user, please check!",Toast.LENGTH_LONG).show();
+                            Intent resetIntent = new Intent(PassordForgetActivity.this,ResetPasswordActivity.class);
+                            resetIntent.putExtra("email",txt_email.getText().toString().trim());
+                            startActivity(resetIntent);
+                        } else if(response.isSuccessful() && response.code() != 200){
                                 Toast.makeText(PassordForgetActivity.this,res.getResult() + "email failed to send!",Toast.LENGTH_LONG).show();
                         }
                         System.out.println("=======" + response.isSuccessful()+ ", " + response.body().getResult()+"=============");
