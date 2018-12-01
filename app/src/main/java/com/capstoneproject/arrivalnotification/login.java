@@ -32,27 +32,19 @@ import javax.net.ssl.HttpsURLConnection;
 public class login extends AppCompatActivity {
 
     private Button btn_forget_pwd;
+    private String currentUser;
 
     public void loginUser (View view) {
 
         EditText usr = (EditText) findViewById(R.id.usernameEdit);
         EditText pwd = (EditText) findViewById(R.id.passwordEdit);
         Intent changeActivity;
-        JSONObject obj;
         String url = "https://awk4q8rl4b.execute-api.us-west-1.amazonaws.com/test";
-//        HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-//        try {
-//            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-//            readStream(in);
-//        } finally {
-//            urlConnection.disconnect();
-//        }
         String json = "{"
                         + "\"userName\":" + "\"" + usr.getText().toString().trim() + "\","
                         + "\"password\":" + "\"" + pwd.getText().toString().trim() + "\""
                         +"}";
         try {
-            //obj = new JSONObject(json);
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
 
@@ -76,19 +68,32 @@ public class login extends AppCompatActivity {
                 res.append(line);
             }
 
-            Log.i("YESH", res.toString());
+            //Can't get user logged in even though console prints correct usr/pwd...
+            Log.i("USER", res.toString());
+            if ((res.toString() == "doctor".toString())){
+                currentUser = res.toString();
+            } else if (res.toString() == "transporter".toString()){
+                currentUser = res.toString();
+            }
+            else {
+                Toast.makeText(this, "Username or password is incorrect", Toast.LENGTH_SHORT).show();
+            }
 
-//            Toast.makeText(this,"json string is: usrname = " + obj.getString("userName") + ",pwd = " + obj.getString("password"),
-//                    Toast.LENGTH_LONG).show();
+            if (currentUser == "doctor") {
+                //TODO: Doctor view
+                //Placeholder redirect
+                Log.i("USER", "Doctor logged on");
+                changeActivity = new Intent(this, MainActivity.class);
+                startActivity(changeActivity);
+            } else if (currentUser == "transporter"){
+                //TODO: Transporter view
+                //Placeholder redirect
+                Log.i("USER", "Transporter logged on");
+                changeActivity = new Intent(this, MainActivity.class);
+                startActivity(changeActivity);
+            }
         }catch (Exception e){
             e.printStackTrace();
-        }
-        if (usr.getText().toString().matches("admin") && pwd.getText().toString().matches("password")) {
-            //After user logs in, it will default to the barcode scanner activity.
-            changeActivity = new Intent(this, MainActivity.class);
-            startActivity(changeActivity);
-        } else {
-            Toast.makeText(this, "Username or password is incorrect", Toast.LENGTH_SHORT).show();
         }
 
     }
