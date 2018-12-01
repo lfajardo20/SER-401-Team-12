@@ -41,4 +41,5 @@ dependencies {
     implementation 'org.apache:apache:21'
     implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation "com.google.android.gms:play-services-location:15.0.1"
 }
