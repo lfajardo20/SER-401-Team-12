@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+                startActivity(new Intent(MainActivity.this, PassordForgetActivity.class));
                 cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
                 context = MainActivity.this.getApplicationContext();
                 openCamera();
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
         bottomNavigation.setOnNavigationItemSelectedListener(selectedListener);
-
+        bottomNavigation.setSelectedItemId(R.id.navigation_barcode);
 
         //Notification registration initialized in mainactivity to assure that it always runs
         createNotificationChannel();
