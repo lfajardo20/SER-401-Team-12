@@ -1,4 +1,4 @@
-package com.capstoneproject.arrivalnotification.Notification;
+package com.capstoneproject.arrivalnotification.calendar;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 //adapting tutorial from https://medium.com/@otoloye/creating-custom-components-in-android-3d24a2bdaebd
-public class NotificationView extends LinearLayout {
+public class CalendarItemView extends LinearLayout {
 
     //resource value indices for XML created views
     @StyleableRes
@@ -32,20 +32,20 @@ public class NotificationView extends LinearLayout {
 
     //closest to default constructor
     //
-    public NotificationView(Context context) {
+    public CalendarItemView(Context context) {
         super(context);
-        inflate(context, R.layout.notification_view, this);
+        inflate(context, R.layout.calendar_item_view, this);
         initComponents();
     }
 
     //constructor and initialization function for XML created views
-    public NotificationView(Context context, AttributeSet attrs) {
+    public CalendarItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
-        inflate(context, R.layout.notification_view, this);
+        inflate(context, R.layout.calendar_item_view, this);
 
         int[] sets = {R.attr.artistText, R.attr.trackText, R.attr.buyButton};
         TypedArray typedArray = context.obtainStyledAttributes(attrs, sets);
@@ -61,22 +61,23 @@ public class NotificationView extends LinearLayout {
 
     //constructor/init combo for programmatic (java) creation of this view item
     //currently unused since recyclerview items are constructed before they have dataSet
-    public NotificationView(Context context, NotificationData dataset) {
+    public CalendarItemView(Context context, CalendarItemData dataset) {
         super(context);
         init(context, dataset);
     }
 
-    private void init(Context context, NotificationData item) {
-        inflate(context, R.layout.notification_view, this);
+    private void init(Context context, CalendarItemData item) {
+        inflate(context, R.layout.calendar_item_view, this);
         initComponents();
 
+        /* TODO change component attributes based on the dataSet item
         String detailDisplay = (item.name + ": " + item.type
                 + " \nLocation: " + item.location);
 
         // String timeDisplay = (item.date.getTime() + "\n" + item.date.getDate());
+*/
 
-
-        detailsText.setText(detailDisplay);
+        //detailsText.setText(detailDisplay);
         timeText.setText("init is being called");
         dismissButton.setText("Dismiss");
     }
@@ -84,25 +85,19 @@ public class NotificationView extends LinearLayout {
     private void initComponents() {
         detailsText = findViewById(R.id.details_Text);
         timeText = findViewById(R.id.time_Text);
-        dismissButton = findViewById(R.id.dismiss_Button);
-        dismissButton.setText("Dismiss");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setData(NotificationData item) {
-        //translates the information of each surgery notification into text
+    public void setData(CalendarItemData item) {
+
+        //translates the information of each surgery calendarDay into text
         String detailDisplay = (item.name + ": " + item.type
                 + " \nLocation: " + item.location);
         LocalDateTime date = item.date;
         String timeDisplay = date.format(DateTimeFormatter.ofPattern("d/m/Y \n H:m"));
 
-
         detailsText.setText(detailDisplay);
         timeText.setText(timeDisplay);
-    }
 
-    //allows passing down an eventlistener for this view's button
-    public void setOnClick(Button.OnClickListener listener) {
-        dismissButton.setOnClickListener(listener);
     }
 }

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 
 import com.capstoneproject.arrivalnotification.Notification.NotificationActivity;
+import com.capstoneproject.arrivalnotification.calendar.CalendarActivity;
 
 public class DoctorActivity extends AppCompatActivity
 {

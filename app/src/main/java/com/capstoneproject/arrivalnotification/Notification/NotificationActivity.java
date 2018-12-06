@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.capstoneproject.arrivalnotification.CalendarActivity;
+import com.capstoneproject.arrivalnotification.calendar.CalendarActivity;
 import com.capstoneproject.arrivalnotification.MainActivity;
 import com.capstoneproject.arrivalnotification.R;
 
