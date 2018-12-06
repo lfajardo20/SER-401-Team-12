@@ -34,6 +34,7 @@ public class login extends AppCompatActivity {
     private Button btn_forget_pwd;
     private String currentUser;
     private boolean isDoctor;
+    private boolean isTransporter;
 
     public void loginUser (View view) {
 
@@ -75,7 +76,7 @@ public class login extends AppCompatActivity {
             if (user.equalsIgnoreCase("doctor")){
                 isDoctor = true;
             } else if (user.equalsIgnoreCase("transporter")){
-                isDoctor = false;
+                isTransporter = true;
             }
             else {
                 Toast.makeText(this, "Username or password is incorrect", Toast.LENGTH_SHORT).show();
@@ -86,7 +87,7 @@ public class login extends AppCompatActivity {
                 Intent Doctor = new Intent(this, DoctorActivity.class);
                 startActivity(Doctor);
                 super.finish();
-            } else if(!isDoctor) {
+            } else if(isTransporter) {
             Intent Transporter = new Intent(this, TransporterActivity.class);
             startActivity(Transporter);
             super.finish();
