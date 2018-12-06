@@ -11,11 +11,14 @@ import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,8 +26,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstoneproject.arrivalnotification.Notification.NotificationActivity;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
@@ -37,19 +54,37 @@ public class MainActivity extends AppCompatActivity {
     private final Activity actitvity = this;
     private TextView bar_scanner;
     private Button btn_camera;
+    private FusedLocationProviderClient lastKnownLocation;
+    private String latitude, longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        requestPermission();
+
         bar_scanner = this.findViewById(R.id.scanning_view);
         btn_camera = this.findViewById(R.id.btn_camera);
+        lastKnownLocation = LocationServices.getFusedLocationProviderClient(this);
 
         btn_camera.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(MainActivity.this,PassordForgetActivity.class));
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    return;
+                }
+                lastKnownLocation.getLastLocation().addOnSuccessListener(MainActivity.this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            latitude = "Latitude: " + location.getLatitude();
+                            longitude = "Longitude: " + location.getLongitude();
+                        }
+                    }
+                });
+                startActivity(new Intent(MainActivity.this, PassordForgetActivity.class));
                 cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
                 context = MainActivity.this.getApplicationContext();
                 openCamera();
@@ -85,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Notification registration initialized in mainactivity to assure that it always runs
         createNotificationChannel();
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
     }
 
     private void createNotificationChannel() {
@@ -130,18 +169,78 @@ public class MainActivity extends AppCompatActivity {
         if (res != null) {
             if (res.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG);
-            } else {
-                updateText(res.getContents());
+            } else
+                {
+                    callAPI(res.getContents(), latitude, longitude);
+                    updateText(res.getContents() + "\n" + latitude + "\n" + longitude);
             }
         } else {
             super.onActivityResult(reqCode, resCode, data);
         }
     }
 
+    private void callAPI(String data, String lat, String longi)
+    {
+
+        try {
+
+            //FORCING NETWORK CALLS ON MAIN THREAD FIX LATER
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            String url = "https://k634ch08g9.execute-api.us-west-1.amazonaws.com/test";
+            String dataStr = removeLeadingZeros(data);
+
+            HttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost(url);
+
+            String jsonString = "{\r\n  \"id\" :" + "\"" + dataStr + "\", \r\n" +
+                    "{\r\n  \"lat\" :" + "\"" + lat + "\", \r\n" +
+                    "{\r\n  \"long\" :" + "\"" + longi + "\" \r\n}";
+            Log.v("SENT", jsonString);
+
+
+            StringEntity params = new StringEntity(jsonString);
+
+            post.setEntity(params);
+            post.setHeader("Content-type", "application/json");
+            HttpResponse response = client.execute(post);
+
+            BufferedReader rd = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent()));
+
+            StringBuffer result = new StringBuffer();
+            String line = "";
+            while ((line = rd.readLine()) != null)
+            {
+                Log.d("line",line);
+                result.append(line);
+            }
+
+            updateText(result.toString());
+        }
+        catch(Exception e)
+        {
+            Log.d("ERROR", e.toString());
+        }
+    }
+
+    private String removeLeadingZeros(String str)
+    {
+        char zero = '0';
+        for(int i = 0; i < str.length(); i++)
+        {
+            if(str.charAt(i) != zero)
+            {
+                return(str.substring(i, str.length() - 1));
+            }
+        }
+        return str;
+    }
+
     private void updateText(String getCode){
         bar_scanner.setText(getCode);
     }
-
 
     public void startCalendar(MenuItem menu) {
         Intent intent = new Intent(this, CalendarActivity.class);
