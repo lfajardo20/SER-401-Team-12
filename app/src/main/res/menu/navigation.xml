@@ -4,11 +4,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_barcode"
-        android:icon="@drawable/ic_barcode"
-        android:title="@string/barcodeLabel" />
-
-    <item
         android:id="@+id/navigation_calendar"
         android:icon="@drawable/ic_date_range_black_24dp"
         android:title="@string/calendarLabel" />

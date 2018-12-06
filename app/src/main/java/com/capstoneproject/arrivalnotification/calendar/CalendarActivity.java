@@ -63,9 +63,9 @@ public class CalendarActivity extends AppCompatActivity implements DownloadCallb
             switch (item.getItemId()) {
                 case R.id.navigation_calendar:
                     return true;
-                case R.id.navigation_barcode:
-                    startScanning(item);
-                    return true;
+//                case R.id.navigation_barcode:
+//                    startScanning(item);
+//                    return true;
                 case R.id.navigation_notifications:
                     startNotifications(item);
                     return true;

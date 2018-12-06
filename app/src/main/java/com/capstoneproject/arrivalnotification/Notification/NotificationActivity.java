@@ -39,9 +39,6 @@ public class NotificationActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_notifications:
                     return true;
-                case R.id.navigation_barcode:
-                    startBarcode(item);
-                    return true;
                 case R.id.navigation_calendar:
                     startCalendar(item);
                     return true;
@@ -52,6 +49,7 @@ public class NotificationActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
         bottomNavigation.setOnNavigationItemSelectedListener(selectedListener);
+        bottomNavigation.setSelectedItemId(R.id.navigation_notifications);
 
         recyclerView = findViewById(R.id.notification_recycler);
 
