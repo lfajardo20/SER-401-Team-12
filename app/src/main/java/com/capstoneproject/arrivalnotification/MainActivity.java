@@ -1,11 +1,5 @@
 package com.capstoneproject.arrivalnotification;
 
-
-import android.Manifest;
-import android.app.Activity;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
@@ -44,7 +38,6 @@ import java.io.InputStreamReader;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
     private Context context;
     private String cameraId;
@@ -57,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient lastKnownLocation;
     private String latitude, longitude;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -142,23 +134,6 @@ public class MainActivity extends AppCompatActivity {
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
-        }
-    }
-
-    private void openCamera(){
-        try{
-            cameraId = cameraManager.getCameraIdList()[0];//get camera 1
-            cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
-            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA_PERMISSION);
-                return;
-            }
-            //new IntentIntegrator(this).initiateScan();
-        }catch(CameraAccessException e){
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -255,5 +230,4 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_MESSAGE, "hello notifications");
         startActivity(intent);
     }
-
 }

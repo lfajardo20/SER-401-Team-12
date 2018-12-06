@@ -39,9 +39,6 @@ public class NotificationActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_notifications:
                     return true;
-                case R.id.navigation_barcode:
-                    startBarcode(item);
-                    return true;
                 case R.id.navigation_calendar:
                     startCalendar(item);
                     return true;

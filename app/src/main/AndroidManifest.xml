@@ -22,6 +22,21 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity">
         </activity>
+        <activity android:name=".DoctorActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".TransporterActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".lockScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
         <activity android:name=".CalendarActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
