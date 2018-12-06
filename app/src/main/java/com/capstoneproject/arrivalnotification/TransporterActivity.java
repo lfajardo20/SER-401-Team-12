@@ -10,8 +10,10 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +24,15 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -117,11 +128,69 @@ public class TransporterActivity extends AppCompatActivity {
             if (res.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG);
             } else {
-                updateText(res.getContents() + "\n" + latitude + "\n" + longitude);
+                callAPI(res.getContents(), latitude, longitude);
+                //updateText(res.getContents() + "\n" + latitude + "\n" + longitude);
             }
         } else {
             super.onActivityResult(reqCode, resCode, data);
         }
+    }
+
+    private void callAPI(String data, String lat, String longi)
+    {
+
+        try {
+
+            //FORCING NETWORK CALLS ON MAIN THREAD FIX LATER
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            String url = "https://k634ch08g9.execute-api.us-west-1.amazonaws.com/test";
+            String dataStr = removeLeadingZeros(data);
+
+            HttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost(url);
+
+            String json = "{\n  \"id\" : " + "\"" + dataStr + "\" \n}";
+            Log.v("SENT", json);
+            Log.i("JSON", json);
+
+            StringEntity params = new StringEntity(json);
+
+            post.setEntity(params);
+            post.setHeader("Content-type", "application/json");
+            HttpResponse response = client.execute(post);
+
+            BufferedReader rd = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent()));
+
+            StringBuffer result = new StringBuffer();
+            String line = "";
+            while ((line = rd.readLine()) != null)
+            {
+                Log.d("line",line);
+                result.append(line);
+            }
+
+            updateText(result.toString());
+        }
+        catch(Exception e)
+        {
+            Log.d("ERROR", e.toString());
+        }
+    }
+
+    private String removeLeadingZeros(String str)
+    {
+        char zero = '0';
+        for(int i = 0; i < str.length(); i++)
+        {
+            if(str.charAt(i) != zero)
+            {
+                return(str.substring(i, str.length() - 1));
+            }
+        }
+        return str;
     }
 
     private void updateText(String getCode){
