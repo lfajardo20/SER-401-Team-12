@@ -33,12 +33,14 @@ public class login extends AppCompatActivity {
 
     private Button btn_forget_pwd;
     private String currentUser;
+    private boolean isDoctor;
 
     public void loginUser (View view) {
 
         EditText usr = (EditText) findViewById(R.id.usernameEdit);
         EditText pwd = (EditText) findViewById(R.id.passwordEdit);
         Intent changeActivity;
+
         String url = "https://awk4q8rl4b.execute-api.us-west-1.amazonaws.com/test";
         String json = "{"
                         + "\"userName\":" + "\"" + usr.getText().toString().trim() + "\","
@@ -68,30 +70,29 @@ public class login extends AppCompatActivity {
                 res.append(line);
             }
 
-            //Can't get user logged in even though console prints correct usr/pwd...
-            Log.i("USER", res.toString());
-            if ((res.toString() == "doctor".toString())){
-                currentUser = res.toString();
-            } else if (res.toString() == "transporter".toString()){
-                currentUser = res.toString();
+            //Login authentication.
+            String user = res.toString().replace("\"", "");
+            if (user.equalsIgnoreCase("doctor")){
+                isDoctor = true;
+            } else if (user.equalsIgnoreCase("transporter")){
+                isDoctor = false;
             }
             else {
                 Toast.makeText(this, "Username or password is incorrect", Toast.LENGTH_SHORT).show();
             }
 
-            if (currentUser == "doctor") {
-                //TODO: Doctor view
-                //Placeholder redirect
-                Log.i("USER", "Doctor logged on");
-                changeActivity = new Intent(this, MainActivity.class);
-                startActivity(changeActivity);
-            } else if (currentUser == "transporter"){
-                //TODO: Transporter view
-                //Placeholder redirect
-                Log.i("USER", "Transporter logged on");
-                changeActivity = new Intent(this, MainActivity.class);
-                startActivity(changeActivity);
+            //Display activity of user
+            if(isDoctor) {
+                Intent Doctor = new Intent(this, DoctorActivity.class);
+                startActivity(Doctor);
+                super.finish();
+            } else if(!isDoctor) {
+            Intent Transporter = new Intent(this, TransporterActivity.class);
+            startActivity(Transporter);
+            super.finish();
             }
+
+
         }catch (Exception e){
             e.printStackTrace();
         }
