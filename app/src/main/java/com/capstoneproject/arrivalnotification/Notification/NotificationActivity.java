@@ -20,7 +20,6 @@ import com.capstoneproject.arrivalnotification.MainActivity;
 import com.capstoneproject.arrivalnotification.R;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 public class NotificationActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -50,6 +49,7 @@ public class NotificationActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
         bottomNavigation.setOnNavigationItemSelectedListener(selectedListener);
+        bottomNavigation.setSelectedItemId(R.id.navigation_notifications);
 
         recyclerView = findViewById(R.id.notification_recycler);
 
