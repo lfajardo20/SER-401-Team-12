@@ -172,7 +172,7 @@ public class TransporterActivity extends AppCompatActivity {
                 result.append(line);
             }
 
-            updateText(result.toString());
+            updateText(lat + "\n" + longi);
         }
         catch(Exception e)
         {
