@@ -19,6 +19,9 @@ exports.handler = (event, context, callback) => {
     //context.callbackWaitsForEmptyEventLoop = false;
 
     let id = event.id;
+    let location = "unknown location";
+    if(event.lat && event.longi)
+        location = lat + ", " + longi;
     let messages = [];
 
     pool.getConnection(function(connectionErr, connection) {
@@ -38,7 +41,7 @@ exports.handler = (event, context, callback) => {
                     console.log(results[ii].date.toString());
                     let time = results[ii].date.toString().substring(16, 21);
                     messages[ii] = {
-                        Message: "Your " + time + " appointment has been checked in",
+                        Message: "Your " + time + " appointment has been checked in from " + location,
                         PhoneNumber: results[ii].phoneNumber,
                     };
                 }
