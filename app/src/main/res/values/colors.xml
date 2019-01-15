@@ -4,4 +4,14 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="notificationBackground">#3949ab</color>
+
+    <color name="mainRed">#e4002b</color>
+    <color name="offRed">#bd0024</color>
+    <color name="infoPurple">#7e30a6</color>
+    <color name="infoBlue">#008cc3</color>
+    <color name="infoGreen">#84bd00</color>
+    <color name="infoMagenta">#d21668</color>
+    <color name="infoYellow">#f2a900</color>
+    <color name="textColor">#0075a3</color>
+    <color name="lightTextColor">#72e6ff</color>
 </resources>
