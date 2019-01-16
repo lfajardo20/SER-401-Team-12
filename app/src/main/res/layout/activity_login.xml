@@ -37,11 +37,11 @@
         android:layout_width="wrap_content"
         android:layout_height="54dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="56dp"
         android:layout_marginEnd="8dp"
         android:onClick="loginUser"
         android:text="login"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.346"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordEdit" />
 
@@ -59,4 +59,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButton"
         app:layout_constraintVertical_bias="0.171" />
+
+    <TextView
+        android:id="@+id/changeLoginMode"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="or, sign up"
+        android:textColor="@color/zxing_custom_viewfinder_laser"
+        app:layout_constraintBottom_toTopOf="@+id/btn_forgetPwd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toEndOf="@+id/loginButton"
+        app:layout_constraintTop_toBottomOf="@+id/passwordEdit"
+        app:layout_constraintVertical_bias="0.232" />
 </android.support.constraint.ConstraintLayout>
