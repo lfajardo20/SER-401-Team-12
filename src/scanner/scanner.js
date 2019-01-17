@@ -3,18 +3,10 @@ import { Alert, View, Text, Vibration, StyleSheet } from "react-native";
 import { Camera, BarCodeScanner, Permissions } from "expo";
 
 export default class Scanner extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onBarCodeRead = this.onBarCodeRead.bind(this);
-    this.renderMessage = this.renderMessage.bind(this);
-    this.scannedCode = null;
-
-    this.state = {
-      hasCameraPermission: null,
-      type: Camera.Constants.Type.back,
-    };
-  }
+  state ={ scannedItem: {
+    hasCameraPermission: null,
+    type: Camera.Constants.Type.back,
+  }}
 
   async UNSAFE_componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -22,16 +14,16 @@ export default class Scanner extends Component {
     await this.resetScanner();
   }
 
-  renderAlert(title, message) {
+  renderAlert = (title, message) => {
     Alert.alert(
       title,
       message,
       [{ text: "OK", onPress: () => this.resetScanner() }],
       { cancelable: true }
     );
-  }
+  };
 
-  onBarCodeRead({ type, data }) {
+  onBarCodeRead = ({ type, data }) => {
     if (
       (type === this.state.scannedItem.type &&
         data === this.state.scannedItem.data) ||
@@ -53,21 +45,7 @@ export default class Scanner extends Component {
     } else {
       this.renderAlert("This barcode is not supported.", `${type} : ${data}`);
     }
-  }
-
-  renderMessage() {
-    if (this.state.scannedItem && this.state.scannedItem.type) {
-      const { type, data } = this.state.scannedItem;
-      return (
-        <Text style={styles.scanScreenMessage}>
-          {`Scanned \n ${type} \n ${data}`}
-        </Text>
-      );
-    }
-    return (
-      <Text style={styles.scanScreenMessage}>Focus the barcode to scan.</Text>
-    );
-  }
+  };
 
   resetScanner() {
     this.scannedCode = null;
@@ -81,9 +59,10 @@ export default class Scanner extends Component {
 
   render() {
     const { hasCameraPermission } = this.state;
+    const { type, data } = this.state.scannedItem;
 
     if (hasCameraPermission === null) {
-      return <Text>Requesting for camera permission</Text>;
+      return <Text>Requesting camera permission...</Text>;
     }
     if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
@@ -95,7 +74,15 @@ export default class Scanner extends Component {
             onBarCodeScanned={this.onBarCodeRead}
             style={StyleSheet.absoluteFill}
           />
-          {this.renderMessage()}
+          {this.state.scannedItem && this.state.scannedItem.type ? (
+            <Text style={styles.scanScreenMessage}>
+              {`Scanned \n ${type} \n ${data}`}
+            </Text>
+          ) : (
+            <Text style={styles.scanScreenMessage}>
+              Focus the barcode to scan.
+            </Text>
+          )}
         </View>
       </View>
     );
