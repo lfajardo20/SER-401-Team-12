@@ -4,9 +4,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_calendar"
+        android:id="@+id/navigation_calendarDay"
         android:icon="@drawable/ic_date_range_black_24dp"
-        android:title="@string/calendarLabel" />
+        android:title="Day" />
+
+    <item
+        android:id="@+id/navigation_calendarMonth"
+        android:icon="@drawable/ic_date_range_black_24dp"
+        android:title="Month" />
 
     <item
         android:id="@+id/navigation_notifications"
