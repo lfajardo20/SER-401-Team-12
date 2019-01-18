@@ -61,11 +61,11 @@ public class CalendarActivity extends AppCompatActivity implements DownloadCallb
 
         BottomNavigationView.OnNavigationItemSelectedListener selectedListener = (MenuItem item) -> {
             switch (item.getItemId()) {
-                case R.id.navigation_calendar:
+                case R.id.navigation_calendarDay:
                     return true;
-//                case R.id.navigation_barcode:
-//                    startScanning(item);
-//                    return true;
+                case R.id.navigation_calendarMonth:
+                    startScanning(item);
+                    return true;
                 case R.id.navigation_notifications:
                     startNotifications(item);
                     return true;

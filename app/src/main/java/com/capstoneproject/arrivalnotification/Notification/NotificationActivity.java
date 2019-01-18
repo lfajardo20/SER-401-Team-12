@@ -39,7 +39,10 @@ public class NotificationActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_notifications:
                     return true;
-                case R.id.navigation_calendar:
+                case R.id.navigation_calendarDay:
+                    startCalendar(item);
+                    return true;
+                case R.id.navigation_calendarMonth:
                     startCalendar(item);
                     return true;
                 default:
