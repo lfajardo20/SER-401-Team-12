@@ -7,27 +7,60 @@
 //
 
 import UIKit
+import AVFoundation
 
-class ViewController: UIViewController,UIImagePickerControllerDelegate,
-UINavigationControllerDelegate {
+class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
-    @IBOutlet weak var openCamera: UIButton!
-    @IBOutlet weak var imagePicked: UIImageView!
-
-
-    @IBAction func openCameraButton(sender: AnyObject) {
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            var imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = .camera;
-            imagePicker.allowsEditing = false
-            self.presentViewController(imagePicker, animated: true, completion: nil)
-        }
-    }
+    var captureSession: AVCaptureSession!
+    var previewLayer: AVCaptureVideoPreviewLayer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        view.backgroundColor = UIColor.black
+        captureSession = AVCaptureSession()
+
+        guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
+        let videoInput: AVCaptureDeviceInput
+
+        do {
+            videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
+        } catch {
+            return
+        }
+
+        if (captureSession.canAddInput(videoInput)) {
+            captureSession.addInput(videoInput)
+        } else {
+            failed()
+            return
+        }
+
+        let metadataOutput = AVCaptureMetadataOutput()
+
+        if (captureSession.canAddOutput(metadataOutput)) {
+            captureSession.addOutput(metadataOutput)
+
+            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            metadataOutput.metadataObjectTypes = [.ean8, .ean13, .pdf417]
+        } else {
+            failed()
+            return
+        }
+
+        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        previewLayer.frame = view.layer.bounds
+        previewLayer.videoGravity = .resizeAspectFill
+        view.layer.addSublayer(previewLayer)
+
+        captureSession.startRunning()
+    }
+
+    func failed() {
+        let ac = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+        captureSession = nil
     }
 
 
