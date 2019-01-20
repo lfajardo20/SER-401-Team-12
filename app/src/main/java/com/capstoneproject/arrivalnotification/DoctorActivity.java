@@ -40,7 +40,10 @@ public class DoctorActivity extends AppCompatActivity
 
             BottomNavigationView.OnNavigationItemSelectedListener selectedListener = (MenuItem item) -> {
                 switch (item.getItemId()) {
-                    case R.id.navigation_calendar:
+                    case R.id.navigation_calendarDay:
+                        startCalendar(item);
+                        return true;
+                    case R.id.navigation_calendarMonth:
                         startCalendar(item);
                         return true;
                     case R.id.navigation_notifications:
