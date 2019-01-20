@@ -16,12 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -30,6 +32,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -128,7 +132,7 @@ public class TransporterActivity extends AppCompatActivity {
             if (res.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG);
             } else {
-                callAPI(res.getContents(), latitude, longitude);
+                callConfirmAPI(res.getContents());
                 //updateText(res.getContents() + "\n" + latitude + "\n" + longitude);
             }
         } else {
@@ -136,7 +140,84 @@ public class TransporterActivity extends AppCompatActivity {
         }
     }
 
-    private void callAPI(String data, String lat, String longi)
+    private void callConfirmAPI(String data)
+    {
+
+        try {
+
+            //FORCING NETWORK CALLS ON MAIN THREAD FIX LATER
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            String url = "https://8svpahmpbc.execute-api.us-west-1.amazonaws.com/Test";
+            String dataStr = removeLeadingZeros(data);
+
+            HttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost(url);
+
+            String json = "{\n  \"id\" : " + "\"" + dataStr + "\" \n}";
+
+            StringEntity params = new StringEntity(json);
+
+            post.setEntity(params);
+            post.setHeader("Content-type", "application/json");
+            HttpResponse response = client.execute(post);
+
+            BufferedReader rd = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent()));
+
+            StringBuffer result = new StringBuffer();
+            String line = "";
+            while ((line = rd.readLine()) != null)
+            {
+                Log.d("line",line);
+                result.append(line);
+            }
+
+            //If exists continue
+            if(result != null)
+            {
+                //Calls confimration layout but does not pass info from post
+                setContentView(R.layout.activity_confirm);
+
+                TextView PatientInfo = findViewById(R.id.patient_Info);
+
+                String[] resultArray = result.toString().split(",");
+                String fixedString = "";
+
+                for(int i = 1; i < resultArray.length; i++)
+                {
+                    fixedString += resultArray[i].replace("]","").replace("}","").replace("[\\\\s\\\\-()]", "") + "\n";
+                }
+
+                PatientInfo.setText(fixedString);
+
+                Button ConfirmButton = findViewById(R.id.confirm_button);
+                ConfirmButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v)
+                {
+                    setContentView(R.layout.activity_transporter);
+                    callAPI(result.toString());
+                }
+                    });
+
+                Button DenyButton = findViewById(R.id.deny_Button);
+                DenyButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v)
+                    {
+                        setContentView(R.layout.activity_transporter);
+                    }
+                });
+            }
+
+        }
+        catch(Exception e)
+        {
+            Log.d("ERROR", e.toString());
+        }
+    }
+
+    private void callAPI(String data)
     {
 
         try {
@@ -172,7 +253,8 @@ public class TransporterActivity extends AppCompatActivity {
                 result.append(line);
             }
 
-            updateText(lat + "\n" + longi);
+            //Needed for GPS
+            //updateText(lat + "\n" + longi);
         }
         catch(Exception e)
         {
