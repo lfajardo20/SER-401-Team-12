@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -31,8 +32,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class login extends AppCompatActivity {
 
-    private Button btn_forget_pwd;
-    private String currentUser;
+    //private Button btn_forget_pwd;
+    //private String currentUser;
     private boolean isDoctor;
     private boolean isTransporter;
 
@@ -100,17 +101,26 @@ public class login extends AppCompatActivity {
 
     }
 
+    public void onClick(View view){
+        if (view.getId() == R.id.changeLoginMode){
+            Intent Signup = new Intent(this, signup.class);
+            startActivity(Signup);
+            super.finish();
+        }
+        else if (view.getId() == R.id.btn_forgetPwd){
+            startActivity(new Intent(getApplicationContext(),PassordForgetActivity.class));
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        btn_forget_pwd = findViewById(R.id.btn_forgetPwd);
-        btn_forget_pwd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),PassordForgetActivity.class));
-            }
-        });
+        Button btn_forget_pwd = findViewById(R.id.btn_forgetPwd);
+        TextView changeLoginMode = findViewById(R.id.changeLoginMode);
+
+        btn_forget_pwd.setOnClickListener(this::onClick);
+        changeLoginMode.setOnClickListener(this::onClick);
     }
 }
