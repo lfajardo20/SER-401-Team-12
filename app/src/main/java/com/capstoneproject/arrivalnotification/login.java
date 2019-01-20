@@ -103,7 +103,9 @@ public class login extends AppCompatActivity {
 
     public void onClick(View view){
         if (view.getId() == R.id.changeLoginMode){
-            Log.i("LOG", "Text view changed.");
+            Intent Signup = new Intent(this, signup.class);
+            startActivity(Signup);
+            super.finish();
         }
         else if (view.getId() == R.id.btn_forgetPwd){
             startActivity(new Intent(getApplicationContext(),PassordForgetActivity.class));
