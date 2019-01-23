@@ -1,6 +1,7 @@
 package com.capstoneproject.arrivalnotification;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,8 @@ import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
@@ -16,14 +19,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.gson.Gson;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -32,15 +34,14 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
+
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class TransporterActivity extends AppCompatActivity {
+public class TransporterActivity extends AppCompatActivity implements LocationListener {
         public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
         private Context context;
@@ -52,9 +53,12 @@ public class TransporterActivity extends AppCompatActivity {
         private TextView bar_scanner;
         private Button btn_camera;
         private FusedLocationProviderClient lastKnownLocation;
-        private String latitude, longitude;
+        LocationManager locationManager;
+        private double latitude, longitude;
 
+    @SuppressLint("MissingPermission")
     @Override
+    //remove Override when everything starts working.
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -62,6 +66,9 @@ public class TransporterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transporter);
 
         requestPermission();
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         bar_scanner = this.findViewById(R.id.scanning_view);
         btn_camera = this.findViewById(R.id.btn_camera);
@@ -79,8 +86,8 @@ public class TransporterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
-                            latitude = "Latitude: " + location.getLatitude();
-                            longitude = "Longitude: " + location.getLongitude();
+                            Log.d("Lat", Double.toString(latitude));
+                            Log.d("Long", Double.toString(longitude));
                         }
                     }
                 });
@@ -140,10 +147,15 @@ public class TransporterActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("MissingPermission")
+    //Testing purposes again
     private void callConfirmAPI(String data)
     {
 
         try {
+
+            Log.d("Lat", Double.toString(latitude));
+            Log.d("Long", Double.toString(longitude));
 
             //FORCING NETWORK CALLS ON MAIN THREAD FIX LATER
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -213,11 +225,11 @@ public class TransporterActivity extends AppCompatActivity {
         }
         catch(Exception e)
         {
-            Log.d("ERROR", e.toString());
+            //Log.d("ERROR", e.toString());
         }
     }
 
-    private void callAPI(String data)
+        private void callAPI(String data)
     {
 
         try {
@@ -233,10 +245,10 @@ public class TransporterActivity extends AppCompatActivity {
             HttpPost post = new HttpPost(url);
 
             String json = "{\n  \"id\" : " + "\"" + dataStr + "\" \n}";
-            Log.v("SENT", json);
-            Log.i("JSON", json);
 
             StringEntity params = new StringEntity(json);
+
+
 
             post.setEntity(params);
             post.setHeader("Content-type", "application/json");
@@ -249,7 +261,7 @@ public class TransporterActivity extends AppCompatActivity {
             String line = "";
             while ((line = rd.readLine()) != null)
             {
-                Log.d("line",line);
+                //Log.d("line",line);
                 result.append(line);
             }
 
@@ -258,7 +270,7 @@ public class TransporterActivity extends AppCompatActivity {
         }
         catch(Exception e)
         {
-            Log.d("ERROR", e.toString());
+           // Log.d("ERROR", e.toString());
         }
     }
 
@@ -279,7 +291,25 @@ public class TransporterActivity extends AppCompatActivity {
         bar_scanner.setText(getCode);
     }
 
+
     private void requestPermission() {
         ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
     }
+
+    public void onLocationChanged(Location location)
+    {
+
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+
+    }
+
+    //Add later for proper GPS implementation
+    public void onProviderEnabled(String input) {}
+
+    public void onProviderDisabled(String input){}
+
+    public void onProviderChanged(String input){}
+
+    public void onStatusChanged(String Changed,int newInput,Bundle newBundle){}
 }
