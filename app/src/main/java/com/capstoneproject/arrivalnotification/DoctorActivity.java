@@ -37,6 +37,8 @@ public class DoctorActivity extends AppCompatActivity
             super.onCreate(savedInstanceState);
             //set layout to doctor
             setContentView(R.layout.activity_calendar);
+            Intent intent = new Intent(this, CalendarActivity.class);
+            startActivity(intent);
 
             BottomNavigationView.OnNavigationItemSelectedListener selectedListener = (MenuItem item) -> {
                 switch (item.getItemId()) {
@@ -44,7 +46,7 @@ public class DoctorActivity extends AppCompatActivity
                         startCalendar(item);
                         return true;
                     case R.id.navigation_calendarMonth:
-                        startCalendar(item);
+                        startMonthView(item);
                         return true;
                     case R.id.navigation_notifications:
                         startNotifications(item);
@@ -93,6 +95,11 @@ public class DoctorActivity extends AppCompatActivity
         //TextView textView = (TextView) findViewById(R.id.textView);
         // String message = textView.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, "hi");
+        startActivity(intent);
+    }
+
+    public void startMonthView(MenuItem menu){
+        Intent intent = new Intent(this, month_view.class);
         startActivity(intent);
     }
 

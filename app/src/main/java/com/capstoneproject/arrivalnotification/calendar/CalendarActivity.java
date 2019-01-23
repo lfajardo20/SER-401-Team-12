@@ -19,6 +19,7 @@ import com.capstoneproject.arrivalnotification.Notification.NotificationActivity
 import com.capstoneproject.arrivalnotification.R;
 import com.capstoneproject.arrivalnotification.common.DownloadCallback;
 import com.capstoneproject.arrivalnotification.common.NetworkFragment;
+import com.capstoneproject.arrivalnotification.month_view;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,7 +65,7 @@ public class CalendarActivity extends AppCompatActivity implements DownloadCallb
                 case R.id.navigation_calendarDay:
                     return true;
                 case R.id.navigation_calendarMonth:
-                    startScanning(item);
+                    startMonthView(item);
                     return true;
                 case R.id.navigation_notifications:
                     startNotifications(item);
@@ -93,10 +94,8 @@ public class CalendarActivity extends AppCompatActivity implements DownloadCallb
         startDownload();
     }
 
-    public void startScanning(MenuItem menu) {
-        Intent intent = new Intent(this, MainActivity.class);
-        //TextView textView = (TextView) findViewById(R.id.textView);
-        // String message = textView.getText().toString();
+    public void startMonthView(MenuItem menu){
+        Intent intent = new Intent(this, month_view.class);
         startActivity(intent);
     }
 
