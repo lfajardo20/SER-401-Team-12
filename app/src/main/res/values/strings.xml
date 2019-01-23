@@ -46,5 +46,5 @@
     <string name="button">Button</string>
     <string name="username">Username...</string>
     <string name="go_to_date">Go To Date</string>
-
+    <string name="patient_info">Is the patient information below correct?</string>
 </resources>

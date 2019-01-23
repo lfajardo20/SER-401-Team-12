@@ -62,6 +62,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".month_view"></activity>
+        <activity android:name=".signup"></activity>
     </application>
 
 </manifest>
