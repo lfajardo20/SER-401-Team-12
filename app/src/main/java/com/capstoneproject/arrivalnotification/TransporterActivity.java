@@ -42,7 +42,6 @@ import java.io.InputStreamReader;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class TransporterActivity extends AppCompatActivity implements LocationListener {
-        public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
         private Context context;
         private String cameraId;
@@ -68,11 +67,16 @@ public class TransporterActivity extends AppCompatActivity implements LocationLi
         requestPermission();
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         bar_scanner = this.findViewById(R.id.scanning_view);
         btn_camera = this.findViewById(R.id.btn_camera);
         lastKnownLocation = LocationServices.getFusedLocationProviderClient(this);
+
+        //USE network
+        if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+        {
+            locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER,this, null);
+        }
 
         btn_camera.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -86,8 +90,13 @@ public class TransporterActivity extends AppCompatActivity implements LocationLi
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
-                            Log.d("Lat", Double.toString(latitude));
-                            Log.d("Long", Double.toString(longitude));
+
+                            Log.v("Lat", Double.toString(location.getLatitude()));
+                            Log.v("Long", Double.toString(location.getLongitude()));
+
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+
                         }
                     }
                 });
@@ -154,8 +163,10 @@ public class TransporterActivity extends AppCompatActivity implements LocationLi
 
         try {
 
-            Log.d("Lat", Double.toString(latitude));
-            Log.d("Long", Double.toString(longitude));
+
+            //print location
+            Log.i("Lat", Double.toString(latitude));
+            Log.i("Long", Double.toString(longitude));
 
             //FORCING NETWORK CALLS ON MAIN THREAD FIX LATER
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -248,8 +259,6 @@ public class TransporterActivity extends AppCompatActivity implements LocationLi
 
             StringEntity params = new StringEntity(json);
 
-
-
             post.setEntity(params);
             post.setHeader("Content-type", "application/json");
             HttpResponse response = client.execute(post);
@@ -265,8 +274,6 @@ public class TransporterActivity extends AppCompatActivity implements LocationLi
                 result.append(line);
             }
 
-            //Needed for GPS
-            //updateText(lat + "\n" + longi);
         }
         catch(Exception e)
         {
@@ -292,16 +299,15 @@ public class TransporterActivity extends AppCompatActivity implements LocationLi
     }
 
 
-    private void requestPermission() {
+    private void requestPermission()
+    {
         ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
     }
 
     public void onLocationChanged(Location location)
     {
-
         latitude = location.getLatitude();
         longitude = location.getLongitude();
-
     }
 
     //Add later for proper GPS implementation

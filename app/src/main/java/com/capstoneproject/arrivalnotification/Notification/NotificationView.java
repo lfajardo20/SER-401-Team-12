@@ -71,7 +71,7 @@ public class NotificationView extends LinearLayout {
         initComponents();
 
         String detailDisplay = (item.name + ": " + item.type
-                + " \nLocation: " + item.location);
+                + " Location: " + item.location);
 
         // String timeDisplay = (item.date.getTime() + "\n" + item.date.getDate());
 
@@ -92,7 +92,7 @@ public class NotificationView extends LinearLayout {
     public void setData(NotificationData item) {
         //translates the information of each surgery notification into text
         String detailDisplay = (item.name + ": " + item.type
-                + " \nLocation: " + item.location);
+                + "Location: " + item.location);
         LocalDateTime date = item.date;
         String timeDisplay = date.format(DateTimeFormatter.ofPattern("d/m/Y \n H:m"));
 
