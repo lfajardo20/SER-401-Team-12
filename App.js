@@ -1,8 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import Scanner from "./src/scanner/scanner";
+import { Button, View, Text } from 'react-native';
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
-export default class App extends React.Component {
+import Scanner from "./src/scanner/scanner";
+import ConfirmationScreen  from "./src/views/ConfirmationScreen";
+
+export class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
@@ -13,11 +16,14 @@ export default class App extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+const AppNavigator = createStackNavigator(
+  {
+    Confirmation: ConfirmationScreen,
+    Scanner: Scanner
   },
-});
+  {
+    initialRouteName: "Scanner"
+  }
+);
+
+export default createAppContainer(AppNavigator);
