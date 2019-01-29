@@ -6,9 +6,7 @@ export default class SchedulePage extends React.Component {
   render() {
     return (
       <View>
-        {exampleData.map(day => {
-          return <ScheduleDay data={day} key={day} />;
-        })}
+        <ScheduleDay data={exampleData[0]} />
       </View>
     );
   }
@@ -17,6 +15,23 @@ export default class SchedulePage extends React.Component {
 const exampleData = [
   {
     date: "1/29/2019",
+    events: [
+      {
+        location: "place",
+        time: "14:00",
+        type: "Surgery",
+        name: "John Doe",
+      },
+      {
+        location: "place",
+        time: "14:00",
+        type: "Surgery",
+        name: "John Doe",
+      },
+    ],
+  },
+  {
+    date: "1/30/2019",
     events: [
       {
         location: "place",
