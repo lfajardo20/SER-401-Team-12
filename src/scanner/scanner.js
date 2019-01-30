@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Alert, View, Text, Vibration, StyleSheet } from "react-native";
 import { Camera, BarCodeScanner, Permissions } from "expo";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
 export default class Scanner extends Component {
   state ={ scannedItem: {
@@ -60,6 +61,7 @@ export default class Scanner extends Component {
   render() {
     const { hasCameraPermission } = this.state;
     const { type, data } = this.state.scannedItem;
+    const {navigate} = this.props.navigation;
 
     if (hasCameraPermission === null) {
       return <Text>Requesting camera permission...</Text>;
@@ -71,7 +73,7 @@ export default class Scanner extends Component {
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
           <BarCodeScanner
-            onBarCodeScanned={this.onBarCodeRead}
+            onBarCodeScanned={this.onBarCodeRead && this.handleBarCodeScanned}
             style={StyleSheet.absoluteFill}
           />
           {this.state.scannedItem && this.state.scannedItem.type ? (
@@ -87,6 +89,11 @@ export default class Scanner extends Component {
       </View>
     );
   }
+  
+    handleBarCodeScanned = ({ type, data }) => 
+    {
+        this.props.navigation.navigate('Confirmation', {id:data})
+    }
 }
 
 const styles = StyleSheet.create({
