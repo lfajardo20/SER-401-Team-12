@@ -1,23 +1,50 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import Scanner from "./src/scanner/scanner";
+import { Button, View, Text } from 'react-native';
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
-export default class App extends React.Component {
+//Need to import each of the used view classes
+import Scanner from "./src/scanner/scanner";
+import TransporterScreen  from "./src/views/TransporterScreen";
+import StaffScreen  from "./src/views/StaffScreen";
+
+class HomeScreen extends React.Component {
+    static navigationOptions = {
+    title: 'Temp Home',
+    };
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Scanner />
-      </View>
+        //Can only return one element so all componets must be wrapped in a parent componet 
+        //ex: the two views in one view
+     <View style={{ flex: 1, alignItems: "center",justifyContent: "center"}}>
+        <Text>Select a role view</Text>     
+        <View style={{alignItems: "center", padding: 5}}>
+            <Button
+              title="Go to Transporter View"
+              onPress={() => this.props.navigation.navigate('Transporter')}
+            />
+        </View>
+        <View style={{alignItems: "center", padding: 5}}>
+            <Button
+              title="Go to Staff View"
+              onPress={() => this.props.navigation.navigate('Staff')}
+            />
+        </View>
+     </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+//Name of different navigation screens go here
+const AppNavigator = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Transporter: TransporterScreen,
+    Staff: StaffScreen,
+    Scanner: Scanner
   },
-});
+  {
+    initialRouteName: "Home"
+  }
+);
+
+export default createAppContainer(AppNavigator);
