@@ -1,15 +1,31 @@
 import React from "react";
-import { View } from "react-native";
+import { View, SectionList } from "react-native";
 import ScheduleDay from "./scheduleDay";
 
 export default class SchedulePage extends React.Component {
   render() {
+    //turns JSON props into an array of objects usable by SectionList
+    let sectionData = exampleData.map(event => eventTranslator(event));
     return (
       <View>
-        <ScheduleDay data={exampleData[0]} />
+        <SectionList
+          renderItem={({ item, index }) => (
+            <ScheduleDay key={index} data={item} />
+          )}
+          sections={sectionData}
+          keyExtractor={(item, index) => item + index}
+        />
       </View>
     );
   }
+}
+
+//translates JSON representation of events into SectionList usable format
+function eventTranslator(day) {
+  return {
+    title: day.date,
+    data: [day], //puts the object into an array for SectionList
+  };
 }
 
 const exampleData = [

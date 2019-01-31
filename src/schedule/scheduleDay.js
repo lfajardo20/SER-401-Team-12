@@ -15,7 +15,7 @@ export default class ScheduleDay extends React.Component {
         <Text>{data.date}</Text>
         <SectionList
           renderItem={({ item, index }) => (
-            <ScheduleEvent key={index} event={item} />
+            <ScheduleEvent key={index} event={item} style={styles.item} />
           )}
           renderSectionHeader={({ section: { title } }) => (
             <Text style={{ fontWeight: "bold" }}>{title}</Text>
