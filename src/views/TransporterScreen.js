@@ -1,21 +1,21 @@
 import React, { Component } from "react";
-import { Button, View, Text } from 'react-native';
+import { Button, View, Text } from "react-native";
 
 //Export TransporterScreen so App.js can call it for navigation
 export default class TransporterScreen extends React.Component {
   static navigationOptions = {
-    title: 'Transporter',
+    title: "Transporter",
   };
   render() {
     const {navigate} = this.props.navigation;
     return (
-        <View style={{ flex: 1, alignItems: "center",justifyContent: "center"}}>
-          <Button
-            title="Open Camera"
-            //On press navigate to camera object
-            onPress={() => navigate('Scanner')}
-          />
-        </View>
+      <View style={{ flex: 1, alignItems: "center",justifyContent: "center"}}>
+        <Button
+          title="Open Camera"
+          //On press navigate to camera object
+          onPress={() => navigate("Scanner")}
+        />
+      </View>
     );
   }
 }

@@ -3,10 +3,12 @@ import { Alert, View, Text, Vibration, StyleSheet } from "react-native";
 import { Camera, BarCodeScanner, Permissions } from "expo";
 
 export default class Scanner extends Component {
-  state ={ scannedItem: {
-    hasCameraPermission: null,
-    type: Camera.Constants.Type.back,
-  }}
+  state = {
+    scannedItem: {
+      hasCameraPermission: null,
+      type: Camera.Constants.Type.back,
+    },
+  };
 
   async UNSAFE_componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
