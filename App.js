@@ -6,7 +6,7 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Scanner from "./src/scanner/scanner";
 import TransporterScreen from "./src/views/TransporterScreen";
 import StaffScreen from "./src/views/StaffScreen";
-import SchedulePage from "./src/schedule/schedulePage";
+import SignupForm from "./src/signupForm";
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -30,6 +30,12 @@ class HomeScreen extends React.Component {
             onPress={() => this.props.navigation.navigate("Staff")}
           />
         </View>
+        <View style={{ alignItems: "center", padding: 5 }}>
+          <Button
+            title="Create new account"
+            onPress={() => this.props.navigation.navigate("Signup")}
+          />
+        </View>
       </View>
     );
   }
@@ -42,6 +48,7 @@ const AppNavigator = createStackNavigator(
     Transporter: TransporterScreen,
     Staff: StaffScreen,
     Scanner: Scanner,
+    Signup: SignupForm,
   },
   {
     initialRouteName: "Home",

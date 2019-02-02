@@ -81,7 +81,9 @@ export default class SignupForm extends React.Component {
         <TextInput onChangeText={text => this.setState({ email: text })} />
         <Text style={styles.errorText}>{errors.email} </Text>
 
-        <Button onPress={this.submitForm}>Submit</Button>
+        <Button onPress={this.submitForm} title="Submit">
+          Submit
+        </Button>
       </View>
     );
   }
@@ -135,6 +137,6 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     fontSize: 8,
-    marginBottom: "20px",
+    marginBottom: 20,
   },
 });
