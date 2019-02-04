@@ -7,19 +7,21 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 //Export ConfirmationScreen so App.js can call it for navigation
 export default class ConfirmationScreen extends React.Component 
 { 
-   constructor(props){
-    super(props);
-    this.id = {"id" : this.props.navigation.getParam('id').replace(/^0+/, '')};
+   constructor(props)
+   {
+        super(props)
+        this.id = {"id" : this.props.navigation.getParam('id').replace(/^0+/, '')};
 
-    this.state ={ isLoading: true}
-    this.ComponentDidMount(this.id)
-  }
+        this.state ={isLoading: true, data:[]}
+        this.PostConfirmation();
+    }
 
     static navigationOptions = {
         title: 'Confirmation',
       };    
     
-    ComponentDidMount(id){
+    PostConfirmation()
+    {
         return fetch('https://8svpahmpbc.execute-api.us-west-1.amazonaws.com/Test',
             { method: 'POST',headers: 
             { Accept: 'application/json','Content-Type': 'application/json',}
@@ -34,14 +36,35 @@ export default class ConfirmationScreen extends React.Component
             console.log(JSON.stringify(this.id))
             console.log(this.state.dataSource);
         });
-
       })
-      .catch((error) =>{
-        console.error(error);
-      });
-  }
-     
- 
+      .catch((error) =>{ console.error(error);});
+      
+      
+    }
+    
+    PostConfirmationTrue()
+    {                
+        return fetch('https://k634ch08g9.execute-api.us-west-1.amazonaws.com/test',
+            { method: 'POST',headers: 
+            { Accept: 'application/json','Content-Type': 'application/json',}
+            , body: JSON.stringify(this.id)})
+          .then((response) => response.json())
+          .then((responseJson) => {
+
+            this.setState({
+          isLoading: false,
+          dataSource: responseJson,
+        }, function(){
+            console.log(JSON.stringify(this.id))
+            console.log(this.state.dataSource);
+        });
+        })
+          .catch((error) =>{
+            console.error(error);
+          });
+        
+        // Change screen after post        
+    } 
   
   render() 
   {
@@ -54,19 +77,14 @@ export default class ConfirmationScreen extends React.Component
       )
     }
     
+    
     return(
         
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>          
-            <View style={styles.container}>
-                <FlatList
-                data = {this.state.dataSource}
-                  renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-                />
-            </View>
-                        <View style={{flex: 1, alignItems: 'center'}}>
+            <View style={{flex: 1, alignItems: 'center'}}>
                 <Button
                   title="Yes"
-                  onPress={() => this.props.navigation.navigate('Scanner')}
+                  onPress={() => this.PostConfirmationTrue}
                 />
             </View>            
             <View style={{flex: 1, alignItems: 'center'}}>
