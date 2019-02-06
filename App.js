@@ -3,7 +3,7 @@ import { Button, View, Text } from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 import Scanner from "./src/scanner/scanner";
-import ConfirmationScreen  from "./src/views/ConfirmationScreen";
+import ConfirmationScreen from "./src/views/ConfirmationScreen";
 
 export class App extends React.Component {
   render() {

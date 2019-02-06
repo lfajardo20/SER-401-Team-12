@@ -77,7 +77,6 @@ export default class ConfirmationScreen extends React.Component
       )
     }
     
-    
     return(
         
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>          
