@@ -1,11 +1,46 @@
 import React from "react";
-import { View, SectionList } from "react-native";
+import { View, SectionList, Text } from "react-native";
 import ScheduleDay from "./scheduleDay";
 
 export default class SchedulePage extends React.Component {
+  state = {
+    fetchedData: null,
+  };
+  async ComponentDidMount() {
+    return fetch(
+      "https://8svpahmpbc.execute-api.us-west-1.amazonaws.com/Test", //TODO make account creation API endpoint
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState(
+          {
+            fetchedData: responseJson,
+          },
+          function() {
+            console.log(JSON.stringify(accountInfo));
+          }
+        );
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
   render() {
+    let { fetchedData } = this.state;
+
+    if (!fetchedData) {
+      return <Text>Loading Schedule...</Text>;
+    }
     //turns JSON props into an array of objects usable by SectionList
-    let sectionData = exampleData.map(event => eventTranslator(event));
+    let sectionData = fetchedData.map(event => eventTranslator(event));
     return (
       <View>
         <SectionList
