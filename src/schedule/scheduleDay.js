@@ -9,7 +9,7 @@ export default class ScheduleDay extends React.Component {
     if (!data) return null;
 
     //turns JSON props into an array of objects usable by SectionList
-    let sectionData = data.events.map(event => eventTranslator(event));
+    let sectionData = data.schedule.map(event => eventTranslator(event));
     return (
       <View style={styles.container}>
         <Text>{data.date}</Text>

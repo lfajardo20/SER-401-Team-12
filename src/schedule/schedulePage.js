@@ -6,26 +6,17 @@ export default class SchedulePage extends React.Component {
   state = {
     fetchedData: null,
   };
-  async ComponentDidMount() {
-    return fetch(
-      "https://8svpahmpbc.execute-api.us-west-1.amazonaws.com/Test", //TODO make account creation API endpoint
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    )
+
+  componentDidMount() {
+    return fetch("https://ka388qldlb.execute-api.us-west-1.amazonaws.com/test/")
       .then(response => response.json())
       .then(responseJson => {
         this.setState(
           {
+            isLoading: false,
             fetchedData: responseJson,
           },
-          function() {
-            console.log(JSON.stringify(accountInfo));
-          }
+          function() {}
         );
       })
       .catch(error => {
@@ -95,6 +86,37 @@ const exampleData = [
         time: "14:00",
         type: "Surgery",
         name: "John Doe",
+      },
+    ],
+  },
+];
+
+const exampleData2 = [
+  {
+    date: "2019-02-08T01:49:42.455Z",
+    schedule: [
+      {
+        type: "Appendectomy",
+        name: "John Doe",
+        location: "OP206",
+        time: "12:00",
+      },
+      {
+        type: "Other Surgery",
+        name: "Jane Doe",
+        location: "OP201",
+        time: "13:30",
+      },
+    ],
+  },
+  {
+    date: "2019-02-08T01:49:42.455Z",
+    schedule: [
+      {
+        type: "API Test",
+        name: "HELLO WORLD",
+        location: "OP206",
+        time: "12:00",
       },
     ],
   },
