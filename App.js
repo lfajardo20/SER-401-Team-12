@@ -7,17 +7,18 @@ import Scanner from "./src/scanner/scanner";
 import TransporterScreen from "./src/views/TransporterScreen";
 import StaffScreen from "./src/views/StaffScreen";
 import SignupForm from "./src/signupForm";
+import { TextInput } from "react-native-gesture-handler";
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: "Temp Home",
+    title: "Arrival Notification",
   };
   render() {
     return (
       //Can only return one element so all componets must be wrapped in a parent componet
       //ex: the two views in one view
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Select a role view</Text>
+        {/* <Text>Select a role view</Text>
         <View style={{ alignItems: "center", padding: 5 }}>
           <Button
             title="Go to Transporter View"
@@ -28,6 +29,16 @@ class HomeScreen extends React.Component {
           <Button
             title="Go to Staff View"
             onPress={() => this.props.navigation.navigate("Staff")}
+          />
+        </View> */}
+        <View>
+          <Text>Username</Text>
+          <TextInput />
+          <Text>Password</Text>
+          <TextInput />
+          <Button
+            title="Log in"
+            onPress={() => this.props.navigation.navigate("Transporter")}
           />
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
