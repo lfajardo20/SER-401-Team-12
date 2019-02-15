@@ -36,10 +36,7 @@ class HomeScreen extends React.Component {
           <TextInput />
           <Text>Password</Text>
           <TextInput />
-          <Button
-            title="Log in"
-            onPress={() => this.props.navigation.navigate("Transporter")}
-          />
+          <Button title="Log in" onPress={() => this.testingFetchAsync()} />
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
           <Button
@@ -49,6 +46,17 @@ class HomeScreen extends React.Component {
         </View>
       </View>
     );
+  }
+
+  async testingFetchAsync() {
+    return fetch("https://facebook.github.io/react-native/movies.json")
+      .then(response => response.json())
+      .then(responseJson => {
+        return responseJson.movies;
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 }
 
