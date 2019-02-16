@@ -1,8 +1,8 @@
 var mysql = require('mysql');
-var AWS = require('aws-sdk');
+var crypto = require('crypto-js');
 
 var pool  = mysql.createPool({
-    host: "24.56.49.110",
+    host: "184.103.137.162",
     user: 'db',
     password: 'password',
     port: "3306",
@@ -13,6 +13,7 @@ exports.handler = async (event, context, callback) => {
   //prevent timeout from waiting event loop
   
   var queryStr = "SELECT * FROM user.user WHERE userName ='" + event.userName + "'"; 
+
   
     context.callbackWaitsForEmptyEventLoop = false;
     return new Promise(function(resolve, reject)
@@ -32,8 +33,10 @@ exports.handler = async (event, context, callback) => {
                     }
                     else
                     {
-                        //Check if passwords match
-                        if(event.password == results[0].userPassword)
+                        //hash password + salt
+                        //see if this matches the account
+                        let hash = Crypto.SHA256(event.password + "" + salt);
+                        if(hash === results[0].passwordHash)
                         {
                             resolve(results[0].userType);
                         }
