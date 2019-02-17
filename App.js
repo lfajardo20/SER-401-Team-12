@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, View, Text, StyleSheet } from "react-native";
+import { Button, View, Text, StyleSheet, PermissionsAndroid } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 //Need to import each of the used view classes
@@ -8,8 +8,10 @@ import TransporterScreen from "./src/views/TransporterScreen";
 import StaffScreen from "./src/views/StaffScreen";
 import SignupForm from "./src/signupForm";
 import { TextInput } from "react-native-gesture-handler";
+import gps from "./src/gps";
 
-class HomeScreen extends React.Component {
+class HomeScreen extends React.Component 
+{
   static navigationOptions = {
     title: "Arrival Notification",
   };
@@ -43,6 +45,12 @@ class HomeScreen extends React.Component {
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
           <Button
+            title="Go GPS test"
+            onPress={() => this.props.navigation.navigate("GPS")}
+          />
+        </View>
+        <View style={{ alignItems: "center", padding: 5 }}>
+          <Button
             title="Create new account"
             onPress={() => this.props.navigation.navigate("Signup")}
           />
@@ -70,6 +78,7 @@ const AppNavigator = createStackNavigator(
     Staff: StaffScreen,
     Scanner: Scanner,
     Signup: SignupForm,
+    GPS: gps,
   },
   {
     initialRouteName: "Home",
