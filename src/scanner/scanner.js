@@ -37,14 +37,17 @@ export default class Scanner extends Component {
     Vibration.vibrate();
     this.setState({ scannedItem: { data, type } });
 
-    if (type.startsWith("org.gs1.EAN")) {
-      // Process EAN code
+    if (type != null) 
+    {
+      //Process as long type is not null
+      //Will have to implement checksum function for GS1-128 as expo does not have one
+      //Scan the literal and let database find if its not valid
+      
       this.resetScanner();
       this.props.navigation.navigate("YOUR_NEXT_SCREEN", { ean: data });
-    } else if (type.startsWith("org.iso.QRCode")) {
-      // Process QRCode
-      this.resetScanner();
-    } else {
+    } 
+    else 
+    {
       this.renderAlert("This barcode is not supported.", `${type} : ${data}`);
     }
   };

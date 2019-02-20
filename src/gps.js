@@ -10,7 +10,8 @@ export default class gps extends React.Component
     title: "gps",
   };
   
-    //Get these corrdinates from database in later sprint    
+    //Get these corrdinates from database in later sprint
+
     MainPREOP = {
         Lat: 33.479214,
         Long: -112.041310,
@@ -66,7 +67,7 @@ export default class gps extends React.Component
 
   render() 
   {
-    let text = 'Awaiting location...';
+    let text = "Awaiting location...";
     
     if (this.state.hasLocationPermission) 
     {
@@ -115,7 +116,7 @@ export default class gps extends React.Component
           }
           else
           {          
-            text = "Error not in a valid location. \n" + "Please select one from the list below.";
+            text = "Error not in a valid location." + this.state.location.coords.longitude + "," + this.state.location.coords.latitude + "\n" + "Please select one from the list below.";
             return(
                 <View style={styles.container}>
                     <Text style={styles.paragraph}>{text}</Text>                
@@ -127,7 +128,7 @@ export default class gps extends React.Component
                       }>
                       <Picker.Item label="Main PREOP" value="MainPREOP" />
                       <Picker.Item label="East PREOP" value="EastPREOP" />
-                      <Picker.Item label="East PACU PREOP" value="East PACUPREOP" />
+                      <Picker.Item label="East PACU PREOP" value="EastPACUPREOP" />
                     </Picker>
                     
                     <Button
