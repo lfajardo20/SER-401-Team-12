@@ -12,7 +12,8 @@ var pool  = mysql.createPool({
 exports.handler = async (event, context, callback) => {
 
   //prevent timeout from waiting event loop
-  var queryStr = "SELECT * FROM app.patient WHERE id ='" + event.id + "'";
+  var queryStr = "SELECT * FROM app.patient, app.trasporter, WHERE ad patient.id ='" + event.id + "'"
+                  + " ad patient.id = app.transporter.id";
 
     return new Promise(function(resolve, reject)
     {
