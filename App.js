@@ -6,6 +6,7 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Scanner from "./src/scanner/scanner";
 import TransporterScreen from "./src/views/TransporterScreen";
 import StaffScreen from "./src/views/StaffScreen";
+import ConfirmationScreen from "./src/views/ConfirmationScreen";
 import SignupForm from "./src/signupForm";
 import gps from "./src/gps";
 

@@ -106,7 +106,7 @@ export default class Scanner extends Component {
   
     handleBarCodeScanned = ({ type, data }) => 
     {
-        this.props.navigation.navigate('Confirmation', {id:data})
+        this.props.navigation.navigate('Confirmation', {id:this.processBarcode(data)})
     }
 }
 
