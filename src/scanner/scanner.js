@@ -4,10 +4,12 @@ import { Camera, BarCodeScanner, Permissions } from "expo";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 export default class Scanner extends Component {
-  state ={ scannedItem: {
-    hasCameraPermission: null,
-    type: Camera.Constants.Type.back,
-  }}
+  state = {
+    scannedItem: {
+      hasCameraPermission: null,
+      type: Camera.Constants.Type.back,
+    },
+  };
 
   async UNSAFE_componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -35,18 +37,30 @@ export default class Scanner extends Component {
 
     Vibration.vibrate();
     this.setState({ scannedItem: { data, type } });
-
-    if (type.startsWith("org.gs1.EAN")) {
-      // Process EAN code
-      this.resetScanner();
-      this.props.navigation.navigate("YOUR_NEXT_SCREEN", { ean: data });
-    } else if (type.startsWith("org.iso.QRCode")) {
-      // Process QRCode
-      this.resetScanner();
-    } else {
+    if (type == 2) 
+    {
+      //this.resetScanner();
+      //this.renderAlert("This barcode is Supported", `${type} : ${this.processBarcode(data)}`);
+      //this.props.navigation.navigate("YOUR_NEXT_SCREEN", { ean: data });
+    } 
+    else 
+    {
       this.renderAlert("This barcode is not supported.", `${type} : ${data}`);
     }
   };
+  
+  processBarcode(data)
+  {
+    //bacodes follow format of A00000000
+    if(data.charAt(0) == "A" && data.length == 9)
+    {
+        return data.substr(1,data.length - 1);
+    }
+    else
+    {
+        return null;
+    }
+  }
 
   resetScanner() {
     this.scannedCode = null;
@@ -78,7 +92,7 @@ export default class Scanner extends Component {
           />
           {this.state.scannedItem && this.state.scannedItem.type ? (
             <Text style={styles.scanScreenMessage}>
-              {`Scanned \n ${type} \n ${data}`}
+              {`Scanned \n type: ${type} \n Patient ID: ${this.processBarcode(data)}`}
             </Text>
           ) : (
             <Text style={styles.scanScreenMessage}>
