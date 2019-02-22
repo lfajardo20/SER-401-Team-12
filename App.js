@@ -14,6 +14,7 @@ class HomeScreen extends React.Component
   static navigationOptions = {
     title: "Temp Home",
   };
+
   render() {
     return (
       //Can only return one element so all componets must be wrapped in a parent componet
@@ -54,6 +55,7 @@ const AppNavigator = createStackNavigator(
   {
     Home: HomeScreen,
     Transporter: TransporterScreen,
+    Confirmation: ConfirmationScreen,
     Staff: StaffScreen,
     Scanner: Scanner,
     Signup: SignupForm,
