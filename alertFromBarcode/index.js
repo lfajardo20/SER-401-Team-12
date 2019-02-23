@@ -19,12 +19,12 @@ exports.handler = async (event, context, callback) => {
     let id = event.id;
     let location = "unknown location";
     if(event.lat && event.longi)
-        location = lat + ", " + longi;
+        location = event.lat + ", " + event.longi;
     let messages = [];
   
   var queryStr = 'SELECT DISTINCT phoneNumber, date ' + 
   //get users, appointments, and their associations
-  'FROM app.user as u, app.appointment as a, app.assignment as assign ' +
+  'FROM user.user as u, app.appointment as a, app.assignment as assign ' +
   'WHERE assign.staffID = u.userID AND assign.appointmentID = a.appointmentID AND ' +
   ' a.appointmentID = ' + id + ';';
   
