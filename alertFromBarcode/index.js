@@ -1,77 +1,92 @@
-//mysql connection pool
-var mysql = require('mysql');
+var mysql = require('mysql');//establish sql connection pool
 
 var pool  = mysql.createPool({
-    host: "24.56.49.110",
+    host: "184.103.137.162",
     user: 'db',
     password: 'password',
     port: "3306",
-    database: 'app',
+    database: 'user',
   });
+
 
 // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
 // Set region
 AWS.config.update({region: 'us-west-2'});
-
-exports.handler = (event, context, callback) => {
-    //prevent timeout from waiting event loop
-    //context.callbackWaitsForEmptyEventLoop = false;
-
+  
+exports.handler = async (event, context, callback) => {
+    //parse event info
     let id = event.id;
     let location = "unknown location";
     if(event.lat && event.longi)
         location = lat + ", " + longi;
     let messages = [];
+  
+  var queryStr = 'SELECT DISTINCT phoneNumber, date ' + 
+  //get users, appointments, and their associations
+  'FROM app.user as u, app.appointment as a, app.assignment as assign ' +
+  'WHERE assign.staffID = u.userID AND assign.appointmentID = a.appointmentID AND ' +
+  ' a.appointmentID = ' + id + ';';
+  
+    context.callbackWaitsForEmptyEventLoop = false;
+    return new Promise(function(resolve, reject)
+    {
+        try{
+            pool.getConnection(function(err, connection) 
+            {
+                // Use the connection
+                connection.query(queryStr, function (error, results, fields) 
+                {
+                    // And done with the connection.
+                    connection.release();
+                    //if Error reject promise
+                    if (error || results[0] == undefined) {
+                        reject("No appointment or staff info found");   
+                    }
+                    else {
+                        //load messages and targets into array
+                        for(let ii = 0; ii < results.length; ii++) {
+                            console.log(results[ii].date.toString());
+                            let time = results[ii].date.toString().substring(16, 21);
+                            messages[ii] = {
+                                Message: "Your " + time + " appointment has been checked in from " + location,
+                                PhoneNumber: results[ii].phoneNumber,
+                            };
+                        }
+                    
+                        // Create promise and SNS service object
+                        var publishTextPromise = messageChain(messages);
 
-    pool.getConnection(function(connectionErr, connection) {
-        if(connectionErr) callback(err);
-        // Use the connection
-        connection.query(
-                'SELECT DISTINCT phoneNumber, date ' + 
-                'FROM app.staff as s, app.appointment as a ' + 
-                'WHERE a.mainSurgeon = s.staffID AND a.accountNum = ' + id + ';',
-            function (error, results, fields) {
-                // And done with the connection.
-                connection.release();
-                // Handle error after the release.
-                if (error) callback(error);
-                //load resulting numbers into array
-                for(let ii = 0; ii < results.length; ii++) {
-                    console.log(results[ii].date.toString());
-                    let time = results[ii].date.toString().substring(16, 21);
-                    messages[ii] = {
-                        Message: "Your " + time + " appointment has been checked in from " + location,
-                        PhoneNumber: results[ii].phoneNumber,
-                    };
-                }
-            
-                // Create promise and SNS service object
-                var publishTextPromise = messageChain(messages);
-
-                try {
-                    // Handle promise's fulfilled/rejected states
-                    publishTextPromise.then(
-                        function(data) {
-                        console.log("MessageID is " + data.MessageId);
-                        callback(null, true);
-                        return true;
-                    }).catch(
-                        function(err) {
-                        console.error(err, err.stack);
-                        callback(err);
-                    });
-                }
-                catch (err) {
-                    callback(null, false);
-                }
-                
-               // messageChain(messages).then(() => callback(null, true));
-        });
+                        try {
+                            // Handle promise's fulfilled/rejected states
+                            publishTextPromise.then(
+                                function(data) {
+                                console.log("MessageID is " + data.MessageId);
+                                callback(null, true);
+                                return true;
+                            }).catch(
+                                function(err) {
+                                console.error(err, err.stack);
+                                callback(err);
+                            });
+                        }
+                        catch (err) {
+                            callback(null, false);
+                        }              
+                    }
+    
+                    //Can end event now that call is finished    
+                    context.callbackWaitsForEmptyEventLoop = false;
+                });
+            });
+        }
+        catch(e)
+        {
+            //If server is down return null
+            reject("Database is down.");
+        }
     });
-    callback(null, true);
-};
-
+}
 
 function messageChain(messages) {
     let chain = Promise.resolve();
