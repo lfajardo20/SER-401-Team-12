@@ -11,7 +11,6 @@ export default class gps extends React.Component
   };
   
     //Get these corrdinates from database in later sprint
-
     MainPREOP = {
         Lat: 33.479214,
         Long: -112.041310,
@@ -42,7 +41,8 @@ export default class gps extends React.Component
     CurrentLocation: null,
   };
 
-  UNSAFE_componentWillMount() 
+  //On view mount call asynch function to get location
+  componentWillMount() 
   {
       this.getLocationAsync();
   }
@@ -59,15 +59,27 @@ export default class gps extends React.Component
     this.state.GPSenabled = locationStatus.gpsAvailable;
     this.state.NetworkEnabled = locationStatus.networkAvailable;
     
+    //Get three locations and average them out
+    let location = await Location.getCurrentPositionAsync({});
+    let location_2 = await Location.getCurrentPositionAsync({});
+    let location_3 = await Location.getCurrentPositionAsync({});
     
-    let location = await Location.getCurrentPositionAsync({}); 
+    //Average out the lat and long and set them to the state value of location
+    location.coords.latitude =  Number.parseFloat((location.coords.latitude + location_2.coords.latitude + location_3.coords.latitude)/3).toFixed(8);
+    location.coords.longitude = Number.parseFloat((location.coords.longitude + location_2.coords.longitude + location_3.coords.longitude)/3).toFixed(8);
+    
     this.setState({ location });
 
   };
+  
 
   render() 
   {
     let text = "Awaiting location...";
+    
+    //Use this var to find the difference bettween current location and defeined locations to guess what location a user is in.
+    let difference = 0;
+    
     
     if (this.state.hasLocationPermission) 
     {
@@ -145,7 +157,7 @@ export default class gps extends React.Component
             text = "GPS and Network are not enabled.";
         }
     }
-    
+
     return (
       <View style={styles.container}>
         <Text style={styles.paragraph}>{text}</Text>
