@@ -8,14 +8,15 @@ export default class SignupForm extends React.Component {
     username: "",
     password: "",
     confirmation: "",
-    email: "",
+    userType: "",
+    phoneNumber: "",
     errors: {},
     submitResponse: null,
   };
 
   postAccount = accountInfo => {
     return fetch(
-      "https://8svpahmpbc.execute-api.us-west-1.amazonaws.com/Test", //TODO make account creation API endpoint
+      "https://2znkbd4rua.execute-api.us-west-1.amazonaws.com/beta",
       {
         method: "POST",
         headers: {
@@ -42,8 +43,8 @@ export default class SignupForm extends React.Component {
   };
 
   submitForm = () => {
-    let { username, password, confirmation, email } = this.state;
-    if (!validate(username, password, confirmation, email)) return;
+    let { username, password, confirmation, phoneNumber } = this.state;
+    if (!validate(username, password, confirmation, phoneNumber)) return;
     //if you make it here, do  network stuff to create account
 
     let salt = Math.floor(Math.random() * 10000); //generates random number between 0-10,000 as a salt
@@ -53,7 +54,7 @@ export default class SignupForm extends React.Component {
       salt: salt,
       hash: hash,
       username: username,
-      email: email,
+      phoneNumber: phoneNumber,
     };
 
     this.postAccount(accountInfo);
@@ -77,9 +78,11 @@ export default class SignupForm extends React.Component {
         />
         <Text style={styles.errorText}>{errors.confirmation} </Text>
 
-        <Text>Email Address</Text>
-        <TextInput onChangeText={text => this.setState({ email: text })} />
-        <Text style={styles.errorText}>{errors.email} </Text>
+        <Text>Phone Number</Text>
+        <TextInput
+          onChangeText={text => this.setState({ phoneNumber: text })}
+        />
+        <Text style={styles.errorText}>{errors.phoneNumber} </Text>
 
         <Button onPress={this.submitForm} title="Submit">
           Submit
@@ -89,7 +92,7 @@ export default class SignupForm extends React.Component {
   }
 }
 
-function validate(username, password, confirmation, email) {
+function validate(username, password, confirmation, phoneNumber) {
   let errors = {};
   //start basic validation, will need refactors and upgrades once API is up and integrated
 
@@ -103,8 +106,8 @@ function validate(username, password, confirmation, email) {
   if (!confirmation) {
     errors.confirmation = "required";
   }
-  if (!email) {
-    errors.email = "required";
+  if (!phoneNumber) {
+    errors.phoneNumber = "required";
   }
 
   if (password !== confirmation) {
