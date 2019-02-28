@@ -18,8 +18,10 @@ exports.handler = async (event, context, callback) => {
     //parse event info
     let id = event.id;
     let location = "unknown location";
-    if(event.lat && event.longi)
-        location = event.lat + ", " + event.longi;
+    if(event.location != null)
+    {
+        location = event.location;
+    }
     let messages = [];
   
   var queryStr = 'SELECT DISTINCT phoneNumber, date ' + 
@@ -90,7 +92,8 @@ exports.handler = async (event, context, callback) => {
 
 function messageChain(messages) {
     let chain = Promise.resolve();
-    for(let ii = 0; ii < messages.length; ii++) {
+    for(let ii = 0; ii < messages.length; ii++) 
+    {
         let message = messages[ii];
         chain = chain.then(() => new AWS.SNS({apiVersion: '2010-03-31'}).publish(message).promise());
     }
