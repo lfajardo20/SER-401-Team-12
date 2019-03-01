@@ -18,21 +18,14 @@ import gps from "./src/gps";
 
 class HomeScreen extends React.Component {
   state = {
-    user = "",
-    password = "",
+    user: "",
+    password: "",
     userMatches: false,
   };
   static navigationOptions = {
     title: "Arrival Notification",
   };
   render() {
-
-    /*
-    * Use this link to continue working on conditionals:
-    * https://reactjs.org/docs/conditional-rendering.html
-    * still have to make adjustments
-    */
-
     return (
       //Can only return one element so all componets must be wrapped in a parent componet
       //ex: the two views in one view
@@ -54,7 +47,7 @@ class HomeScreen extends React.Component {
           <Text>Username</Text>
           <TextInput
             placeholder="Enter your username..."
-            onChangeText={(user) => this.setState({ user })}
+            onChangeText={user => this.setState({ user })}
             value={this.state.user}
           />
           <Text>Password</Text>
@@ -63,7 +56,24 @@ class HomeScreen extends React.Component {
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
           />
-          {button}
+          {/*These two if statements are to check if the user input
+          in the username text field is identified as a staff member
+          or transporter and will redirect accordingly.
+          These statements are poorley designed and still need work.
+          Right now it loads the button based on input.
+          */}
+          {this.state.user === "admin" && ( //staff view
+            <Button
+              title="Log in"
+              onPress={() => this.props.navigation.navigate("Staff")}
+            />
+          )}
+          {this.state.user === "admin1" && ( //transporter view
+            <Button
+              title="Log in"
+              onPress={() => this.props.navigation.navigate("Transporter")}
+            />
+          )}
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
           <Button
@@ -90,16 +100,6 @@ class HomeScreen extends React.Component {
       .catch(error => {
         console.error(error);
       });
-  }
-
-  //Function that will check if the username inputted matches the one
-  //in the database (the one passed in as a parameter).
-  doesUserMatch(text) {
-    if (user === "admin") {
-      button = <Button title="Log in" onPress={() => this.props.navigation.navigate("Transporter")} />
-    } else {
-      //TODO
-    }
   }
 }
 
