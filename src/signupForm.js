@@ -1,5 +1,12 @@
 import React from "react";
-import { Text, TextInput, View, Button, StyleSheet } from "react-native";
+import {
+  Text,
+  TextInput,
+  View,
+  Button,
+  StyleSheet,
+  Picker,
+} from "react-native";
 
 import Crypto from "crypto-js";
 
@@ -43,7 +50,13 @@ export default class SignupForm extends React.Component {
   };
 
   submitForm = () => {
-    let { username, password, confirmation, phoneNumber } = this.state;
+    let {
+      username,
+      password,
+      confirmation,
+      phoneNumber,
+      userType,
+    } = this.state;
     if (!validate(username, password, confirmation, phoneNumber)) return;
     //if you make it here, do  network stuff to create account
 
@@ -52,9 +65,10 @@ export default class SignupForm extends React.Component {
 
     let accountInfo = {
       salt: salt,
-      hash: hash,
-      username: username,
+      passwordHash: hash,
+      userName: username,
       phoneNumber: phoneNumber,
+      userType: userType,
     };
 
     this.postAccount(accountInfo);
@@ -65,25 +79,42 @@ export default class SignupForm extends React.Component {
     return (
       <View>
         <Text>Username</Text>
-        <TextInput onChangeText={text => this.setState({ username: text })} />
+        <TextInput
+          onChangeText={text => this.setState({ username: text })}
+          style={styles.borderedField}
+        />
         <Text style={styles.errorText}>{errors.username} </Text>
 
         <Text>Password</Text>
-        <TextInput onChangeText={text => this.setState({ password: text })} />
+        <TextInput
+          onChangeText={text => this.setState({ password: text })}
+          style={styles.borderedField}
+        />
         <Text style={styles.errorText}>{errors.password} </Text>
 
         <Text>Confirm Password</Text>
         <TextInput
           onChangeText={text => this.setState({ confirmation: text })}
+          style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.confirmation} </Text>
 
         <Text>Phone Number</Text>
         <TextInput
           onChangeText={text => this.setState({ phoneNumber: text })}
+          style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.phoneNumber} </Text>
 
+        <Picker
+          style={styles.borderedPicker}
+          onValueChange={(itemValue, itemIndex) =>
+            this.setState({ userType: itemValue })
+          }
+        >
+          <Picker.Item label="Staff" value="doctor" />
+          <Picker.Item label="Transporter" value="transporter" />
+        </Picker>
         <Button onPress={this.submitForm} title="Submit">
           Submit
         </Button>
@@ -141,5 +172,15 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 8,
     marginBottom: 20,
+  },
+  borderedField: {
+    borderBottomColor: "black",
+    borderBottomWidth: 2,
+  },
+  borderedPicker: {
+    borderColor: "black",
+    borderWidth: 2,
+    height: 50,
+    width: 100,
   },
 });
