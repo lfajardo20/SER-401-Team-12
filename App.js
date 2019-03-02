@@ -17,6 +17,15 @@ import { TextInput } from "react-native-gesture-handler";
 import gps from "./src/gps";
 
 class HomeScreen extends React.Component {
+  //fetch method to post to the api endpoint to get the type of user logged in.
+  postTest(url = "", data = {}) {
+    return fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }).then(response => response.json());
+  }
+
   state = {
     user: "",
     password: "",
@@ -57,24 +66,34 @@ class HomeScreen extends React.Component {
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
           />
+
+          {/*postTest(
+            "https://9tkh5sthia.execute-api.us-west-1.amazonaws.com/beta",
+            { userName: this.state.user, password: this.state.password }
+          )
+            .then(data => console.log(JSON.stringify(data)))
+          .catch(error => console.error(error))*/}
+
           {/*These two if statements are to check if the user input
           in the username text field is identified as a staff member
           or transporter and will redirect accordingly.
           These statements are poorley designed and still need work.
           Right now it loads the button based on input.
           */}
-          {this.state.user === "admin" && ( //staff view
-            <Button
-              title="Log in"
-              onPress={() => this.props.navigation.navigate("Staff")}
-            />
-          )}
-          {this.state.user === "admin1" && ( //transporter view
-            <Button
-              title="Log in"
-              onPress={() => this.props.navigation.navigate("Transporter")}
-            />
-          )}
+          {this.state.user === "admin" && //staff view
+            (this.state.password === "admin" && (
+              <Button
+                title="Log in"
+                onPress={() => this.props.navigation.navigate("Staff")}
+              />
+            ))}
+          {this.state.user === "admin2" && //transporter view
+            (this.state.password === "password" && (
+              <Button
+                title="Log in"
+                onPress={() => this.props.navigation.navigate("Transporter")}
+              />
+            ))}
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
           <Button
@@ -90,17 +109,6 @@ class HomeScreen extends React.Component {
         </View>
       </View>
     );
-  }
-  async testingFetchAsync() {
-    //The url fetches to the database for the json payload
-    return fetch("https://awk4q8rl4b.execute-api.us-west-1.amazonaws.com/test")
-      .then(response => response.json())
-      .then(responseJson => {
-        return responseJson.movies;
-      })
-      .catch(error => {
-        console.error(error);
-      });
   }
 }
 
