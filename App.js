@@ -1,5 +1,11 @@
 import React from "react";
-import { Button, View, Text, StyleSheet, PermissionsAndroid } from "react-native";
+import {
+  Button,
+  View,
+  Text,
+  StyleSheet,
+  PermissionsAndroid,
+} from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 //Need to import each of the used view classes
@@ -10,8 +16,21 @@ import SignupForm from "./src/signupForm";
 import { TextInput } from "react-native-gesture-handler";
 import gps from "./src/gps";
 
-class HomeScreen extends React.Component 
-{
+class HomeScreen extends React.Component {
+  //fetch method to post to the api endpoint to get the type of user logged in.
+  postTest(url = "", data = {}) {
+    return fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }).then(response => response.json());
+  }
+
+  state = {
+    user: "",
+    password: "",
+    userMatches: false,
+  };
   static navigationOptions = {
     title: "Arrival Notification",
   };
@@ -35,13 +54,46 @@ class HomeScreen extends React.Component
         </View> */}
         <View>
           <Text>Username</Text>
-          <TextInput />
-          <Text>Password</Text>
-          <TextInput />
-          <Button
-            title="Log in"
-            onPress={() => this.props.navigation.navigate("Transporter")}
+          <TextInput
+            placeholder="Enter your username..."
+            onChangeText={user => this.setState({ user })}
+            value={this.state.user}
           />
+          <Text>Password</Text>
+          <TextInput
+            secureTextEntry={true}
+            placeholder="Enter your password..."
+            onChangeText={password => this.setState({ password })}
+            value={this.state.password}
+          />
+
+          {/*postTest(
+            "https://9tkh5sthia.execute-api.us-west-1.amazonaws.com/beta",
+            { userName: this.state.user, password: this.state.password }
+          )
+            .then(data => console.log(JSON.stringify(data)))
+          .catch(error => console.error(error))*/}
+
+          {/*These two if statements are to check if the user input
+          in the username text field is identified as a staff member
+          or transporter and will redirect accordingly.
+          These statements are poorley designed and still need work.
+          Right now it loads the button based on input.
+          */}
+          {this.state.user === "admin" && //staff view
+            (this.state.password === "admin" && (
+              <Button
+                title="Log in"
+                onPress={() => this.props.navigation.navigate("Staff")}
+              />
+            ))}
+          {this.state.user === "admin2" && //transporter view
+            (this.state.password === "password" && (
+              <Button
+                title="Log in"
+                onPress={() => this.props.navigation.navigate("Transporter")}
+              />
+            ))}
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
           <Button
@@ -57,16 +109,6 @@ class HomeScreen extends React.Component
         </View>
       </View>
     );
-  }
-  async testingFetchAsync() {
-    return fetch("https://facebook.github.io/react-native/movies.json")
-      .then(response => response.json())
-      .then(responseJson => {
-        return responseJson.movies;
-      })
-      .catch(error => {
-        console.error(error);
-      });
   }
 }
 
