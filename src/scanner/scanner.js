@@ -52,7 +52,7 @@ export default class Scanner extends Component {
   processBarcode(data)
   {
     //bacodes follow format of A00000000
-    if(data.charAt(0) == "A" && data.length == 9)
+    if(data.charAt(0) == "A")
     {
         return data.substr(1,data.length - 1);
     }
@@ -83,7 +83,7 @@ export default class Scanner extends Component {
     if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
     }
-    return (
+    return(
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
           <BarCodeScanner
@@ -106,7 +106,7 @@ export default class Scanner extends Component {
   
     handleBarCodeScanned = ({ type, data }) => 
     {
-        this.props.navigation.navigate('Confirmation', {id:this.processBarcode(data)})
+        this.props.navigation.navigate('GPS', {id:this.processBarcode(data)})
     }
 }
 

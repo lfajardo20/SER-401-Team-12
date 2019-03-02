@@ -6,6 +6,13 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 //Export StaffScreen so App.js can call it for navigation
 export default class gps extends React.Component 
 {   
+    
+   constructor(props)
+   {
+        super(props)
+        this.idObj = {"id" : this.props.navigation.getParam('id')};
+    }
+
   static navigationOptions = {
     title: "gps",
   };
@@ -38,7 +45,7 @@ export default class gps extends React.Component
     hasLocationPermission: null,
     GPSenabled: false,
     NetworkEnabled: false,
-    CurrentLocation: null,
+    CurrentLocation: "MainPREOP",
   };
 
   //On view mount call asynch function to get location
@@ -71,7 +78,6 @@ export default class gps extends React.Component
     this.setState({ location });
 
   };
-  
 
   render() 
   {
@@ -79,8 +85,7 @@ export default class gps extends React.Component
     
     //Use this var to find the difference bettween current location and defeined locations to guess what location a user is in.
     let difference = 0;
-    
-    
+        
     if (this.state.hasLocationPermission) 
     {
       text = this.state.hasLocationPermission;
@@ -145,8 +150,8 @@ export default class gps extends React.Component
                     
                     <Button
                       title="Confirm"
-                      //On press navigate to camera object
-                      onPress={() => this.props.navigation.navigate("Home")}
+                      //On press navigate to confimration screen
+                      onPress={() => this.props.navigation.navigate("Confirmation", {id:this.idObj.id, loc:this.state.CurrentLocation})}
                     />
                 </View>    
                 )
