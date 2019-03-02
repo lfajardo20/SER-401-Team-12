@@ -1,7 +1,7 @@
 var mysql = require('mysql');//establish sql connection pool
 
 var pool  = mysql.createPool({
-    host: "184.103.137.162",
+    host: "mechris6temp.ddns.net",
     user: 'db',
     password: 'password',
     port: "3306",
@@ -18,14 +18,15 @@ exports.handler = async (event, context, callback) => {
     //parse event info
     let id = event.id;
     let location = "unknown location";
+    let messages = [];
+    
     if(event.location != null)
     {
         location = event.location;
     }
-    let messages = [];
-  
-  var queryStr = 'SELECT DISTINCT phoneNumber, date ' + 
+    
   //get users, appointments, and their associations
+  var queryStr = 'SELECT DISTINCT phoneNumber, date ' + 
   'FROM user.user as u, app.appointment as a, app.assignment as assign ' +
   'WHERE assign.staffID = u.userID AND assign.appointmentID = a.appointmentID AND ' +
   ' a.appointmentID = ' + id + ';';

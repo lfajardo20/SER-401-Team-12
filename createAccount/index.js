@@ -1,7 +1,7 @@
 var mysql = require('mysql');//establish sql connection pool
 
 var pool  = mysql.createPool({
-    host: "184.103.137.162",
+    host: "mechris6temp.ddns.net",
     user: 'db',
     password: 'password',
     port: "3306",
