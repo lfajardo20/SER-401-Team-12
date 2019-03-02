@@ -52,6 +52,7 @@ class HomeScreen extends React.Component {
           />
           <Text>Password</Text>
           <TextInput
+            secureTextEntry={true}
             placeholder="Enter your password..."
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
