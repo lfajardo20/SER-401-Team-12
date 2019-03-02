@@ -1,5 +1,12 @@
 import React from "react";
-import { Text, TextInput, View, Button, StyleSheet } from "react-native";
+import {
+  Text,
+  TextInput,
+  View,
+  Button,
+  StyleSheet,
+  Picker,
+} from "react-native";
 
 import Crypto from "crypto-js";
 
@@ -8,14 +15,15 @@ export default class SignupForm extends React.Component {
     username: "",
     password: "",
     confirmation: "",
-    email: "",
+    userType: "",
+    phoneNumber: "",
     errors: {},
     submitResponse: null,
   };
 
   postAccount = accountInfo => {
     return fetch(
-      "https://8svpahmpbc.execute-api.us-west-1.amazonaws.com/Test", //TODO make account creation API endpoint
+      "https://2znkbd4rua.execute-api.us-west-1.amazonaws.com/beta",
       {
         method: "POST",
         headers: {
@@ -42,45 +50,79 @@ export default class SignupForm extends React.Component {
   };
 
   submitForm = () => {
-    let { username, password, confirmation, email } = this.state;
-    if (!validate(username, password, confirmation, email)) return;
+    let {
+      username,
+      password,
+      confirmation,
+      phoneNumber,
+      userType,
+    } = this.state;
+    if (!validate(username, password, confirmation, phoneNumber, this)) return;
     //if you make it here, do  network stuff to create account
 
     let salt = Math.floor(Math.random() * 10000); //generates random number between 0-10,000 as a salt
-    let hash = Crypto.SHA256(password + salt); //using a salted, hashed password to prepare for actual security
+    let hash = Crypto.SHA256(password + "" + salt); //using a salted, hashed password to prepare for actual security
 
     let accountInfo = {
       salt: salt,
-      hash: hash,
-      username: username,
-      email: email,
+      passwordHash: hash.toString(Crypto.enc.Hex), //convert to hexadecimal string,
+      userName: username,
+      phoneNumber: phoneNumber,
+      userType: userType,
     };
-
     this.postAccount(accountInfo);
   };
 
   render() {
     let { errors } = this.state;
+
+    if (this.state.submitResponse) {
+      return (
+        <View>
+          <Text>Account Created Successfully</Text>
+        </View>
+      );
+    }
     return (
       <View>
         <Text>Username</Text>
-        <TextInput onChangeText={text => this.setState({ username: text })} />
+        <TextInput
+          onChangeText={text => this.setState({ username: text })}
+          style={styles.borderedField}
+        />
         <Text style={styles.errorText}>{errors.username} </Text>
 
         <Text>Password</Text>
-        <TextInput onChangeText={text => this.setState({ password: text })} />
+        <TextInput
+          onChangeText={text => this.setState({ password: text })}
+          style={styles.borderedField}
+        />
         <Text style={styles.errorText}>{errors.password} </Text>
 
         <Text>Confirm Password</Text>
         <TextInput
           onChangeText={text => this.setState({ confirmation: text })}
+          style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.confirmation} </Text>
 
-        <Text>Email Address</Text>
-        <TextInput onChangeText={text => this.setState({ email: text })} />
-        <Text style={styles.errorText}>{errors.email} </Text>
+        <Text>Phone Number</Text>
+        <TextInput
+          onChangeText={text => this.setState({ phoneNumber: text })}
+          style={styles.borderedField}
+        />
+        <Text style={styles.errorText}>{errors.phoneNumber} </Text>
 
+        <Picker
+          selectedValue={this.state.userType}
+          style={styles.borderedPicker}
+          onValueChange={(itemValue, itemIndex) =>
+            this.setState({ userType: itemValue })
+          }
+        >
+          <Picker.Item label="Staff" value="doctor" />
+          <Picker.Item label="Transporter" value="transporter" />
+        </Picker>
         <Button onPress={this.submitForm} title="Submit">
           Submit
         </Button>
@@ -89,7 +131,7 @@ export default class SignupForm extends React.Component {
   }
 }
 
-function validate(username, password, confirmation, email) {
+function validate(username, password, confirmation, phoneNumber, context) {
   let errors = {};
   //start basic validation, will need refactors and upgrades once API is up and integrated
 
@@ -103,15 +145,15 @@ function validate(username, password, confirmation, email) {
   if (!confirmation) {
     errors.confirmation = "required";
   }
-  if (!email) {
-    errors.email = "required";
+  if (!phoneNumber) {
+    errors.phoneNumber = "required";
   }
 
   if (password !== confirmation) {
     errors.confirmation = "Does not match password";
   }
 
-  this.setState({ errors: errors });
+  context.setState({ errors: errors });
   return Object.keys(errors).length === 0; //if errors has at least one property marked, return not valid
 }
 
@@ -138,5 +180,15 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 8,
     marginBottom: 20,
+  },
+  borderedField: {
+    borderBottomColor: "black",
+    borderBottomWidth: 2,
+  },
+  borderedPicker: {
+    borderColor: "black",
+    borderWidth: 2,
+    height: 50,
+    width: 100,
   },
 });
