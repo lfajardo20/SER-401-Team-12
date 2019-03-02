@@ -57,25 +57,32 @@ export default class SignupForm extends React.Component {
       phoneNumber,
       userType,
     } = this.state;
-    if (!validate(username, password, confirmation, phoneNumber)) return;
+    if (!validate(username, password, confirmation, phoneNumber, this)) return;
     //if you make it here, do  network stuff to create account
 
     let salt = Math.floor(Math.random() * 10000); //generates random number between 0-10,000 as a salt
-    let hash = Crypto.SHA256(password + salt); //using a salted, hashed password to prepare for actual security
+    let hash = Crypto.SHA256(password + "" + salt); //using a salted, hashed password to prepare for actual security
 
     let accountInfo = {
       salt: salt,
-      passwordHash: hash,
+      passwordHash: hash.toString(Crypto.enc.Hex), //convert to hexadecimal string,
       userName: username,
       phoneNumber: phoneNumber,
       userType: userType,
     };
-
     this.postAccount(accountInfo);
   };
 
   render() {
     let { errors } = this.state;
+
+    if (this.state.submitResponse) {
+      return (
+        <View>
+          <Text>Account Created Successfully</Text>
+        </View>
+      );
+    }
     return (
       <View>
         <Text>Username</Text>
@@ -107,6 +114,7 @@ export default class SignupForm extends React.Component {
         <Text style={styles.errorText}>{errors.phoneNumber} </Text>
 
         <Picker
+          selectedValue={this.state.userType}
           style={styles.borderedPicker}
           onValueChange={(itemValue, itemIndex) =>
             this.setState({ userType: itemValue })
@@ -123,7 +131,7 @@ export default class SignupForm extends React.Component {
   }
 }
 
-function validate(username, password, confirmation, phoneNumber) {
+function validate(username, password, confirmation, phoneNumber, context) {
   let errors = {};
   //start basic validation, will need refactors and upgrades once API is up and integrated
 
@@ -145,7 +153,7 @@ function validate(username, password, confirmation, phoneNumber) {
     errors.confirmation = "Does not match password";
   }
 
-  this.setState({ errors: errors });
+  context.setState({ errors: errors });
   return Object.keys(errors).length === 0; //if errors has at least one property marked, return not valid
 }
 
