@@ -17,24 +17,59 @@ import { TextInput } from "react-native-gesture-handler";
 import gps from "./src/gps";
 
 class HomeScreen extends React.Component {
-  //fetch method to post to the api endpoint to get the type of user logged in.
-  postTest(url = "", data = {}) {
-    return fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    }).then(response => response.json());
-  }
-
   state = {
     user: "",
     password: "",
-    userMatches: false,
+    errors: {},
+    submitResponse: null,
   };
+
   static navigationOptions = {
     title: "Arrival Notification",
   };
+
+  postLogin = info => {
+    return fetch(
+      "https://awk4q8rl4b.execute-api.us-west-1.amazonaws.com/test",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(info),
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState(
+          {
+            submitResponse: responseJson,
+          },
+          function () {
+            console.log(JSON.stringify(responseJson));
+          }
+        );
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  validateUser = () => {
+    let { user, password } = this.state;
+    //if (!verify(user, password)) return; //check for user
+
+    // let info = {
+    //   userName: user,
+    //   password: password
+    // };
+
+    this.postLogin();
+  };
+
   render() {
+    let { errors } = this.state;
     return (
       //Can only return one element so all componets must be wrapped in a parent componet
       //ex: the two views in one view
@@ -66,21 +101,10 @@ class HomeScreen extends React.Component {
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
           />
-
-          {/*postTest(
-            "https://9tkh5sthia.execute-api.us-west-1.amazonaws.com/beta",
-            { userName: this.state.user, password: this.state.password }
-          )
-            .then(data => console.log(JSON.stringify(data)))
-          .catch(error => console.error(error))*/}
-
-          {/*These two if statements are to check if the user input
-          in the username text field is identified as a staff member
-          or transporter and will redirect accordingly.
-          These statements are poorley designed and still need work.
-          Right now it loads the button based on input.
-          */}
-          {this.state.user === "admin" && //staff view
+          <Button onPress={this.validateUser} title="Login">
+            Login
+          </Button>
+          {/* {this.state.user === "admin" && //staff view
             (this.state.password === "admin" && (
               <Button
                 title="Log in"
@@ -93,7 +117,7 @@ class HomeScreen extends React.Component {
                 title="Log in"
                 onPress={() => this.props.navigation.navigate("Transporter")}
               />
-            ))}
+            ))} */}
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
           <Button
@@ -110,6 +134,13 @@ class HomeScreen extends React.Component {
       </View>
     );
   }
+}
+
+function verify(user, password) {
+  let errors = {};
+
+  //Start to verify info from db to see if input matches db
+
 }
 
 //Name of different navigation screens go here
