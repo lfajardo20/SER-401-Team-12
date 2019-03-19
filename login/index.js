@@ -2,17 +2,17 @@ var mysql = require('mysql');
 var crypto = require('crypto-js');
 
 var pool  = mysql.createPool({
-    host: "mechris6temp.ddns.net",
-    user: 'db',
-    password: 'password',
+    host: "arrivaldatabase.cerlvveo6skh.us-east-2.rds.amazonaws.com",
+    user: 'arrival',
+    password: 'brbUh86hELkWf82',
     port: "3306",
-    database: 'user',
+    database: 'app',
   });
   
 exports.handler = async (event, context, callback) => {
   //prevent timeout from waiting event loop
   
-  var queryStr = "SELECT userName, userType, salt, passwordHash FROM user.user WHERE userName ='" + event.userName + "'"; 
+  var queryStr = "SELECT userName, userType, salt, passwordHash FROM app.account WHERE userName ='" + event.userName + "'"; 
 
   
     context.callbackWaitsForEmptyEventLoop = false;
@@ -33,9 +33,15 @@ exports.handler = async (event, context, callback) => {
                     }
                     else
                     {
+                        console.log(results)
                         //hash password + salt
                         //see if this matches the account
-                        let hash = Crypto.SHA256(event.password + "" + salt);
+                        let hash = String(crypto.SHA256(event.password + "" + results[0].salt));
+                        console.log(results[0].salt);
+                        console.log(event.password);
+                        
+                        console.log("Hashed password: " +hash);
+                        console.log("Server hash:" + results[0].passwordHash);
                         if(hash === results[0].passwordHash)
                         {
                             resolve(results[0].userType);

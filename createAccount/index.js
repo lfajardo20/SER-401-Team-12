@@ -1,21 +1,28 @@
 var mysql = require('mysql');//establish sql connection pool
 
 var pool  = mysql.createPool({
-    host: "mechris6temp.ddns.net",
-    user: 'db',
-    password: 'password',
+    host: "arrivaldatabase.cerlvveo6skh.us-east-2.rds.amazonaws.com",
+    user: 'arrival',
+    password: 'brbUh86hELkWf82',
     port: "3306",
-    database: 'user',
+    database: 'app',
   });
   
 exports.handler = async (event, context, callback) => {
     //parse event info
     let {userName, passwordHash, userType, salt, phoneNumber} = event;
-  
-  var queryStr = "Insert into user.users" + 
+    
+    //add quotes to string variables
+    userName = addQuotes(userName);
+    passwordHash = addQuotes(passwordHash);
+    userType = addQuotes(userType);
+    phoneNumber = addQuotes(phoneNumber);
+
+  var queryStr = "Insert into app.account" + 
     "(userName, passwordHash, userType, salt, phoneNumber) " +
     "Values (" + userName + ", " + passwordHash + ", " + userType + ", " + salt
     + ", " + phoneNumber + ")";
+    console.log(queryStr);
   
     context.callbackWaitsForEmptyEventLoop = false;
     return new Promise(function(resolve, reject)
@@ -30,10 +37,10 @@ exports.handler = async (event, context, callback) => {
                     connection.release();
                     //if Error reject promise
                     if (error) {
-                        reject("Account creation failed");   
+                        reject("Account creation failed" + JSON.stringify(error));   
                     }
                     else {
-                        callback(true);
+                        resolve(true);
                     }
     
                     //Can end event now that call is finished    
@@ -47,4 +54,8 @@ exports.handler = async (event, context, callback) => {
             reject("Database is down.");
         }
     });
+}
+
+function addQuotes(val) {
+        return "'" + val + "'";
 }
