@@ -5,7 +5,7 @@ import {
   Text,
   StyleSheet,
   PermissionsAndroid,
-  AppState
+  AppState,
 } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
@@ -38,15 +38,18 @@ class HomeScreen extends React.Component {
   };
 
   componentDidMount() {
-    AppState.addEventListener('change', this._handleAppStateChange);
+    AppState.addEventListener("change", this._handleAppStateChange);
   }
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
+    AppState.removeEventListener("change", this._handleAppStateChange);
   }
 
-  _handleAppStateChange = (nextAppState) => {
-    if (this.state.appState.match("inactive|background") && nextAppState === "active") {
+  _handleAppStateChange = nextAppState => {
+    if (
+      this.state.appState.match("inactive|background") &&
+      nextAppState === "active"
+    ) {
       //Almost done.
       //ERROR/BUG: If anything was typed on the login screen and go to a different screen
       //the text will stay in the text boxes even though we reset the view to the login.
@@ -54,7 +57,7 @@ class HomeScreen extends React.Component {
       this.props.navigation.navigate("Home");
       console.log("App is back from background.");
     }
-    this.setState({ appState: nextAppState })
+    this.setState({ appState: nextAppState });
   };
   render() {
     return (
