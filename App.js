@@ -14,7 +14,7 @@ import Scanner from "./src/scanner/scanner";
 import TransporterScreen from "./src/views/TransporterScreen";
 import StaffScreen from "./src/views/StaffScreen";
 import SignupForm from "./src/signupForm";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput, RotationGestureHandler } from "react-native-gesture-handler";
 import gps from "./src/gps";
 
 class HomeScreen extends React.Component {
@@ -51,6 +51,7 @@ class HomeScreen extends React.Component {
       //ERROR/BUG: If anything was typed on the login screen and go to a different screen
       //the text will stay in the text boxes even though we reset the view to the login.
       //SOLUTION(POTENTIAL): Call the createStackNAvigator again and reset the app.
+      this.setState({ user: "", password: "" });
       this.props.navigation.navigate("Home");
       console.log("App is back from background.");
     }
