@@ -42,14 +42,8 @@ class HomeScreen extends React.Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        this.setState(
-          {
-            submitResponse: responseJson,
-          },
-          function () {
-            console.log(JSON.stringify(responseJson));
-          }
-        );
+        console.log(JSON.stringify(info));
+        console.log(JSON.stringify(responseJson));
       })
       .catch(error => {
         console.error(error);
@@ -60,12 +54,12 @@ class HomeScreen extends React.Component {
     let { user, password } = this.state;
     //if (!verify(user, password)) return; //check for user
 
-    // let info = {
-    //   userName: user,
-    //   password: password
-    // };
+    let info = {
+      userName: user,
+      password: password,
+    };
 
-    this.postLogin();
+    this.postLogin(info);
   };
 
   render() {
@@ -140,7 +134,6 @@ function verify(user, password) {
   let errors = {};
 
   //Start to verify info from db to see if input matches db
-
 }
 
 //Name of different navigation screens go here
