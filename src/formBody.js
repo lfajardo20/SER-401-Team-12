@@ -1,5 +1,6 @@
 import React from "react";
 import NewForms from "./newForms";
+import DataTables from "./dataTables";
 
 export default class FormBody extends React.Component {
     render() {
@@ -18,7 +19,7 @@ export default class FormBody extends React.Component {
 
         return (
             <>
-                TODO
+                <DataTables type={type} />
             </>
         )
     }
