@@ -1,11 +1,10 @@
 var mysql = require('mysql');//establish sql connection pool
 
 var pool  = mysql.createPool({
-    host: "mechris6temp.ddns.net",
-    user: 'db',
-    password: 'password',
-    port: "3306",
-    database: 'user',
+    host: "arrivaldatabase.cerlvveo6skh.us-east-2.rds.amazonaws.com",
+    user: 'arrival',
+    password: 'brbUh86hELkWf82',
+    port: "3306"
   });
 
 
@@ -26,11 +25,9 @@ exports.handler = async (event, context, callback) => {
     }
     
   //get users, appointments, and their associations
-  var queryStr = 'SELECT DISTINCT phoneNumber, date ' + 
-  'FROM user.user as u, app.appointment as a, app.assignment as assign ' +
-  'WHERE assign.staffID = u.userID AND assign.appointmentID = a.appointmentID AND ' +
-  ' a.appointmentID = ' + id + ';';
-  
+   var queryStr = 'SELECT DISTINCT phoneNumber,staffID FROM app.staff as s' +
+   ', app.appointment as a WHERE s.staffID = a.mainSurgeon AND a.accountNum = ' + id + ';';
+
     context.callbackWaitsForEmptyEventLoop = false;
     return new Promise(function(resolve, reject)
     {
@@ -49,10 +46,10 @@ exports.handler = async (event, context, callback) => {
                     else {
                         //load messages and targets into array
                         for(let ii = 0; ii < results.length; ii++) {
-                            console.log(results[ii].date.toString());
-                            let time = results[ii].date.toString().substring(16, 21);
+                            //console.log(results[ii].date.toString());
+                            //let time = results[ii].date.toString().substring(16, 21);
                             messages[ii] = {
-                                Message: "Your " + time + " appointment has been checked in from " + location,
+                                Message: "Your appointment has been checked in from " + location,
                                 PhoneNumber: results[ii].phoneNumber,
                             };
                         }
