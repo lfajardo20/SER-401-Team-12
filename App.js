@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   PermissionsAndroid,
+  AppState
 } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
@@ -13,7 +14,7 @@ import Scanner from "./src/scanner/scanner";
 import TransporterScreen from "./src/views/TransporterScreen";
 import StaffScreen from "./src/views/StaffScreen";
 import SignupForm from "./src/signupForm";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput, RotationGestureHandler } from "react-native-gesture-handler";
 import gps from "./src/gps";
 
 class HomeScreen extends React.Component {
@@ -22,12 +23,12 @@ class HomeScreen extends React.Component {
     password: "",
     errors: {},
     submitResponse: null,
+    appState: AppState.currentState,
   };
 
   static navigationOptions = {
     title: "Arrival Notification",
   };
-
   //function to retrieve the user tpe based on the user info passed
   //this will execute correctly and load a view if the username and password
   //are correct and found on the DB.
@@ -73,7 +74,26 @@ class HomeScreen extends React.Component {
 
     this.postLogin(info);
   };
+  componentDidMount() {
+    AppState.addEventListener('change', this._handleAppStateChange);
+  }
 
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = (nextAppState) => {
+    if (this.state.appState.match("inactive|background") && nextAppState === "active") {
+      //Almost done.
+      //ERROR/BUG: If anything was typed on the login screen and go to a different screen
+      //the text will stay in the text boxes even though we reset the view to the login.
+      //SOLUTION(POTENTIAL): Call the createStackNAvigator again and reset the app.
+      this.setState({ user: "", password: "" });
+      this.props.navigation.navigate("Home");
+      console.log("App is back from background.");
+    }
+    this.setState({ appState: nextAppState })
+  };
   render() {
     let { errors } = this.state;
     return (
@@ -140,12 +160,6 @@ class HomeScreen extends React.Component {
       </View>
     );
   }
-}
-
-function verify(user, password) {
-  let errors = {};
-
-  //Start to verify info from db to see if input matches db
 }
 
 //Name of different navigation screens go here
