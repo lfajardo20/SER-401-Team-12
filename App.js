@@ -28,9 +28,12 @@ class HomeScreen extends React.Component {
     title: "Arrival Notification",
   };
 
+  //function to retrieve the user tpe based on the user info passed
+  //this will execute correctly and load a view if the username and password
+  //are correct and found on the DB.
   postLogin = info => {
     return fetch(
-      "https://awk4q8rl4b.execute-api.us-west-1.amazonaws.com/test",
+      "https://9tkh5sthia.execute-api.us-west-1.amazonaws.com/beta/",
       {
         method: "POST",
         headers: {
@@ -44,6 +47,15 @@ class HomeScreen extends React.Component {
       .then(responseJson => {
         console.log(JSON.stringify(info));
         console.log(JSON.stringify(responseJson));
+        userType = JSON.stringify(responseJson);//payload response with the usertype
+
+        //load view according to user type
+        if (JSON.stringify(responseJson).match("doctor")) {
+          this.props.navigation.navigate("Staff")
+        }
+        else if (JSON.stringify(responseJson).match("transporter")) {
+          this.props.navigation.navigate("Transporter")
+        }
       })
       .catch(error => {
         console.error(error);
