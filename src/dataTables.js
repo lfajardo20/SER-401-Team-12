@@ -1,5 +1,7 @@
 import React from "react";
-import ReactTable from "react-table";
+import UserTable from "./userTable";
+import PatientTable from "./patientTable";
+import AppointmentTable from "./appointmentTable";
 
 import "react-table/react-table.css"
 
@@ -11,46 +13,28 @@ export default class DataTables extends React.Component {
         this.fetchData();
     }
 
-    componentDidUpdate(prevProps) {
-        if(this.props.type !== prevProps.type) {
-            this.fetchData();
-        }
-    }
-
     fetchData = () => {
-        const url = "https://jsonplaceholder.typicode.com/posts";//TODO get/create AWS API
-        let params = {
-            body: {
-                type: this.props.type,
-            },
-            method: "POST",
-        }
-        fetch(url, params)
+        const url = "https://ich20wj3w4.execute-api.us-west-1.amazonaws.com/table";//TODO get/create AWS API
+        fetch(url)
         .then(data=>{return data.json()})
         .then(result => {
-            this.setState({fetchedData: [result]});
+            this.setState({fetchedData: result.Data});
             console.log(result);
         });
     }
 
     render() {
-        return (
-            <>
-            {JSON.stringify(this.state.fetchedData)}
-            <ReactTable data={this.state.fetchedData} columns={testColumns} />
-            </>
-        );
+        const {fetchedData} = this.state || {};
+
+        switch(this.props.type) {
+            case "patients":
+                return <PatientTable data={fetchedData.appointments}/>;
+            case "appointments":
+                return <AppointmentTable data={fetchedData.appointments}/>;
+            case "users":
+                return <UserTable data={fetchedData.users}/>;
+            default: 
+                return null;
+        }
     }
 }
-
-
-const testColumns = [
-    {
-        accessor: "id",
-        Header: "ID",
-    }, 
-    {
-        accessor: "hello",
-        Header: "Testing",
-    }
-]
