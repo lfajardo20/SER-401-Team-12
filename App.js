@@ -47,14 +47,13 @@ class HomeScreen extends React.Component {
       .then(responseJson => {
         console.log(JSON.stringify(info));
         console.log(JSON.stringify(responseJson));
-        userType = JSON.stringify(responseJson);//payload response with the usertype
+        userType = JSON.stringify(responseJson); //payload response with the usertype
 
         //load view according to user type
         if (JSON.stringify(responseJson).match("doctor")) {
-          this.props.navigation.navigate("Staff")
-        }
-        else if (JSON.stringify(responseJson).match("transporter")) {
-          this.props.navigation.navigate("Transporter")
+          this.props.navigation.navigate("Staff");
+        } else if (JSON.stringify(responseJson).match("transporter")) {
+          this.props.navigation.navigate("Transporter");
         }
       })
       .catch(error => {
@@ -62,9 +61,11 @@ class HomeScreen extends React.Component {
       });
   };
 
+  //Function that gets the info entered by the user
+  //and calls a post function and passes the info
+  //to verify the info.
   validateUser = () => {
     let { user, password } = this.state;
-    //if (!verify(user, password)) return; //check for user
 
     let info = {
       userName: user,
@@ -80,19 +81,6 @@ class HomeScreen extends React.Component {
       //Can only return one element so all componets must be wrapped in a parent componet
       //ex: the two views in one view
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        {/* <Text>Select a role view</Text>
-        <View style={{ alignItems: "center", padding: 5 }}>
-          <Button
-            title="Go to Transporter View"
-            onPress={() => this.props.navigation.navigate("Transporter")}
-          />
-        </View>
-        <View style={{ alignItems: "center", padding: 5 }}>
-          <Button
-            title="Go to Staff View"
-            onPress={() => this.props.navigation.navigate("Staff")}
-          />
-        </View> */}
         <View>
           <Text>Username</Text>
           <TextInput
@@ -110,20 +98,6 @@ class HomeScreen extends React.Component {
           <Button onPress={this.validateUser} title="Login">
             Login
           </Button>
-          {/* {this.state.user === "admin" && //staff view
-            (this.state.password === "admin" && (
-              <Button
-                title="Log in"
-                onPress={() => this.props.navigation.navigate("Staff")}
-              />
-            ))}
-          {this.state.user === "admin2" && //transporter view
-            (this.state.password === "password" && (
-              <Button
-                title="Log in"
-                onPress={() => this.props.navigation.navigate("Transporter")}
-              />
-            ))} */}
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
           <Button
@@ -140,12 +114,6 @@ class HomeScreen extends React.Component {
       </View>
     );
   }
-}
-
-function verify(user, password) {
-  let errors = {};
-
-  //Start to verify info from db to see if input matches db
 }
 
 //Name of different navigation screens go here
