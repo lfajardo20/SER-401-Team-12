@@ -106,32 +106,32 @@ class HomeScreen extends React.Component {
     return (
       //Can only return one element so all componets must be wrapped in a parent componet
       //ex: the two views in one view
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <View>
+      <View style={styles.container}>
           <Text>Username</Text>
-          <TextInput
+          <TextInput style={styles.textNav}
             placeholder="Enter your username..."
             onChangeText={user => this.setState({ user })}
             value={this.state.user}
           />
           <Text>Password</Text>
-          <TextInput
+          <TextInput style={styles.textNav}
             secureTextEntry={true}
             placeholder="Enter your password..."
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
           />
+        <View style={styles.buttonStyle}>
           <Button onPress={this.validateUser} title="Login">
             Login
           </Button>
         </View>
-        <View style={{ alignItems: "center", padding: 5 }}>
+        <View style={styles.buttonStyle}>
           <Button
             title="Go GPS test"
             onPress={() => this.props.navigation.navigate("GPS")}
           />
         </View>
-        <View style={{ alignItems: "center", padding: 5 }}>
+        <View style={styles.buttonStyle}>
           <Button
             title="Create new account"
             onPress={() => this.props.navigation.navigate("Signup")}
@@ -141,7 +141,25 @@ class HomeScreen extends React.Component {
     );
   }
 }
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor:'#deeff2',
+    alignItems: 'center',
+    justifyContent: "center"
+  },
+  textNav:{
+    color: 'red',
+    fontSize: 25,
+  },
+  buttonStyle:{
+    height: 40,
+    width:'50%',
+    borderRadius:20,
+    backgroundColor : "yellow",
+    marginTop :30,
+  },
+});
 //Name of different navigation screens go here
 const AppNavigator = createStackNavigator(
   {
