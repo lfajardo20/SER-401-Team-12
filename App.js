@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   PermissionsAndroid,
+  AppState,
 } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
@@ -13,19 +14,44 @@ import Scanner from "./src/scanner/scanner";
 import TransporterScreen from "./src/views/TransporterScreen";
 import StaffScreen from "./src/views/StaffScreen";
 import SignupForm from "./src/signupForm";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput, RotationGestureHandler } from "react-native-gesture-handler";
 import gps from "./src/gps";
 
 class HomeScreen extends React.Component {
   state = {
     user: "",
     password: "",
+    appState: AppState.currentState,
     errors: {},
     submitResponse: null,
   };
 
   static navigationOptions = {
     title: "Arrival Notification",
+  };
+
+  componentDidMount() {
+    AppState.addEventListener("change", this._handleAppStateChange);
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener("change", this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = nextAppState => {
+    if (
+      this.state.appState.match("inactive|background") &&
+      nextAppState === "active"
+    ) {
+      //Almost done.
+      //ERROR/BUG: If anything was typed on the login screen and go to a different screen
+      //the text will stay in the text boxes even though we reset the view to the login.
+      //SOLUTION(POTENTIAL): Call the createStackNAvigator again and reset the app.
+      this.setState({ user: "", password: "" });
+      this.props.navigation.navigate("Home");
+      console.log("App is back from background.");
+    }
+    this.setState({ appState: nextAppState });
   };
 
   //function to retrieve the user tpe based on the user info passed
