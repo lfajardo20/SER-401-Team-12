@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Alert, View, Text, Vibration, StyleSheet } from "react-native";
 import { Camera, BarCodeScanner, Permissions } from "expo";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
 export default class Scanner extends Component {
   state = {
@@ -36,18 +37,30 @@ export default class Scanner extends Component {
 
     Vibration.vibrate();
     this.setState({ scannedItem: { data, type } });
-
-    if (type.startsWith("org.gs1.EAN")) {
-      // Process EAN code
-      this.resetScanner();
-      this.props.navigation.navigate("YOUR_NEXT_SCREEN", { ean: data });
-    } else if (type.startsWith("org.iso.QRCode")) {
-      // Process QRCode
-      this.resetScanner();
-    } else {
+    if (type == 2) 
+    {
+      //this.resetScanner();
+      //this.renderAlert("This barcode is Supported", `${type} : ${this.processBarcode(data)}`);
+      //this.props.navigation.navigate("YOUR_NEXT_SCREEN", { ean: data });
+    } 
+    else 
+    {
       this.renderAlert("This barcode is not supported.", `${type} : ${data}`);
     }
   };
+  
+  processBarcode(data)
+  {
+    //bacodes follow format of A00000000
+    if(data.charAt(0) == "A")
+    {
+        return data.substr(1,data.length - 1);
+    }
+    else
+    {
+        return null;
+    }
+  }
 
   resetScanner() {
     this.scannedCode = null;
@@ -62,6 +75,7 @@ export default class Scanner extends Component {
   render() {
     const { hasCameraPermission } = this.state;
     const { type, data } = this.state.scannedItem;
+    const {navigate} = this.props.navigation;
 
     if (hasCameraPermission === null) {
       return <Text>Requesting camera permission...</Text>;
@@ -69,16 +83,16 @@ export default class Scanner extends Component {
     if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
     }
-    return (
+    return(
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
           <BarCodeScanner
-            onBarCodeScanned={this.onBarCodeRead}
+            onBarCodeScanned={this.onBarCodeRead && this.handleBarCodeScanned}
             style={StyleSheet.absoluteFill}
           />
           {this.state.scannedItem && this.state.scannedItem.type ? (
             <Text style={styles.scanScreenMessage}>
-              {`Scanned \n ${type} \n ${data}`}
+              {`Scanned \n type: ${type} \n Patient ID: ${this.processBarcode(data)}`}
             </Text>
           ) : (
             <Text style={styles.scanScreenMessage}>
@@ -89,6 +103,11 @@ export default class Scanner extends Component {
       </View>
     );
   }
+  
+    handleBarCodeScanned = ({ type, data }) => 
+    {
+        this.props.navigation.navigate('GPS', {id:this.processBarcode(data)})
+    }
 }
 
 const styles = StyleSheet.create({
