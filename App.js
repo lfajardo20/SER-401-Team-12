@@ -5,7 +5,7 @@ import {
   Text,
   StyleSheet,
   PermissionsAndroid,
-  AppState
+  AppState,
 } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
@@ -13,6 +13,7 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Scanner from "./src/scanner/scanner";
 import TransporterScreen from "./src/views/TransporterScreen";
 import StaffScreen from "./src/views/StaffScreen";
+import ConfirmationScreen from "./src/views/ConfirmationScreen";
 import SignupForm from "./src/signupForm";
 import { TextInput, RotationGestureHandler } from "react-native-gesture-handler";
 import gps from "./src/gps";
@@ -21,14 +22,39 @@ class HomeScreen extends React.Component {
   state = {
     user: "",
     password: "",
+    appState: AppState.currentState,
     errors: {},
     submitResponse: null,
-    appState: AppState.currentState,
   };
 
   static navigationOptions = {
     title: "Arrival Notification",
   };
+
+  componentDidMount() {
+    AppState.addEventListener("change", this._handleAppStateChange);
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener("change", this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = nextAppState => {
+    if (
+      this.state.appState.match("inactive|background") &&
+      nextAppState === "active"
+    ) {
+      //Almost done.
+      //ERROR/BUG: If anything was typed on the login screen and go to a different screen
+      //the text will stay in the text boxes even though we reset the view to the login.
+      //SOLUTION(POTENTIAL): Call the createStackNAvigator again and reset the app.
+      this.setState({ user: "", password: "" });
+      this.props.navigation.navigate("Home");
+      console.log("App is back from background.");
+    }
+    this.setState({ appState: nextAppState });
+  };
+
   //function to retrieve the user tpe based on the user info passed
   //this will execute correctly and load a view if the username and password
   //are correct and found on the DB.
@@ -48,14 +74,13 @@ class HomeScreen extends React.Component {
       .then(responseJson => {
         console.log(JSON.stringify(info));
         console.log(JSON.stringify(responseJson));
-        userType = JSON.stringify(responseJson);//payload response with the usertype
+        userType = JSON.stringify(responseJson); //payload response with the usertype
 
         //load view according to user type
         if (JSON.stringify(responseJson).match("doctor")) {
-          this.props.navigation.navigate("Staff")
-        }
-        else if (JSON.stringify(responseJson).match("transporter")) {
-          this.props.navigation.navigate("Transporter")
+          this.props.navigation.navigate("Staff");
+        } else if (JSON.stringify(responseJson).match("transporter")) {
+          this.props.navigation.navigate("Transporter");
         }
       })
       .catch(error => {
@@ -63,9 +88,11 @@ class HomeScreen extends React.Component {
       });
   };
 
+  //Function that gets the info entered by the user
+  //and calls a post function and passes the info
+  //to verify the info.
   validateUser = () => {
     let { user, password } = this.state;
-    //if (!verify(user, password)) return; //check for user
 
     let info = {
       userName: user,
@@ -94,25 +121,13 @@ class HomeScreen extends React.Component {
     }
     this.setState({ appState: nextAppState })
   };
+
   render() {
     let { errors } = this.state;
     return (
       //Can only return one element so all componets must be wrapped in a parent componet
       //ex: the two views in one view
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        {/* <Text>Select a role view</Text>
-        <View style={{ alignItems: "center", padding: 5 }}>
-          <Button
-            title="Go to Transporter View"
-            onPress={() => this.props.navigation.navigate("Transporter")}
-          />
-        </View>
-        <View style={{ alignItems: "center", padding: 5 }}>
-          <Button
-            title="Go to Staff View"
-            onPress={() => this.props.navigation.navigate("Staff")}
-          />
-        </View> */}
         <View>
           <Text>Username</Text>
           <TextInput
@@ -130,20 +145,6 @@ class HomeScreen extends React.Component {
           <Button onPress={this.validateUser} title="Login">
             Login
           </Button>
-          {/* {this.state.user === "admin" && //staff view
-            (this.state.password === "admin" && (
-              <Button
-                title="Log in"
-                onPress={() => this.props.navigation.navigate("Staff")}
-              />
-            ))}
-          {this.state.user === "admin2" && //transporter view
-            (this.state.password === "password" && (
-              <Button
-                title="Log in"
-                onPress={() => this.props.navigation.navigate("Transporter")}
-              />
-            ))} */}
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
           <Button
@@ -167,6 +168,7 @@ const AppNavigator = createStackNavigator(
   {
     Home: HomeScreen,
     Transporter: TransporterScreen,
+    Confirmation: ConfirmationScreen,
     Staff: StaffScreen,
     Scanner: Scanner,
     Signup: SignupForm,
