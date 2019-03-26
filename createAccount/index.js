@@ -10,18 +10,27 @@ var pool  = mysql.createPool({
   
 exports.handler = async (event, context, callback) => {
     //parse event info
-    let {userName, passwordHash, userType, salt, phoneNumber} = event;
+    let {userName, passwordHash, userType, salt, phoneNumber, phoneType} = event;
     
     //add quotes to string variables
     userName = addQuotes(userName);
     passwordHash = addQuotes(passwordHash);
     userType = addQuotes(userType);
     phoneNumber = addQuotes(phoneNumber);
+    
+    IOS = 0;
+    
+    console.log(phoneType);
+    
+    if(phoneType == "IOS")
+    {
+        IOS = 1;
+    }
 
   var queryStr = "Insert into app.account" + 
-    "(userName, passwordHash, userType, salt, phoneNumber) " +
+    "(userName, passwordHash, userType, salt, phoneNumber, IOS) " +
     "Values (" + userName + ", " + passwordHash + ", " + userType + ", " + salt
-    + ", " + phoneNumber + ")";
+    + ", " + phoneNumber + ", " + IOS + ")";
     console.log(queryStr);
   
     context.callbackWaitsForEmptyEventLoop = false;
