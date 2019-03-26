@@ -39,7 +39,7 @@ export default class SignupForm extends React.Component {
           {
             submitResponse: responseJson,
           },
-          function() {
+          function () {
             console.log(JSON.stringify(accountInfo));
           }
         );
@@ -69,6 +69,7 @@ export default class SignupForm extends React.Component {
       userName: username,
       phoneNumber: phoneNumber,
       userType: userType,
+      phoneType: phoneType,
     };
     this.postAccount(accountInfo);
   };
@@ -123,6 +124,18 @@ export default class SignupForm extends React.Component {
           <Picker.Item label="Staff" value="doctor" />
           <Picker.Item label="Transporter" value="transporter" />
         </Picker>
+
+        <Picker
+          selectedValue={this.state.phoneType}
+          style={styles.borderedPicker}
+          onValueChange={(itemValue, itemIndex) =>
+            this.setState({ phoneType: itemValue })
+          }
+        >
+          <Picker.Item label="IOS" value="IOS" />
+          <Picker.Item label="Android" value="Android" />
+        </Picker>
+
         <Button onPress={this.submitForm} title="Submit">
           Submit
         </Button>
