@@ -56,8 +56,9 @@ export default class SignupForm extends React.Component {
       confirmation,
       phoneNumber,
       userType,
+      phoneType,
     } = this.state;
-    if (!validate(username, password, confirmation, phoneNumber, this)) return;
+    if (!validate(username, password, confirmation, phoneNumber, phoneType, this)) return;
     //if you make it here, do  network stuff to create account
 
     let salt = Math.floor(Math.random() * 10000); //generates random number between 0-10,000 as a salt
@@ -144,7 +145,7 @@ export default class SignupForm extends React.Component {
   }
 }
 
-function validate(username, password, confirmation, phoneNumber, context) {
+function validate(username, password, confirmation, phoneNumber, phoneType, context) {
   let errors = {};
   //start basic validation, will need refactors and upgrades once API is up and integrated
 
