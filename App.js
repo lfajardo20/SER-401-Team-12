@@ -15,6 +15,7 @@ import TransporterScreen from "./src/views/TransporterScreen";
 import StaffScreen from "./src/views/StaffScreen";
 import ConfirmationScreen from "./src/views/ConfirmationScreen";
 import StaffConfirmScreen from "./src/views/StaffConfirmScreen";
+import TransporterAwait from "./src/views/TransporterAwait";
 import SignupForm from "./src/signupForm";
 import { TextInput, RotationGestureHandler } from "react-native-gesture-handler";
 import gps from "./src/gps";
@@ -131,12 +132,6 @@ class HomeScreen extends React.Component {
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
           <Button
-            title="Go Staff screen"
-            onPress={() => this.props.navigation.navigate("StaffConfirm")}
-          />
-        </View>
-        <View style={{ alignItems: "center", padding: 5 }}>
-          <Button
             title="Create new account"
             onPress={() => this.props.navigation.navigate("Signup")}
           />
@@ -156,7 +151,8 @@ const AppNavigator = createStackNavigator(
     Scanner: Scanner,
     Signup: SignupForm,
     GPS: gps,
-    StaffConfirm: StaffConfirmScreen
+    StaffConfirm: StaffConfirmScreen,
+    TransporterAwait: TransporterAwait
   },
   {
     initialRouteName: "Home",
