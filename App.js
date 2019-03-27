@@ -14,6 +14,7 @@ import Scanner from "./src/scanner/scanner";
 import TransporterScreen from "./src/views/TransporterScreen";
 import StaffScreen from "./src/views/StaffScreen";
 import ConfirmationScreen from "./src/views/ConfirmationScreen";
+import StaffConfirmScreen from "./src/views/StaffConfirmScreen";
 import SignupForm from "./src/signupForm";
 import { TextInput, RotationGestureHandler } from "react-native-gesture-handler";
 import gps from "./src/gps";
@@ -76,6 +77,8 @@ class HomeScreen extends React.Component {
         console.log(JSON.stringify(responseJson));
         userType = JSON.stringify(responseJson); //payload response with the usertype
 
+        console.log(JSON.stringify(responseJson));
+
         //load view according to user type
         if (JSON.stringify(responseJson).match("doctor")) {
           this.props.navigation.navigate("Staff");
@@ -100,26 +103,6 @@ class HomeScreen extends React.Component {
     };
 
     this.postLogin(info);
-  };
-  componentDidMount() {
-    AppState.addEventListener('change', this._handleAppStateChange);
-  }
-
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
-  }
-
-  _handleAppStateChange = (nextAppState) => {
-    if (this.state.appState.match("inactive|background") && nextAppState === "active") {
-      //Almost done.
-      //ERROR/BUG: If anything was typed on the login screen and go to a different screen
-      //the text will stay in the text boxes even though we reset the view to the login.
-      //SOLUTION(POTENTIAL): Call the createStackNAvigator again and reset the app.
-      this.setState({ user: "", password: "" });
-      this.props.navigation.navigate("Home");
-      console.log("App is back from background.");
-    }
-    this.setState({ appState: nextAppState })
   };
 
   render() {
@@ -148,8 +131,8 @@ class HomeScreen extends React.Component {
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
           <Button
-            title="Go GPS test"
-            onPress={() => this.props.navigation.navigate("GPS")}
+            title="Go Staff screen"
+            onPress={() => this.props.navigation.navigate("StaffConfirm")}
           />
         </View>
         <View style={{ alignItems: "center", padding: 5 }}>
@@ -173,6 +156,7 @@ const AppNavigator = createStackNavigator(
     Scanner: Scanner,
     Signup: SignupForm,
     GPS: gps,
+    StaffConfirm: StaffConfirmScreen
   },
   {
     initialRouteName: "Home",
