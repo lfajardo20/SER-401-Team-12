@@ -10,16 +10,11 @@ var pool  = mysql.createPool({
   
 exports.handler = async (event, context, callback) => {
     //parse event info
-    let {firstname, lastname, age, sex} = event;
+    let {id} = event;
     
-    //add quotes to string variables
-    firstname = addQuotes(firstname);
-    lastname = addQuotes(lastname);
-    sex = addQuotes(sex);
 
-  var queryStr = "Insert into app.patient" + 
-    "(firstname, lastname, age, sex) " +
-    "Values (" + firstname + ", " + lastname + ", " + age + ", " + sex + ")";
+  var queryStr = "Select * from app.patient" + 
+    (id? "Where id = " + id : "");
     console.log(queryStr);
   
     context.callbackWaitsForEmptyEventLoop = false;
@@ -35,10 +30,10 @@ exports.handler = async (event, context, callback) => {
                     connection.release();
                     //if Error reject promise
                     if (error) {
-                        reject("Patient creation failed" + JSON.stringify(error));   
+                        reject("Could not fetch patient data" + JSON.stringify(error));   
                     }
                     else {
-                        resolve(true);
+                        resolve(results);
                     }
     
                     //Can end event now that call is finished    
@@ -52,8 +47,4 @@ exports.handler = async (event, context, callback) => {
             reject("Database is down.");
         }
     });
-}
-
-function addQuotes(val) {
-        return "'" + val + "'";
 }
