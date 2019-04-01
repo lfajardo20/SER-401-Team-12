@@ -4,6 +4,7 @@
     "slug": "ArrivalReact",
     "privacy": "public",
     "sdkVersion": "32.0.0",
+    "scheme" : "arrival",
     "platforms": [
       "ios",
       "android"
@@ -24,6 +25,6 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
   }
 }

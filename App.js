@@ -7,7 +7,7 @@ import {
   PermissionsAndroid,
   AppState,
 } from "react-native";
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import { createStackNavigator, createAppContainer, Linking } from "react-navigation";
 
 //Need to import each of the used view classes
 import Scanner from "./src/scanner/scanner";
@@ -32,9 +32,22 @@ class HomeScreen extends React.Component {
   static navigationOptions = {
     title: "Arrival Notification",
   };
+  
+  handleOpenURL(event) {
+      console.log("link Opened");
+}
 
   componentDidMount() {
     AppState.addEventListener("change", this._handleAppStateChange);
+    
+    scheme = 'arrival';
+    Expo.Linking.getInitialURL()
+    .then(url => {
+      alert(url)
+      // this.handleOpenURL({ url });
+    })
+    .catch(error => console.error(error));
+    Expo.Linking.addEventListener('url', this.handleOpenURL);
   }
 
   componentWillUnmount() {
@@ -102,7 +115,7 @@ class HomeScreen extends React.Component {
       userName: user,
       password: password,
     };
-
+    
     this.postLogin(info);
   };
 
