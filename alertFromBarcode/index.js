@@ -49,7 +49,7 @@ exports.handler = async (event, context, callback) => {
                             //console.log(results[ii].date.toString());
                             //let time = results[ii].date.toString().substring(16, 21);
                             messages[ii] = {
-                                Message: "Your appointment has been checked in from " + location,
+                                Message: "Your appointment has been checked in from " + location + " \n" + "https://iulemwnroh.execute-api.us-west-1.amazonaws.com/devLinking?id=" + id,
                                 PhoneNumber: results[ii].phoneNumber,
                             };
                         }
