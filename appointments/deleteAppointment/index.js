@@ -10,11 +10,11 @@ var pool  = mysql.createPool({
   
 exports.handler = async (event, context, callback) => {
     //parse event info
-    let {id} = event;
+    let {apptNumber} = event;
     
 
-  var queryStr = "DELETE from app.patient" + 
-    "Where id = " + id;
+  var queryStr = "DELETE from app.appointment" + 
+    "Where apptNumber = " + apptNumber;
     console.log(queryStr);
   
     context.callbackWaitsForEmptyEventLoop = false;

@@ -10,17 +10,23 @@ var pool  = mysql.createPool({
 
 exports.handler = async (event, context, callback) => {
     //parse event info
-    let {firstname, lastname, age, sex, id} = event;
+    let {mrNumber, accountNum, date, mainSurgeonID, location, apptNumber} = event;
 
     //add quotes to string variables
-    firstname = addQuotes(firstname);
-    lastname = addQuotes(lastname);
-    sex = addQuotes(sex);
+    location = addQuotes(location);
 
-    var queryStr = "Update app.patient\n" + 
-        "Set firstname = " + firstname + ", lastname = " + lastname +
-        ", sex = " + sex + ", age = " + age +
-        "\nWhere id = " + id;
+ /* var queryStr = "Insert into app.appointment" + 
+    "(mrNumber, accountNum, date, location" + (mainSurgeonID? ", " + mainSurgeonID : "") + ")" +
+    "Values (" + mrNumber + ", " + accountNum + ", " + date + ", " + location +
+    (mainSurgeonID? ", " + mainSurgeonID : "") + ")";*/
+
+    var queryStr = "Update app.appointment\n" + 
+        "Set mrNumber = " + mrNumber + ", accountNum = " + accountNum +
+        ", date = " + date + ", location = " + location +
+        mainSurgeonID ?
+            ",  mainSurgeonID = " + mainSurgeonID : 
+            "" +
+        "\nWhere apptNumber = " + apptNumber;
     console.log(queryStr);
 
     context.callbackWaitsForEmptyEventLoop = false;
