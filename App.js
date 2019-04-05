@@ -27,32 +27,33 @@ class HomeScreen extends React.Component {
     appState: AppState.currentState,
     errors: {},
     submitResponse: null,
+    id: null,
   };
 
   static navigationOptions = {
     title: "Arrival Notification",
   };
-  
+
   handleOpenURL(event) {
-      console.log("link Opened");
-}
+    console.log("link Opened");
+  }
 
   componentDidMount() {
     AppState.addEventListener("change", this._handleAppStateChange);
-    
-    scheme = 'arrival';
+
+    //Used for intent linking with staff
     Expo.Linking.getInitialURL()
-    .then(url => {
-      alert(url)
-      // this.handleOpenURL({ url });
-    })
-    .catch(error => console.error(error));
+      .then(url => {
+        this.setState({ id: Expo.Linking.parse(url).queryParams.id });
+      })
+      .catch(error => console.error(error));
     Expo.Linking.addEventListener('url', this.handleOpenURL);
   }
 
   componentWillUnmount() {
     AppState.removeEventListener("change", this._handleAppStateChange);
   }
+
 
   _handleAppStateChange = nextAppState => {
     if (
@@ -95,7 +96,13 @@ class HomeScreen extends React.Component {
 
         //load view according to user type
         if (JSON.stringify(responseJson).match("doctor")) {
-          this.props.navigation.navigate("Staff");
+          //If not linked from URL go to default confirm screen
+          if (this.state.id != null) {
+            this.props.navigation.navigate("StaffConfirm");
+          }
+          else {
+            this.props.navigation.navigate("Staff");
+          }
         } else if (JSON.stringify(responseJson).match("transporter")) {
           this.props.navigation.navigate("Transporter");
         }
@@ -115,7 +122,7 @@ class HomeScreen extends React.Component {
       userName: user,
       password: password,
     };
-    
+
     this.postLogin(info);
   };
 
