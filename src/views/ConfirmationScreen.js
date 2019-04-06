@@ -50,7 +50,6 @@ export default class ConfirmationScreen extends React.Component {
 
   doPostConfirmationTrue() {
     this.confirmationObj.location = this.state.loc;
-    alert(JSON.stringify(this.confirmationObj));
     return fetch('https://k634ch08g9.execute-api.us-west-1.amazonaws.com/test',
       {
         method: 'POST', headers:
@@ -59,20 +58,17 @@ export default class ConfirmationScreen extends React.Component {
       })
       .then((response) => response.json())
       .then((responseJson) => {
-
         this.setState({
           isLoading: false,
           dataSource: responseJson,
         }, function () {
-            //Testing functions go here
-            this.props.navigation.navigate("Transporter")
-          });
+          //Testing functions go here
+          this.props.navigation.navigate("TransporterAwait", { id: this.state.id })
+        });
       })
       .catch((error) => {
         console.error(error);
       });
-
-    // Change screen after post
   }
 
   render() {
