@@ -13,7 +13,7 @@ exports.handler = async (event, context, callback) => {
     let {id} = event;
     
 
-  var queryStr = "Select * from app.patient" + 
+  var queryStr = "Select * from app.patient\n" + 
     (id? "Where id = " + id : "");
     console.log(queryStr);
   
