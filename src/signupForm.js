@@ -84,38 +84,38 @@ export default class SignupForm extends React.Component {
       );
     }
     return (
-      <View>
+      <View style={styles.container}> 
         <Text>Username</Text>
-        <TextInput
+        <TextInput style={styles.textInput}
           onChangeText={text => this.setState({ username: text })}
-          style={styles.borderedField}
+          //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.username} </Text>
 
         <Text>Password</Text>
-        <TextInput
+        <TextInput style={styles.textInput}
           onChangeText={text => this.setState({ password: text })}
-          style={styles.borderedField}
+          //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.password} </Text>
 
         <Text>Confirm Password</Text>
-        <TextInput
+        <TextInput style={styles.textInput}
           onChangeText={text => this.setState({ confirmation: text })}
-          style={styles.borderedField}
+          //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.confirmation} </Text>
 
         <Text>Phone Number</Text>
-        <TextInput
+        <TextInput style={styles.textInput}
           onChangeText={text => this.setState({ phoneNumber: text })}
-          style={styles.borderedField}
+          //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.phoneNumber} </Text>
-
+        <View style={styles.borderedPicker}>
         <Picker
           selectedValue={this.state.userType}
-          style={styles.borderedPicker}
+          //style={styles.borderedPicker}
           onValueChange={(itemValue, itemIndex) =>
             this.setState({ userType: itemValue })
           }
@@ -123,9 +123,12 @@ export default class SignupForm extends React.Component {
           <Picker.Item label="Staff" value="doctor" />
           <Picker.Item label="Transporter" value="transporter" />
         </Picker>
+        </View>
+        <View style={styles.buttonStyle}>
         <Button onPress={this.submitForm} title="Submit">
           Submit
         </Button>
+        </View>
       </View>
     );
   }
@@ -156,7 +159,7 @@ function validate(username, password, confirmation, phoneNumber, context) {
   context.setState({ errors: errors });
   return Object.keys(errors).length === 0; //if errors has at least one property marked, return not valid
 }
-
+/*
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -190,5 +193,53 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     height: 50,
     width: 100,
+  },
+});*/
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor:'#deeff2',
+    paddingTop: 22,
+    alignItems: 'center',
+  },
+  sectionHeader: {
+    paddingTop: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 2,
+    fontSize: 14,
+    fontWeight: "bold",
+    backgroundColor: "rgba(247,247,247,1.0)",
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 8,
+    marginBottom: 20,
+  },
+  textInput:{
+    backgroundColor:'#ffffff',
+    padding:6,
+    marginBottom:0,
+    width:'100%',
+  },
+  borderedPicker: {
+    //borderColor: "black",
+    //borderWidth: 2,
+    backgroundColor: "red",
+    height: 50,
+    width: 100,
+  },
+  buttonStyle:{
+    height: 40,
+    width:100,
+    borderRadius:20,
+    backgroundColor : "yellow",
+    marginTop :150,
   },
 });
