@@ -15,7 +15,7 @@ exports.handler = async (event, context, callback) => {
     //add quotes to string variables
     location = addQuotes(location);
 
-  var queryStr = "Insert into app.appointment" + 
+  var queryStr = "Insert into app.appointment\n" + 
     "(mrNumber, accountNum, date, location" + (mainSurgeonID? ", " + mainSurgeonID : "") + ")" +
     "Values (" + mrNumber + ", " + accountNum + ", " + date + ", " + location +
     (mainSurgeonID? ", " + mainSurgeonID : "") + ")";
