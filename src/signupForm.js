@@ -23,7 +23,7 @@ export default class SignupForm extends React.Component {
 
   postAccount = accountInfo => {
     return fetch(
-      "https://2znkbd4rua.execute-api.us-west-1.amazonaws.com/beta",
+      "https://6m2i2xewv6.execute-api.us-west-1.amazonaws.com/beta",
       {
         method: "POST",
         headers: {
@@ -84,50 +84,54 @@ export default class SignupForm extends React.Component {
       );
     }
     return (
-      <View style={styles.container}> 
+      <View style={styles.container}>
         <Text>Username</Text>
-        <TextInput style={styles.textInput}
+        <TextInput
+          style={styles.textInput}
           onChangeText={text => this.setState({ username: text })}
           //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.username} </Text>
 
         <Text>Password</Text>
-        <TextInput style={styles.textInput}
+        <TextInput
+          style={styles.textInput}
           onChangeText={text => this.setState({ password: text })}
           //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.password} </Text>
 
         <Text>Confirm Password</Text>
-        <TextInput style={styles.textInput}
+        <TextInput
+          style={styles.textInput}
           onChangeText={text => this.setState({ confirmation: text })}
           //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.confirmation} </Text>
 
         <Text>Phone Number</Text>
-        <TextInput style={styles.textInput}
+        <TextInput
+          style={styles.textInput}
           onChangeText={text => this.setState({ phoneNumber: text })}
           //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.phoneNumber} </Text>
         <View style={styles.borderedPicker}>
-        <Picker
-          selectedValue={this.state.userType}
-          //style={styles.borderedPicker}
-          onValueChange={(itemValue, itemIndex) =>
-            this.setState({ userType: itemValue })
-          }
-        >
-          <Picker.Item label="Staff" value="doctor" />
-          <Picker.Item label="Transporter" value="transporter" />
-        </Picker>
+          <Picker
+            selectedValue={this.state.userType}
+            //style={styles.borderedPicker}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({ userType: itemValue })
+            }
+          >
+            <Picker.Item label="Staff" value="doctor" />
+            <Picker.Item label="Transporter" value="transporter" />
+          </Picker>
         </View>
         <View style={styles.buttonStyle}>
-        <Button onPress={this.submitForm} title="Submit">
-          Submit
-        </Button>
+          <Button onPress={this.submitForm} title="Submit">
+            Submit
+          </Button>
         </View>
       </View>
     );
@@ -199,9 +203,9 @@ const styles = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'#deeff2',
+    backgroundColor: "#deeff2",
     paddingTop: 22,
-    alignItems: 'center',
+    alignItems: "center",
   },
   sectionHeader: {
     paddingTop: 2,
@@ -222,11 +226,11 @@ const styles = StyleSheet.create({
     fontSize: 8,
     marginBottom: 20,
   },
-  textInput:{
-    backgroundColor:'#ffffff',
-    padding:6,
-    marginBottom:0,
-    width:'100%',
+  textInput: {
+    backgroundColor: "#ffffff",
+    padding: 6,
+    marginBottom: 0,
+    width: "100%",
   },
   borderedPicker: {
     //borderColor: "black",
@@ -235,11 +239,11 @@ const styles = StyleSheet.create({
     height: 50,
     width: 100,
   },
-  buttonStyle:{
+  buttonStyle: {
     height: 40,
-    width:100,
-    borderRadius:20,
-    backgroundColor : "yellow",
-    marginTop :150,
+    width: 100,
+    borderRadius: 20,
+    backgroundColor: "yellow",
+    marginTop: 150,
   },
 });

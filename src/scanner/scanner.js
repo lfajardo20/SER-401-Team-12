@@ -54,11 +54,11 @@ export default class Scanner extends Component {
     //bacodes follow format of A00000000
     if(data.charAt(0) == "A")
     {
-        return data.substr(1,data.length - 1);
+      return data.substr(1,data.length - 1);
     }
     else
     {
-        return null;
+      return null;
     }
   }
 
@@ -106,7 +106,7 @@ export default class Scanner extends Component {
   
     handleBarCodeScanned = ({ type, data }) => 
     {
-        this.props.navigation.navigate('GPS', {id:this.processBarcode(data)})
+      this.props.navigation.navigate("GPS", {id:this.processBarcode(data)});
     }
 }
 
