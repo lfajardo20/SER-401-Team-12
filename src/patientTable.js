@@ -22,15 +22,24 @@ const getTdProps = (state, rowInfo, column, instance) => {
 
 const columns = [
     {
-        accessor: "name",
+        accessor: "id",
+        Header: "ID",
+    },
+    {
         Header: "Name",
+        id: "name",
+        Cell: (data) => (
+           <span>
+            { data.original.lastname + ", " + data.original.firstname }
+            </span>
+        )
     },
     {
         accessor: "sex",
         Header: "Sex",
     },
     {
-        accessor: "DOB",
-        Header: "DOB",
+        accessor: "age",
+        Header: "Age",
     },
 ];

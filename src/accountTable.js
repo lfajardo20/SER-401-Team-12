@@ -31,7 +31,7 @@ const columns = [
         Header: "Type",
     },
     {
-        accessor: "fullName",
+        accessor: "fullname",
         Header: "Full Name",
     },
     {
