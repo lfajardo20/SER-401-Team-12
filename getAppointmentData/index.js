@@ -33,7 +33,8 @@ exports.handler = async (event, context, callback) => {
                     }
                     else
                     {
-                        resolve(JSON.stringify(result));
+						id = {results: result};
+                        resolve(JSON.stringify(id));
                     }
     
                     //Can end event now that call is finished    
