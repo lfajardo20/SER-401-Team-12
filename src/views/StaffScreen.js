@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, View, Text, StyleSheet } from "react-native";
+import { Button, View, Text, StyleSheet, ScrollView} from "react-native";
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
 import SchedulePage from "../schedule/schedulePage";
@@ -19,7 +19,8 @@ export default class StaffScreen extends React.Component {
   
   state = {
 	tableHead: ['Date', 'mrNumber', 'Account Number'],
-    data: [" "," "," "],
+    data: null,
+	multipleRows: false
   };
   
   
@@ -33,11 +34,28 @@ export default class StaffScreen extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
 		  
-		  objResponse = JSON.parse(responseJson.substr(1,responseJson.length - 2));
-		  ObjArray = [objResponse.date, objResponse.mrNumber, objResponse.accountNum]
+		  objResponse = JSON.parse(responseJson);
+		  Obj2dArray = new Array();
+		  
+		  if(objResponse.results.length > 1)
+		  {
+			for(i = 0; i < objResponse.results.length; i++)
+			  {
+				  ObjArray = [objResponse.results[i].date.replace("T"," ").replace("Z"," ").substring(1,objResponse.results[i].date.length - 5), objResponse.results[i].mrNumber, objResponse.results[i].accountNum];
+				  Obj2dArray.push(ObjArray);
+			  }
+			
+			this.setState({
+				multipleRows: true
+			}); 
+		  }
+		  else
+		  {
+			Obj2dArray = [objResponse.results[0].date.replace("T"," ").replace("Z"," ").substring(1,objResponse.results[0].date.length - 5).replace("Z"," "), objResponse.results[0].mrNumber, objResponse.results[0].accountNum];;
+		  }
 		  
         this.setState({
-          data: ObjArray
+          data: Obj2dArray
         });
       })
       .catch((error) => { console.error(error); });
@@ -46,18 +64,20 @@ export default class StaffScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-	<View style={styles.container}>
-		<Table borderStyle={{borderWidth: 1, borderColor: '#c8e1ff'}}>
+	<ScrollView style={styles.container}>
+		<Table borderStyle={{borderWidth: 1, borderColor: '#6a2e31'}}>
 			<Row data={this.state.tableHead} style={styles.head} textStyle={styles.text}/>
-			<Row data={this.state.data} textStyle={styles.text}/>
+			{(this.state.multipleRows) ? (
+			 <Rows data={this.state.data} textStyle={styles.text}/>) :( 
+			 <Row data={this.state.data} textStyle={styles.text}/>)}
         </Table>
-	</View>
+	</ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-  head: { height: 40, backgroundColor: '#f1f8ff' },
-  text: { margin: 6 }
+  container: { flex: 1, padding: 8, paddingTop: 30, backgroundColor: '#fff' },
+  head: { height: 40, backgroundColor: '#c53b43' },
+  text: { margin: 3 }
 });
