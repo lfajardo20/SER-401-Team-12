@@ -22,8 +22,8 @@ const getTdProps = (state, rowInfo, column, instance) => {
 
 const columns = [
     {
-        accessor: "ID",
-        Header: "id",
+        accessor: "accountNum",
+        Header: "Account#",
     },
     {
         accessor: "location",
