@@ -74,12 +74,14 @@ class HomeScreen extends React.Component {
       .then(responseJson => {
         console.log(JSON.stringify(info));
         console.log(JSON.stringify(responseJson));
-        userType = JSON.stringify(responseJson); //payload response with the usertype
+		
+		objResponse = JSON.parse(JSON.stringify(responseJson));
+        userType = objResponse.Data.userType; //payload response with the usertype
 
         //load view according to user type
-        if (JSON.stringify(responseJson).match("doctor")) {
-          this.props.navigation.navigate("Staff");
-        } else if (JSON.stringify(responseJson).match("transporter")) {
+        if (userType.match("doctor")) {
+		  this.props.navigation.navigate("Staff", {id:objResponse.Data.accountId});
+        } else if (userType.match("transporter")) {
           this.props.navigation.navigate("Transporter");
         }
       })
