@@ -1,5 +1,4 @@
 var mysql = require('mysql');
-var crypto = require('crypto-js');
 
 var pool  = mysql.createPool({
     host: "arrivaldatabase.cerlvveo6skh.us-east-2.rds.amazonaws.com",
@@ -7,12 +6,13 @@ var pool  = mysql.createPool({
     password: 'brbUh86hELkWf82',
     port: "3306",
     database: 'app',
+    multipleStatements: true,
   });
   
 exports.handler = async (event, context, callback) => {
   //prevent timeout from waiting event loop
   
-  var queryStr = "SELECT userName, userType, salt, passwordHash, accountId FROM app.account WHERE userName ='" + event.userName + "'"; 
+  var queryAccount = "SELECT accountNum, mrNumber, date FROM app.appointment WHERE mainSurgeon='" + event.id + "'";
 
   
     context.callbackWaitsForEmptyEventLoop = false;
@@ -22,34 +22,19 @@ exports.handler = async (event, context, callback) => {
             pool.getConnection(function(err, connection) 
             {
                 // Use the connection
-                connection.query(queryStr, function (error, results, fields) 
+                connection.query(queryAccount, function (error, result, fields)
                 {
                     // And done with the connection.
                     connection.release();
                     //if Error reject promise
-                    if (error || results[0] == undefined)
+                    if (error || result == undefined)
                     {
                         reject("User does not exist!");   
                     }
                     else
                     {
-                        console.log(results)
-                        //hash password + salt
-                        //see if this matches the account
-                        let hash = String(crypto.SHA256(event.password + "" + results[0].salt));
-                        console.log(results[0].salt);
-                        console.log(event.password);
-                        
-                        console.log("Hashed password: " +hash);
-                        console.log("Server hash:" + results[0].passwordHash);
-                        if(hash === results[0].passwordHash)
-                        {
-                            resolve({ "Data": {"userType": results[0].userType, "accountId": results[0].staffID }});
-                        }
-                        else
-                        {
-                            reject("Incorrect Password!");
-                        }
+						id = {results: result};
+                        resolve(JSON.stringify(id));
                     }
     
                     //Can end event now that call is finished    
