@@ -10,15 +10,15 @@ var pool = mysql.createPool({
 
 exports.handler = async (event, context, callback) => {
   //parse event info
-  let { userName, userType, id } = event;
+  let { fullname, userType, id } = event;
 
   //add quotes to string variables
-  userName = addQuotes(userName);
+  fullname = addQuotes(fullname);
   userType = addQuotes(userType);
 
   var queryStr =
-    "UPDATE app.account SET userName = " +
-    userName +
+    "UPDATE app.account SET fullname = " +
+    fullname +
     ", userType = " +
     userType +
     "WHERE accountId = " +
