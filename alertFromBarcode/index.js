@@ -25,8 +25,8 @@ exports.handler = async (event, context, callback) => {
     }
     
   //get users, appointments, and their associations
-   var queryStr = 'SELECT DISTINCT phoneNumber,staffID FROM app.staff as s' +
-   ', app.appointment as a WHERE s.staffID = a.mainSurgeon AND a.accountNum = ' + id + ';';
+   var queryStr = 'SELECT DISTINCT phoneNumber,accountId FROM app.account as s' +
+   ', app.appointment as a WHERE s.accountId = a.mainSurgeon AND a.accountNum =' + id + ';';
 
     context.callbackWaitsForEmptyEventLoop = false;
     return new Promise(function(resolve, reject)
@@ -49,7 +49,7 @@ exports.handler = async (event, context, callback) => {
                             //console.log(results[ii].date.toString());
                             //let time = results[ii].date.toString().substring(16, 21);
                             messages[ii] = {
-                                Message: "Your appointment has been checked in from " + location + " \n" + "https://iulemwnroh.execute-api.us-west-1.amazonaws.com/devLinking?id=" + id,
+                                Message: "Your appointment has been checked in from " + location,
                                 PhoneNumber: results[ii].phoneNumber,
                             };
                         }
