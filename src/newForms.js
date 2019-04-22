@@ -12,7 +12,7 @@ export default class NewForms extends React.Component {
 
   submitPatient = () => {};
 
-  submitUser = () => {
+  submitUser = async() => {
     console.log("Entered the submitUser!");
     let { values } = this.state;
 
@@ -31,12 +31,13 @@ export default class NewForms extends React.Component {
   };
 
   postAccount = data => {
-    const url = "https://2znkbd4rua.execute-api.us-west-1.amazonaws.com/beta";
+    const url = "https://6m2i2xewv6.execute-api.us-west-1.amazonaws.com/beta";
     return fetch(url, {
       method: "POST",
+      mode: "cors",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data)
     })
@@ -139,7 +140,7 @@ export default class NewForms extends React.Component {
               }
             />
             <br />
-            <button onClick={this.submitUser()}>Submit</button>
+            <button type="submit" onClick={ () => this.submitUser()}>Submit</button>
           </form>
         </>
       );
