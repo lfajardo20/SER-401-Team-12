@@ -1,6 +1,9 @@
 import React from "react";
 import ReactTable from "react-table";
 
+import { ReactComponent as EditIcon } from "./assets/baseline-edit-24px.svg";
+import { ReactComponent as DeleteIcon } from "./assets/baseline-delete-24px.svg";
+
 export default class UserTable extends React.Component {
     render() {
         return <ReactTable columns={columns} data={this.props.data} getTdProps={getTdProps}/>
@@ -41,5 +44,13 @@ const columns = [
     {
         accessor: "phoneNumber",
         Header: "Phone Number",
+    },
+    {
+        Header: "Edit",
+        Cell: <EditIcon/>
+    },
+    {
+        Header: "Delete",
+        Cell: <DeleteIcon/>
     }
 ];
