@@ -13,7 +13,7 @@ exports.handler = async (event, context, callback) => {
     let {id} = event;
     
 
-  var queryStr = "DELETE from app.patient" + 
+  var queryStr = "DELETE from app.patient\n" + 
     "Where id = " + id;
     console.log(queryStr);
   
