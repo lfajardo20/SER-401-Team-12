@@ -21,7 +21,6 @@ export default class FormBody extends React.Component {
         .then(data=>{return data.json()})
         .then(result => {
             this.setState({accounts: result});
-            console.log(result);
         });
     }
 
@@ -31,7 +30,6 @@ export default class FormBody extends React.Component {
         .then(data=>{return data.json()})
         .then(result => {
             this.setState({patients: result});
-            console.log(result);
         });
     }
 
@@ -41,7 +39,6 @@ export default class FormBody extends React.Component {
         .then(data=>{return data.json()})
         .then(result => {
             this.setState({appointments: result});
-            console.log(result);
         });
     }
 

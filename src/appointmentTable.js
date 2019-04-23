@@ -18,6 +18,9 @@ export default class AppointmentTable extends React.Component {
                     <button onClick={this.deleteRow}>Delete</button>
                     <button onClick={this.closeModal}>Cancel</button>
                 </Modal>  
+                <Modal active={this.state.activeModal === "Edit"} onClose={this.closeModal}>
+                    Stuff
+                </Modal> 
             <ReactTable columns={columns} data={this.props.data} getTdProps={this.getTdProps}/>
             </>
         )
@@ -36,6 +39,9 @@ export default class AppointmentTable extends React.Component {
         .then(data=> console.log(data))
         .then(() =>
             this.props.refetch()
+        ) 
+        .then(() =>
+        this.closeModal()
         );
     }
 
