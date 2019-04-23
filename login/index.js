@@ -10,12 +10,10 @@ var pool  = mysql.createPool({
   });
   
 exports.handler = async (event, context, callback) => {
-  //prevent timeout from waiting event loop
-  let userName = mysql.escape(event.userName);
-  var queryStr = "SELECT userName, userType, salt, passwordHash\n" +
-  "FROM app.account\n" +
-  "WHERE userName =" + userName; 
-
+    let userName = mysql.escape(event.userName);
+    var queryStr = "SELECT userName, userType, salt, accountId, passwordHash\n" +
+    "FROM app.account\n" +
+    "WHERE userName =" + userName;
   
     context.callbackWaitsForEmptyEventLoop = false;
     return new Promise(function(resolve, reject)
@@ -46,7 +44,7 @@ exports.handler = async (event, context, callback) => {
                         console.log("Server hash:" + results[0].passwordHash);
                         if(hash === results[0].passwordHash)
                         {
-                            resolve(results[0].userType);
+                            resolve({ "Data": {"userType": results[0].userType, "accountId": results[0].accountId }});
                         }
                         else
                         {
