@@ -13,7 +13,7 @@ exports.handler = async (event, context, callback) => {
     let {apptNumber} = event;
     
 
-  var queryStr = "DELETE from app.appointment" + 
+  var queryStr = "DELETE from app.appointment\n" + 
     "Where apptNumber = " + apptNumber;
     console.log(queryStr);
   
