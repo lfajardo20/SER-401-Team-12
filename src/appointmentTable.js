@@ -15,8 +15,8 @@ export default class AppointmentTable extends React.Component {
         return (
             <>
                 <Modal active={this.state.activeModal === "Delete"} onClose={this.closeModal}>
-                    hello
-                    <input></input>
+                    <button onClick={this.deleteRow}>Delete</button>
+                    <button onClick={this.closeModal}>Cancel</button>
                 </Modal>  
             <ReactTable columns={columns} data={this.props.data} getTdProps={this.getTdProps}/>
             </>
@@ -27,15 +27,28 @@ export default class AppointmentTable extends React.Component {
         this.setState({activeModal: null})
     }
 
+    deleteRow = async () => {
+        fetch("https://ng8rh0c7n0.execute-api.us-west-1.amazonaws.com/beta",
+        { 
+            method: "DELETE",
+            body: JSON.stringify({apptNumber: this.state.rowInfo.apptNumber}),
+        })
+        .then(data=> console.log(data))
+        .then(() =>
+            this.props.refetch()
+        );
+    }
+
+
     //function passed to react table that determines props such as click handlers
     getTdProps = (state, rowInfo, column, instance) => {
         return {
             onClick: (e, handleOriginal) => {
                 if(column.Header === "Edit") {
-                    this.setState({activeModal: "Edit"});
+                    this.setState({activeModal: "Edit", rowInfo: rowInfo.original});
                 }
                 else if (column.Header === "Delete") {
-                    this.setState({activeModal: "Delete"});
+                    this.setState({activeModal: "Delete", rowInfo: rowInfo.original});
                 }
                 // triggers default events like expanding SubComponents and pivots.
                 if (handleOriginal) {

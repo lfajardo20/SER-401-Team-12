@@ -15,9 +15,9 @@ export default class DataTables extends React.Component {
 
             return (
                 <div>
-                    {type === "patients" ? <PatientTable data={patients}/> :
-                    type === "appointments" ? <AppointmentTable data={appointments}/> :
-                    <AccountTable data={accounts}/>}
+                    {type === "patients" ? <PatientTable data={patients} refetch={this.props.fetches.patients}/> :
+                    type === "appointments" ? <AppointmentTable data={appointments} refetch={this.props.fetches.patients}/> :
+                    <AccountTable data={accounts} refetch={this.props.fetches.patients}/>}
                 </div>
             );
         }

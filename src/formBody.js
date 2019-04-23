@@ -62,8 +62,16 @@ export default class FormBody extends React.Component {
 
         return (
             <>
-                <DataTables type={type} accounts={accounts} patients={patients} 
-                appointments={appointments}/>
+                <DataTables
+                    type={type}
+                    accounts={accounts}
+                    patients={patients} 
+                    appointments={appointments}
+                    fetches={{
+                        appointments: this.fetchAppointments,
+                        patients: this.fetchPatients,
+                        accounts: this.fetchAccounts,
+                    }}/>
             </>
         )
     }
