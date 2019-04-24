@@ -54,3 +54,8 @@ button.selected {
   text-decoration: none;
   cursor: pointer;
 }
+
+.label {
+  align-self: end;
+  margin-bottom: 0;
+}

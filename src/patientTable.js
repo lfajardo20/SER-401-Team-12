@@ -12,6 +12,8 @@ export default class PatientTable extends React.Component {
     }
 
     render() {
+        const {firstname, lastname, sex, age} = this.state;
+
         return (
         <>
             <Modal active={this.state.activeModal === "Delete"} onClose={this.closeModal}>
@@ -19,7 +21,25 @@ export default class PatientTable extends React.Component {
                 <button onClick={this.closeModal}>Cancel</button>
             </Modal>  
             <Modal active={this.state.activeModal === "Edit"} onClose={this.closeModal}>
-                Stuff
+                <div style={{display: "flex", flexDirection: "column"}}>
+                    <p className="label">First Name</p>
+                    <input onChange={(event) => this.setState({firstname: event.target.value})} value={firstname} />
+
+                    <p className="label">Last Name</p>
+                    <input onChange={(event) => this.setState({lastname: event.target.value})} value={lastname} />
+
+                    <p className="label">Sex</p>
+                    <input onChange={(event) => this.setState({sex: event.target.value})} value={sex}/>
+
+
+                    <p className="label">Age</p>
+                    <input
+                     onChange={(event) => this.setState({age: event.target.value})} value={age} />
+                    <br/>
+
+                    <button onClick={this.modifyRow}>Update</button>
+                    <button onClick={this.closeModal}>Cancel</button>
+                </div>
             </Modal> 
             <ReactTable columns={columns} data={this.props.data} getTdProps={this.getTdProps}/>
         </>
@@ -34,7 +54,30 @@ export default class PatientTable extends React.Component {
         fetch("https://agz8z029wg.execute-api.us-west-1.amazonaws.com/beta",
         { 
             method: "DELETE",
-            body: JSON.stringify({id: this.state.rowInfo.id}),
+            body: JSON.stringify({id: this.state.id}),
+        })
+        .then(data=> console.log(data))
+        .then(() =>
+            this.props.refetch()
+        )
+        .then(() =>
+            this.closeModal()
+        );
+    }
+
+    modifyRow = async () => {
+        let info = {
+            firstname: this.state.firstname,
+            lastname: this.state.lastname,
+            id: this.state.id,
+            sex: this.state.sex,
+            age: this.state.age,
+        }
+
+        fetch("https://agz8z029wg.execute-api.us-west-1.amazonaws.com/beta",
+        { 
+            method: "PUT",
+            body: JSON.stringify(info),
         })
         .then(data=> console.log(data))
         .then(() =>
@@ -49,11 +92,24 @@ export default class PatientTable extends React.Component {
     getTdProps = (state, rowInfo, column, instance) => {
         return {
             onClick: (e, handleOriginal) => {
+                //do nothing for empty rows
+                if(!rowInfo) {
+                    return;
+                }
+
+                const row = rowInfo.original;
                 if(column.Header === "Edit") {
-                    this.setState({activeModal: "Edit", rowInfo: rowInfo.original});
+                    this.setState({
+                        activeModal: "Edit",
+                        firstname: row.firstname,
+                        lastname: row.lastname,
+                        id: row.id,
+                        sex: row.sex,
+                        age: row.age,
+                    });
                 }
                 else if (column.Header === "Delete") {
-                    this.setState({activeModal: "Delete", rowInfo: rowInfo.original});
+                    this.setState({activeModal: "Delete", id: rowInfo.original.id});
                 }
                 // triggers default events like expanding SubComponents and pivots.
                 if (handleOriginal) {
@@ -65,10 +121,6 @@ export default class PatientTable extends React.Component {
 }
 
 const columns = [
-    {
-        accessor: "id",
-        Header: "ID",
-    },
     {
         Header: "Name",
         id: "name",
