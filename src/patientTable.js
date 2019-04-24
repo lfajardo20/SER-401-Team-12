@@ -109,7 +109,7 @@ export default class PatientTable extends React.Component {
                     });
                 }
                 else if (column.Header === "Delete") {
-                    this.setState({activeModal: "Delete", id: rowInfo.original.id});
+                    this.setState({activeModal: "Delete", id: row.id});
                 }
                 // triggers default events like expanding SubComponents and pivots.
                 if (handleOriginal) {
