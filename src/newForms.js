@@ -7,26 +7,40 @@ export default class NewForms extends React.Component {
   constructor() {
     super();
     this.submitUser = this.submitUser.bind(this);
+    this.submitAppointment = this.submitAppointment.bind(this);
   }
   state = {
-    username: "",
-    phoneNumber: "",
-    password: "",
-    userType: "",
-    name: "",
     startDate: new Date(),
   };
 
-  submitPatient = () => {};
-
-  /*
-  *The function below has been inspired by Medium post title 
-  *How to handle forms with just React by everdimension
+    /*
+  *The functions below (submitPatient, submitUser, submitAppointments) has been inspired 
+  * by Medium post titled How to handle forms with just React by everdimension
   * link: https://medium.com/@everdimension/how-to-handle-forms-with-just-react-ac066c48bd4f
   * Also, used a for loop created by them to facilitate the data being sent to
   * our API.
   * link: https://gist.github.com/everdimension/87228e9ebab82b84afcdc7794fde3bfd
   */
+  submitAppointment(event){
+    event.preventDefault();
+    const form = event.target;
+    const data = {};
+    const url = "https://ng8rh0c7n0.execute-api.us-west-1.amazonaws.com/beta/";
+
+    for (let element of form.elements) {
+      if (element.tagName === 'BUTTON') {continue;}
+      data[element.name] = element.value;
+    }
+
+    data["date"] += " " + data.time + ":00";
+    delete data["time"];
+
+    console.log("JSON Below.");
+    console.log(JSON.stringify(data));
+
+    //TODO: Fetch to the API
+  };
+
   submitUser(event) {
     event.preventDefault();
     const form = event.target;
@@ -65,7 +79,7 @@ export default class NewForms extends React.Component {
     });
   };
 
-  submitAppointment = () => {};
+  submitPatient = () => {};
 
   render() {
     const { type } = this.props;
@@ -155,36 +169,41 @@ export default class NewForms extends React.Component {
       );
     }
 
-    // if (type === "appointments") {
-    //   return (
-    //     <>
-    //       <h3>Adding a new Appointment:</h3>
-    //       <form>
-    //         Date
-    //         <DatePicker
-    //           onChange={date =>
-    //             this.setState({ values: { ...values, startDate: date } })
-    //           }
-    //           selected={values.startDate}
-    //         />
-    //         Time
-    //         <input
-    //           onChange={text =>
-    //             this.setState({ values: { ...values, time: text } })
-    //           }
-    //           placeholder="24:00"
-    //         />
-    //         Location
-    //         <input
-    //           onChange={text =>
-    //             this.setState({ values: { ...values, location: text } })
-    //           }
-    //         />
-    //         <br />
-    //         <button onClick={this.submitAppointment()}>Submit</button>
-    //       </form>
-    //     </>
-    //   );
-    // }
+    if (type === "appointments") {
+      return (
+        <>
+          <h3>Adding a new Appointment:</h3>
+          <form onSubmit={this.submitAppointment}>
+            Date
+            <input type="date" id="date" name ="date" min="2019-01-01" max="2022-12-31" required/>
+            Time
+            <input id="time" name="time" placeholder="24:00" required/>
+            Location
+            <select id="location" name="location">
+              <option value="Main Preop"
+                id="location"
+                name="location"
+              >
+                Main Preop
+              </option>
+              <option value="East PACU"
+                id="location"
+                name="location"
+              >
+                East PACU
+              </option>
+              <option value="East Preop"
+                id="location"
+                name="location"
+              >
+                East Preop
+              </option>
+            </select>
+            <br />
+            <button>Submit</button>
+          </form>
+        </>
+      );
+    }
   }
 }
