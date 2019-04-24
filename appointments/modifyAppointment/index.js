@@ -14,18 +14,14 @@ exports.handler = async (event, context, callback) => {
 
     //add quotes to string variables
     location = addQuotes(location);
-
- /* var queryStr = "Insert into app.appointment" + 
-    "(mrNumber, accountNum, date, location" + (mainSurgeonID? ", " + mainSurgeonID : "") + ")" +
-    "Values (" + mrNumber + ", " + accountNum + ", " + date + ", " + location +
-    (mainSurgeonID? ", " + mainSurgeonID : "") + ")";*/
+    date = addQuotes(date);
 
     var queryStr = "Update app.appointment\n" + 
         "Set mrNumber = " + mrNumber + ", accountNum = " + accountNum +
         ", date = " + date + ", location = " + location +
-        mainSurgeonID ?
-            ",  mainSurgeonID = " + mainSurgeonID : 
-            "" +
+        (mainSurgeonID ?
+            ",  mainSurgeon = " + mainSurgeonID : 
+            "") +
         "\nWhere apptNumber = " + apptNumber;
     console.log(queryStr);
 
@@ -42,7 +38,7 @@ exports.handler = async (event, context, callback) => {
                     connection.release();
                     //if Error reject promise
                     if (error) {
-                        reject("Patient creation failed" + JSON.stringify(error));   
+                        reject("Appointment change " + JSON.stringify(error));   
                     }
                     else {
                         resolve(true);
