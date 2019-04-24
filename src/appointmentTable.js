@@ -119,7 +119,6 @@ export default class AppointmentTable extends React.Component {
                         location: row.location,
                         apptNumber: row.apptNumber,
                     });
-                    //mrNumber, accountNum, date, mainSurgeonID, location, apptNumber
                 }
                 else if (column.Header === "Delete") {
                     this.setState({activeModal: "Delete", apptNumber: row.apptNumber});
