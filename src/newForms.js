@@ -1,5 +1,4 @@
 import React from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Crypto from "crypto-js";
 
@@ -8,6 +7,7 @@ export default class NewForms extends React.Component {
     super();
     this.submitUser = this.submitUser.bind(this);
     this.submitAppointment = this.submitAppointment.bind(this);
+    this.submitPatient = this.submitPatient.bind(this);
   }
   state = {
     startDate: new Date()
@@ -41,6 +41,22 @@ export default class NewForms extends React.Component {
     console.log(JSON.stringify(data));
 
     //TODO: Fetch to the API
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(JSON.stringify(responseJson));
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   submitUser(event) {
@@ -83,7 +99,36 @@ export default class NewForms extends React.Component {
       });
   }
 
-  submitPatient = () => {};
+  submitPatient(event) {
+    event.preventDefault();
+    const form = event.target;
+    const data = {};
+    const url = "https://agz8z029wg.execute-api.us-west-1.amazonaws.com/beta/";
+
+    for (let element of form.elements) {
+      if (element.tagName === "BUTTON") {
+        continue;
+      }
+      data[element.name] = element.value;
+    }
+
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(JSON.stringify(responseJson));
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   render() {
     const { type } = this.props;
@@ -91,37 +136,35 @@ export default class NewForms extends React.Component {
 
     if (!type) return null; //don't render if previous fields not selected
 
-    // if (type === "patients") {
-    //   return (
-    //     <>
-    //       <h3>Adding a new Patient:</h3>
-    //       <form>
-    //         Name
-    //         <input
-    //           onChange={text =>
-    //             this.setState({ values: { ...values, name: text } })
-    //           }
-    //           placeholder="Name"
-    //         />
-    //         DOB
-    //         <input
-    //           onChange={text =>
-    //             this.setState({ values: { ...values, DOB: text } })
-    //           }
-    //           placeholder="MM/DD/YYYY"
-    //         />
-    //         Sex
-    //         <input
-    //           onChange={text =>
-    //             this.setState({ values: { ...values, sex: text } })
-    //           }
-    //         />
-    //         <br />
-    //         <button onClick={this.submitPatient()}>Submit</button>
-    //       </form>
-    //     </>
-    //   );
-    // }
+    if (type === "patients") {
+      return (
+        <>
+          <h3>Adding a new Patient:</h3>
+          <form onSubmit={this.submitPatient}>
+            First Name
+            <input id="firstname" name="firstname" placeholder="First Name" required
+            />
+            Last Name
+            <input id="lastname" name="lastname" placeholder="Last Name" required
+            />
+            Age
+            <input id="age" name="age"
+            />
+            Sex
+            <select id="sex" name="sex">
+              <option value="M" id="sex" name="sex">
+                M
+              </option>
+              <option value="F" id="sex" name="sex">
+                F
+              </option>
+            </select>
+            <br />
+            <button type="submit">Submit</button>
+          </form>
+        </>
+      );
+    }
 
     if (type === "users") {
       return (
