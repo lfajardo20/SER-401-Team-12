@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList, ActivityIndicator, Text, View, StyleSheet, AppRegistry, Button } from 'react-native';
+import { FlatList, ActivityIndicator, Text, View, StyleSheet, AppRegistry, Button } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 
@@ -8,18 +8,18 @@ export default class ConfirmationScreen extends React.Component {
   state = {
     id: null,
     loc: null,
-    isLoading: null
+    isLoading: null,
   }
 
   confirmationObj = {
-    id: null
+    id: null,
   }
 
   constructor(props) {
     //Get objects from previous view
-    super(props)
-    this.state.id = this.props.navigation.getParam('id');
-    this.state.loc = this.props.navigation.getParam('loc');
+    super(props);
+    this.state.id = this.props.navigation.getParam("id");
+    this.state.loc = this.props.navigation.getParam("loc");
 
     this.confirmationObj.id = this.state.id;
 
@@ -29,11 +29,11 @@ export default class ConfirmationScreen extends React.Component {
   }
 
   doPostConfirmation() {
-    return fetch('https://8svpahmpbc.execute-api.us-west-1.amazonaws.com/Test',
+    return fetch("https://8svpahmpbc.execute-api.us-west-1.amazonaws.com/Test",
       {
-        method: 'POST', headers:
-          { Accept: 'application/json', 'Content-Type': 'application/json', }
-        , body: JSON.stringify(this.confirmationObj)
+        method: "POST", headers:
+          { Accept: "application/json", "Content-Type": "application/json" }
+        , body: JSON.stringify(this.confirmationObj),
       })
       .then((response) => response.json())
       .then((responseJson) => {
@@ -51,11 +51,11 @@ export default class ConfirmationScreen extends React.Component {
   doPostConfirmationTrue() {
     this.confirmationObj.location = this.state.loc;
     alert(JSON.stringify(this.confirmationObj));
-    return fetch('https://k634ch08g9.execute-api.us-west-1.amazonaws.com/test',
+    return fetch("https://k634ch08g9.execute-api.us-west-1.amazonaws.com/test",
       {
-        method: 'POST', headers:
-          { Accept: 'application/json', 'Content-Type': 'application/json', }
-        , body: JSON.stringify(this.confirmationObj)
+        method: "POST", headers:
+          { Accept: "application/json", "Content-Type": "application/json" }
+        , body: JSON.stringify(this.confirmationObj),
       })
       .then((response) => response.json())
       .then((responseJson) => {
@@ -64,9 +64,9 @@ export default class ConfirmationScreen extends React.Component {
           isLoading: false,
           dataSource: responseJson,
         }, function () {
-            //Testing functions go here
-            this.props.navigation.navigate("Transporter")
-          });
+          //Testing functions go here
+          this.props.navigation.navigate("Transporter");
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -81,7 +81,7 @@ export default class ConfirmationScreen extends React.Component {
         <View style={{ flex: 1, padding: 20, backgroundColor: '#DC143C'}}>
           <ActivityIndicator />
         </View>
-      )
+      );
     }
 
     return (
@@ -93,10 +93,10 @@ export default class ConfirmationScreen extends React.Component {
             onPress={() => this.doPostConfirmationTrue()}
           />
         </View>
-        <View style={{ flex: 1, alignItems: 'center' }}>
+        <View style={{ flex: 1, alignItems: "center" }}>
           <Button
             title="No"
-            onPress={() => this.props.navigation.navigate('Scanner')}
+            onPress={() => this.props.navigation.navigate("Scanner")}
           />
         </View>
       </View>
@@ -107,11 +107,11 @@ export default class ConfirmationScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 10
+    paddingTop: 10,
   },
   item: {
     padding: 10,
     fontSize: 18,
     height: 44,
   },
-})
+});

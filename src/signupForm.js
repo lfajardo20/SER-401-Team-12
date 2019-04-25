@@ -84,9 +84,11 @@ export default class SignupForm extends React.Component {
       );
     }
     return (
+
       <View style={styles.container}> 
         <Text style={styles.textLabel}>Username</Text>
         <TextInput style={styles.textInput}
+
           onChangeText={text => this.setState({ username: text })}
           //style={styles.borderedField}
         />
@@ -94,6 +96,7 @@ export default class SignupForm extends React.Component {
 
         <Text style={styles.textLabel}>Password</Text>
         <TextInput style={styles.textInput}
+
           onChangeText={text => this.setState({ password: text })}
           //style={styles.borderedField}
         />
@@ -101,17 +104,21 @@ export default class SignupForm extends React.Component {
 
         <Text style={styles.textLabel}>Confirm Password</Text>
         <TextInput style={styles.textInput}
+
           onChangeText={text => this.setState({ confirmation: text })}
           //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.confirmation} </Text>
+
         <Text style={styles.textLabel}>Phone Number</Text>
         <TextInput style={styles.textInput}
+
           onChangeText={text => this.setState({ phoneNumber: text })}
           //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.phoneNumber} </Text>
         <View style={styles.borderedPicker}>
+
         <Picker
           selectedValue={this.state.userType}
           onValueChange={(itemValue, itemIndex) =>
@@ -127,6 +134,7 @@ export default class SignupForm extends React.Component {
         onPress={this.submitForm} title="Submit">
           Submit
         </Button>
+
         </View>
       </View>
     );
