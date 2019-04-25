@@ -7,6 +7,7 @@ import {
   PermissionsAndroid,
   AppState,
 } from "react-native";
+import LinearGradient from 'react-native-linear-gradient';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 //Need to import each of the used view classes
@@ -129,27 +130,44 @@ class HomeScreen extends React.Component {
     return (
       //Can only return one element so all componets must be wrapped in a parent componet
       //ex: the two views in one view
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View style={styles.container}>
         <View>
-          <Text>Username</Text>
-          <TextInput
-            placeholder="Enter your username..."
+          <Text style={styles.textNav}>Username</Text>
+          <TextInput 
+            //style={styles.textNav}
+            color='white'
+            placeholder="Enter username..."
+            placeholderTextColor="#DCDCDC"
             onChangeText={user => this.setState({ user })}
             value={this.state.user}
           />
-          <Text>Password</Text>
+          <Text style={styles.textNav}>Password</Text>
           <TextInput
+            //style={styles.textNav}
+            color='white'
             secureTextEntry={true}
-            placeholder="Enter your password..."
+            placeholder="Enter password..."
+            placeholderTextColor="#DCDCDC"
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
           />
-          <Button onPress={this.validateUser} title="Login">
+        </View>
+        <View style={styles.buttonStyle}>
+          <Button color='red'
+          onPress={this.validateUser} title="Login">
             Login
           </Button>
-        </View>
-        <View style={{ alignItems: "center", padding: 5 }}>
+          </View>
+        <View style={styles.buttonStyle}>
           <Button
+            color='red'
+            title="Go GPS test"
+            onPress={() => this.props.navigation.navigate("GPS")}
+          />
+        </View>
+        <View style={styles.buttonStyle}>
+          <Button 
+            color='red'
             title="Create new account"
             onPress={() => this.props.navigation.navigate("Signup")}
           />
@@ -158,6 +176,31 @@ class HomeScreen extends React.Component {
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor:'#DC143C',
+    alignItems: 'center',
+    justifyContent: "center"
+  },
+  textNav:{
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  buttonStyle:{
+    height: 40,
+    width:'50%',
+    borderRadius:20,
+    backgroundColor : '#FFFFFF',
+    fontWeight: 'bold',
+    marginTop :30,
+  },
+  buttontextColor:{
+    color: 'red',
+    fontWeight: 'bold',
+  },
+});
 
 //Name of different navigation screens go here
 const AppNavigator = createStackNavigator(

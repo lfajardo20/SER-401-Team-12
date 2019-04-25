@@ -80,7 +80,7 @@ export default class ConfirmationScreen extends React.Component {
   render() {
     if (this.state.isLoading) {
       return (
-        <View style={{ flex: 1, padding: 20 }}>
+        <View style={{ flex: 1, padding: 20, backgroundColor: '#DC143C'}}>
           <ActivityIndicator />
         </View>
       );
@@ -97,6 +97,7 @@ export default class ConfirmationScreen extends React.Component {
           <Text style={{ fontSize: 16, padding: 10, marginTop: 50 }}>Is the information above correct?}</Text>
         </View>
         <View style={styles.row}>
+
           <Button
             title="Yes"
             onPress={() => this.doPostConfirmationTrue()}

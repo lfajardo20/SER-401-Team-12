@@ -64,6 +64,7 @@ export default class StaffScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
+      
 	<ScrollView style={styles.container}>
 		<Table borderStyle={{borderWidth: 1, borderColor: '#6a2e31'}}>
 			<Row data={this.state.tableHead} style={styles.head} textStyle={styles.text}/>
@@ -72,6 +73,7 @@ export default class StaffScreen extends React.Component {
 			 <Row data={this.state.data} textStyle={styles.text}/>)}
         </Table>
 	</ScrollView>
+
     );
   }
 }
