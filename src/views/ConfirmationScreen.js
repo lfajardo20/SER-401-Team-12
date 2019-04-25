@@ -78,14 +78,14 @@ export default class ConfirmationScreen extends React.Component {
   render() {
     if (this.state.isLoading) {
       return (
-        <View style={{ flex: 1, padding: 20 }}>
+        <View style={{ flex: 1, padding: 20, backgroundColor: '#DC143C'}}>
           <ActivityIndicator />
         </View>
       )
     }
 
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#DC143C' }}>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Text>{JSON.stringify(this.state.dataSource)}</Text>
           <Button

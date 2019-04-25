@@ -12,13 +12,13 @@ export default class ScheduleDay extends React.Component {
     let sectionData = data.events.map(event => eventTranslator(event));
     return (
       <View style={styles.container}>
-        <Text>{data.date}</Text>
+        <Text style={{color:'white'}}>{data.date}</Text>
         <SectionList
           renderItem={({ item, index }) => (
             <ScheduleEvent key={index} event={item} style={styles.item} />
           )}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={{ fontWeight: "bold" }}>{title}</Text>
+            <Text style={{ fontWeight: "bold",color:'white' }}>{title}</Text>
           )}
           sections={sectionData}
           keyExtractor={(item, index) => item + index}
