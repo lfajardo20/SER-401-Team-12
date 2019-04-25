@@ -15,7 +15,7 @@ export default class SignupForm extends React.Component {
     username: "",
     password: "",
     confirmation: "",
-    userType: "",
+    userType: "doctor",
     phoneNumber: "",
     errors: {},
     submitResponse: null,
