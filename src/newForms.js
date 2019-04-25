@@ -1,39 +1,49 @@
 import React from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Crypto from "crypto-js";
 
 export default class NewForms extends React.Component {
+  constructor() {
+    super();
+    this.submitUser = this.submitUser.bind(this);
+    this.submitAppointment = this.submitAppointment.bind(this);
+    this.submitPatient = this.submitPatient.bind(this);
+  }
   state = {
-    values: {
-      startDate: new Date()
+    startDate: new Date()
+  };
+
+  /*
+   *The functions below (submitPatient, submitUser, submitAppointments) has been inspired
+   * by Medium post titled How to handle forms with just React by everdimension
+   * link: https://medium.com/@everdimension/how-to-handle-forms-with-just-react-ac066c48bd4f
+   * Also, used a for loop created by them to facilitate the data being sent to
+   * our API.
+   * link: https://gist.github.com/everdimension/87228e9ebab82b84afcdc7794fde3bfd
+   */
+  submitAppointment(event) {
+    event.preventDefault();
+    const form = event.target;
+    const data = {};
+    const url = "https://ng8rh0c7n0.execute-api.us-west-1.amazonaws.com/beta/";
+
+    for (let element of form.elements) {
+      if (element.tagName === "BUTTON") {
+        continue;
+      }
+      data[element.name] = element.value;
     }
-  };
 
-  submitPatient = () => {};
+    data["date"] += " " + data.time + ":00";
+    delete data["time"];
 
-  submitUser = () => {
-    console.log("Entered the submitUser!");
-    let { values } = this.state;
+    console.log("JSON Below.");
+    console.log(JSON.stringify(data));
 
-    let salt = Math.floor(Math.random() * 10000); //generates random number between 0-10,000 as a salt
-    let hash = Crypto.SHA256(values.password + "" + salt); //using a salted, hashed password to prepare for actual security
-
-    let accInfo = {
-      salt: salt,
-      passwordHash: hash.toString(Crypto.enc.Hex), //convert to hexadecimal string
-      userName: values.username,
-      phoneNumber: values.phoneNumber,
-      userType: values.userType,
-      fullname: values.name
-    };
-    this.postAccount(accInfo);
-  };
-
-  postAccount = data => {
-    const url = "https://2znkbd4rua.execute-api.us-west-1.amazonaws.com/beta";
-    return fetch(url, {
+    //TODO: Fetch to the API
+    fetch(url, {
       method: "POST",
+      mode: "cors",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
@@ -45,15 +55,84 @@ export default class NewForms extends React.Component {
         console.log(JSON.stringify(responseJson));
       })
       .catch(error => {
-        console.error(error);
+        console.log(error);
+      });
+  }
+
+  submitUser(event) {
+    event.preventDefault();
+    const form = event.target;
+    const data = {};
+    const url = "https://6m2i2xewv6.execute-api.us-west-1.amazonaws.com/beta";
+
+    for (let element of form.elements) {
+      if (element.tagName === "BUTTON") {
+        continue;
+      }
+      data[element.name] = element.value;
+    }
+
+    let salt = Math.floor(Math.random() * 10000); //generates random number between 0-10,000 as a salt
+    let hash = Crypto.SHA256(data.password.toString() + "" + salt.toString()); //using a salted, hashed password to prepare for actual security
+
+    data["salt"] = salt;
+    data["passwordHash"] = hash.toString();
+    delete data["password"];
+
+    console.log(JSON.stringify(data));
+
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(JSON.stringify(responseJson));
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  submitPatient(event) {
+    event.preventDefault();
+    const form = event.target;
+    const data = {};
+    const url = "https://agz8z029wg.execute-api.us-west-1.amazonaws.com/beta/";
+
+    for (let element of form.elements) {
+      if (element.tagName === "BUTTON") {
+        continue;
+      }
+      data[element.name] = element.value;
+    }
+
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(JSON.stringify(responseJson));
+      })
+      .catch(error => {
+        console.log(error);
       });
   };
 
-  submitAppointment = () => {};
-
   render() {
     const { type } = this.props;
-    const { values } = this.state;
+    //const { username, phoneNumber, password, userType, name } = this.state;
 
     if (!type) return null; //don't render if previous fields not selected
 
@@ -61,29 +140,27 @@ export default class NewForms extends React.Component {
       return (
         <>
           <h3>Adding a new Patient:</h3>
-          <form>
-            Name
-            <input
-              onChange={text =>
-                this.setState({ values: { ...values, name: text } })
-              }
-              placeholder="Name"
+          <form onSubmit={this.submitPatient}>
+            First Name
+            <input id="firstname" name="firstname" placeholder="First Name" required
             />
-            DOB
-            <input
-              onChange={text =>
-                this.setState({ values: { ...values, DOB: text } })
-              }
-              placeholder="MM/DD/YYYY"
+            Last Name
+            <input id="lastname" name="lastname" placeholder="Last Name" required
+            />
+            Age
+            <input id="age" name="age"
             />
             Sex
-            <input
-              onChange={text =>
-                this.setState({ values: { ...values, sex: text } })
-              }
-            />
+            <select id="sex" name="sex">
+              <option value="M" id="sex" name="sex">
+                M
+              </option>
+              <option value="F" id="sex" name="sex">
+                F
+              </option>
+            </select>
             <br />
-            <button onClick={this.submitPatient()}>Submit</button>
+            <button type="submit">Submit</button>
           </form>
         </>
       );
@@ -93,53 +170,35 @@ export default class NewForms extends React.Component {
       return (
         <>
           <h3>Adding a new User:</h3>
-          <form>
+          <form onSubmit={this.submitUser}>
             Name
             <input
-              onChange={text =>
-                this.setState({ values: { ...values, name: text } })
-              }
+              type="text"
               placeholder="Name"
+              id="fullname"
+              name="fullname"
             />
-            <select>
-              <option
-                onChange={() =>
-                  this.setState({ values: { ...values, userType: "staff" } })
-                }
-              >
+            <select id="userType" name="userType">
+              <option value="staff" id="userType" name="userType">
                 Staff
               </option>
-              <option
-                onChange={() =>
-                  this.setState({
-                    values: { ...values, userType: "transporter" }
-                  })
-                }
-              >
+              <option value="transporter" id="userType" name="userType">
                 Transporter
               </option>
             </select>
             Phone Number
             <input
-              onChange={text =>
-                this.setState({ values: { ...values, phoneNumber: text } })
-              }
+              type="text"
               placeholder="123-456-7890"
+              id="phoneNumber"
+              name="phoneNumber"
             />
             Username
-            <input
-              onChange={text =>
-                this.setState({ values: { ...values, username: text } })
-              }
-            />
-            Initial Password(Defaults to 'Password)
-            <input
-              onChange={text =>
-                this.setState({ values: { ...values, password: text } })
-              }
-            />
+            <input type="text" id="userName" name="userName" required />
+            Initial Password(Defaults to 'Password')
+            <input type="text" id="password" name="password" required />
             <br />
-            <button onClick={this.submitUser()}>Submit</button>
+            <button>Submit</button>
           </form>
         </>
       );
@@ -149,29 +208,36 @@ export default class NewForms extends React.Component {
       return (
         <>
           <h3>Adding a new Appointment:</h3>
-          <form>
+          <form onSubmit={this.submitAppointment}>
             Date
-            <DatePicker
-              onChange={date =>
-                this.setState({ values: { ...values, startDate: date } })
-              }
-              selected={values.startDate}
+            <input
+              type="date"
+              id="date"
+              name="date"
+              min="2019-01-01"
+              max="2022-12-31"
+              required
             />
             Time
-            <input
-              onChange={text =>
-                this.setState({ values: { ...values, time: text } })
-              }
-              placeholder="24:00"
-            />
+            <input id="time" name="time" placeholder="24:00" required />
+            mrNumber
+            <input id="mrNumber" name="mrNumber" required />
+            Account Number
+            <input id="accountNum" name="accountNum" required />
             Location
-            <input
-              onChange={text =>
-                this.setState({ values: { ...values, location: text } })
-              }
-            />
+            <select id="location" name="location">
+              <option value="Main Preop" id="location" name="location">
+                Main Preop
+              </option>
+              <option value="East PACU" id="location" name="location">
+                East PACU
+              </option>
+              <option value="East Preop" id="location" name="location">
+                East Preop
+              </option>
+            </select>
             <br />
-            <button onClick={this.submitAppointment()}>Submit</button>
+            <button>Submit</button>
           </form>
         </>
       );
