@@ -76,11 +76,7 @@ class HomeScreen extends React.Component {
         console.log(JSON.stringify(info));
         console.log(JSON.stringify(responseJson));
 
-<<<<<<< HEAD
-		objResponse = JSON.parse(JSON.stringify(responseJson));
-=======
-        objResponse = JSON.parse(JSON.stringify(responseJson));
->>>>>>> 871e4ce4704595d8d1732c7b2c347fde892dae1f
+		    objResponse = JSON.parse(JSON.stringify(responseJson));
         userType = objResponse.Data.userType; //payload response with the usertype
 
         //load view according to user type

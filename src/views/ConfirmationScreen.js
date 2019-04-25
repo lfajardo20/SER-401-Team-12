@@ -80,34 +80,39 @@ export default class ConfirmationScreen extends React.Component {
   render() {
     if (this.state.isLoading) {
       return (
-        <View style={{ flex: 1, padding: 20, backgroundColor: '#DC143C'}}>
+        <View style={{ flex: 1, padding: 20, backgroundColor: '#DC143C' }}>
           <ActivityIndicator />
         </View>
       );
     }
 
     return (
-      <View>
-        <View style={styles.varText}>
+      <View style={styles.container}>
+        <View>
           <Text style={styles.text}>Patient ID:{this.state.dataSource.id}</Text>
           <Text style={styles.text}>Firstname:{this.state.dataSource.firstname}</Text>
           <Text style={styles.text}>Lastname ID:{this.state.dataSource.lastname}</Text>
           <Text style={styles.text}>Age:{this.state.dataSource.age}</Text>
           <Text style={styles.text}>Sex:{this.state.dataSource.sex}</Text>
-          <Text style={{ fontSize: 16, padding: 10, marginTop: 50 }}>Is the information above correct?}</Text>
+          <Text style={{ fontSize: 16, padding: 10, marginTop: 50, color: 'white' }} color='white'>Is the information above correct?</Text>
         </View>
-        <View style={styles.row}>
 
+
+        <View style={styles.buttonStyle}>
           <Button
+            style={{ color: 'white', shadowOpacity: 0 }}
+            color='red'
             title="Yes"
-            onPress={() => this.doPostConfirmationTrue()}
-          />
-          <Button
-            title="No"
-            onPress={() => this.props.navigation.navigate("Scanner")}
-          />
+            onPress={() => this.doPostConfirmationTrue()} />
         </View>
-      </View>
+        <View style={styles.buttonStyle}>
+          <Button
+            style={{ color: 'white', shadowOpacity: 0 }}
+            color='red'
+            title="No"
+            onPress={() => this.props.navigation.navigate("Scanner")} />
+        </View>
+      </View >
     );
   }
 }
@@ -121,6 +126,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
+    backgroundColor: '#DC143C',
     margin: 10,
   },
   varText: {
@@ -134,5 +140,29 @@ const styles = StyleSheet.create({
   {
     fontSize: 22,
     padding: 3,
+    color: 'white'
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#DC143C',
+    alignItems: 'center',
+    justifyContent: "center"
+  },
+  textNav: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  buttonStyle: {
+    height: 40,
+    width: '50%',
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  buttontextColor: {
+    color: 'red',
+    fontWeight: 'bold',
   },
 });

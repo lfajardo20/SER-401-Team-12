@@ -98,18 +98,22 @@ export default class gps extends React.Component {
       text = this.state.hasLocationPermission;
       return (
         <View style={styles.container}>
-          <Text style={styles.paragraph}>{text}</Text>
-          <Button
-            title="Return"
-            //On press navigate to camera object
-            onPress={() => this.props.navigation.navigate("Home")}
-          />
+          <Text style={styles.textNav}>{text}</Text>
+          <View style={styles.buttonStyle}>
+            <Button
+              style={{ color: 'white', elevation: 0 }}
+              color='red'
+              title="Return"
+              //On press navigate to camera object
+              onPress={() => this.props.navigation.navigate("Home")}
+            />
+          </View>
         </View>
       );
     }
     else if (this.state.location != null) {
       //Need both gps and network to get a more accurate location
-      if (this.state.GPSenabled || this.state.NetworkEnabled) {
+      if (true) {
 
         //Long list of comparing lat and long to get current location
         //Moving to a separate function will make it prettier, so I should do that.
@@ -135,23 +139,26 @@ export default class gps extends React.Component {
           text = "Not in a valid location." + "\n" + "Please select one from the list below.";
           return (
             <View style={styles.container}>
-              <Text style={styles.paragraph}>{text}</Text>
+              <Text style={styles.textNav}>{text}</Text>
               <Picker
+                style={styles.borderedPicker}
                 selectedValue={this.state.CurrentLocation}
-                style={{ height: 50, width: 200 }}
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({ CurrentLocation: itemValue })
                 }>
-                <Picker.Item label="Main PREOP" value="MainPREOP" />
-                <Picker.Item label="East PREOP" value="EastPREOP" />
-                <Picker.Item label="East PACU PREOP" value="EastPACUPREOP" />
+                <Picker.Item label="Main PREOP" value="Main PREOP" />
+                <Picker.Item label="East PREOP" value="East PREOP" />
+                <Picker.Item label="East PACU PREOP" value="East PACUPREOP" />
               </Picker>
-
-              <Button
-                title="Confirm"
-                //On press navigate to confimration screen
-                onPress={() => this.props.navigation.navigate("Confirmation", { id: this.idObj.id, loc: this.state.CurrentLocation })}
-              />
+              <View style={styles.buttonStyle}>
+                <Button
+                  style={{ color: 'white', elevation: 0, marginTop: 100 }}
+                  color='red'
+                  title="Confirm"
+                  //On press navigate to confimration screen
+                  onPress={() => this.props.navigation.navigate("Confirmation", { id: this.idObj.id, loc: this.state.CurrentLocation })}
+                />
+              </View>
             </View>
           );
         }
@@ -163,7 +170,7 @@ export default class gps extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.paragraph}>{text}</Text>
+        <Text style={styles.textNav}>{text}</Text>
       </View>
     );
   }
@@ -172,14 +179,32 @@ export default class gps extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: "#ecf0f1",
+    backgroundColor: '#DC143C',
+    alignItems: 'center',
+    justifyContent: "center"
   },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
+  textNav: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 20,
     textAlign: "center",
+  },
+  buttonStyle: {
+    height: 40,
+    width: '50%',
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  buttontextColor: {
+    color: 'red',
+    fontWeight: 'bold',
+  },
+  borderedPicker: {
+    //borderColor: "black",
+    marginBottom: 80,
+    height: 50,
+    width: 250,
   },
 });
