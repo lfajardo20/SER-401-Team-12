@@ -23,7 +23,7 @@ export default class SignupForm extends React.Component {
 
   postAccount = accountInfo => {
     return fetch(
-      "https://2znkbd4rua.execute-api.us-west-1.amazonaws.com/beta",
+      "https://6m2i2xewv6.execute-api.us-west-1.amazonaws.com/beta",
       {
         method: "POST",
         headers: {
@@ -105,7 +105,6 @@ export default class SignupForm extends React.Component {
           //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.confirmation} </Text>
-
         <Text style={styles.textLabel}>Phone Number</Text>
         <TextInput style={styles.textInput}
           onChangeText={text => this.setState({ phoneNumber: text })}
@@ -201,7 +200,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor:'#DC143C',
     paddingTop: 22,
-    alignItems: 'center',
+    alignItems: "center",
   },
   sectionHeader: {
     paddingTop: 2,
@@ -222,11 +221,11 @@ const styles = StyleSheet.create({
     fontSize: 8,
     marginBottom: 20,
   },
-  textInput:{
-    backgroundColor:'#ffffff',
-    padding:6,
-    marginBottom:0,
-    width:'100%',
+  textInput: {
+    backgroundColor: "#ffffff",
+    padding: 6,
+    marginBottom: 0,
+    width: "100%",
   },
   textLabel:{
     color: '#FFFFFF',
@@ -239,7 +238,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 150,
   },
-  buttonStyle:{
+  buttonStyle: {
     height: 40,
     width:100,
     borderRadius:20,
