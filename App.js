@@ -75,7 +75,7 @@ class HomeScreen extends React.Component {
       .then(responseJson => {
         console.log(JSON.stringify(info));
         console.log(JSON.stringify(responseJson));
-		
+
 		objResponse = JSON.parse(JSON.stringify(responseJson));
         userType = objResponse.Data.userType; //payload response with the usertype
 
@@ -133,9 +133,9 @@ class HomeScreen extends React.Component {
       <View style={styles.container}>
         <View>
           <Text style={styles.textNav}>Username</Text>
-          <TextInput 
+          <TextInput
             //style={styles.textNav}
-            color='white'
+            style={{color:'white'}}
             placeholder="Enter username..."
             placeholderTextColor="#DCDCDC"
             onChangeText={user => this.setState({ user })}
@@ -144,7 +144,7 @@ class HomeScreen extends React.Component {
           <Text style={styles.textNav}>Password</Text>
           <TextInput
             //style={styles.textNav}
-            color='white'
+            style={{color:'white'}}
             secureTextEntry={true}
             placeholder="Enter password..."
             placeholderTextColor="#DCDCDC"
@@ -153,20 +153,16 @@ class HomeScreen extends React.Component {
           />
         </View>
         <View style={styles.buttonStyle}>
-          <Button color='red'
+          <Button
+          style={{color:'white', shadowOpacity: 0}}
+          color='red'
           onPress={this.validateUser} title="Login">
             Login
           </Button>
           </View>
         <View style={styles.buttonStyle}>
           <Button
-            color='red'
-            title="Go GPS test"
-            onPress={() => this.props.navigation.navigate("GPS")}
-          />
-        </View>
-        <View style={styles.buttonStyle}>
-          <Button 
+            style={{color:'white', elevation: 0}}
             color='red'
             title="Create new account"
             onPress={() => this.props.navigation.navigate("Signup")}
@@ -194,7 +190,7 @@ const styles = StyleSheet.create({
     borderRadius:20,
     backgroundColor : '#FFFFFF',
     fontWeight: 'bold',
-    marginTop :30,
+    marginTop :10,
   },
   buttontextColor:{
     color: 'red',

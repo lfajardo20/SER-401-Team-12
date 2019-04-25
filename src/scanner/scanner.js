@@ -37,28 +37,25 @@ export default class Scanner extends Component {
 
     Vibration.vibrate();
     this.setState({ scannedItem: { data, type } });
-    if (type == 2) 
-    {
+    if (type == 2) {
       //this.resetScanner();
       //this.renderAlert("This barcode is Supported", `${type} : ${this.processBarcode(data)}`);
       //this.props.navigation.navigate("YOUR_NEXT_SCREEN", { ean: data });
-    } 
-    else 
-    {
+    }
+    else {
       this.renderAlert("This barcode is not supported.", `${type} : ${data}`);
     }
   };
-  
-  processBarcode(data)
-  {
+
+  processBarcode(data) {
     //bacodes follow format of A00000000
-    if(data.charAt(0) == "A")
-    {
-      return data.substr(1,data.length - 1);
-    }
-    else
-    {
-      return null;
+    if (data != null) {
+      if (data.charAt(0) == "A") {
+        return data.substr(1, data.length - 1);
+      }
+      else {
+        return null;
+      }
     }
   }
 
@@ -75,7 +72,7 @@ export default class Scanner extends Component {
   render() {
     const { hasCameraPermission } = this.state;
     const { type, data } = this.state.scannedItem;
-    const {navigate} = this.props.navigation;
+    const { navigate } = this.props.navigation;
 
     if (hasCameraPermission === null) {
       return <Text>Requesting camera permission...</Text>;
@@ -83,7 +80,7 @@ export default class Scanner extends Component {
     if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
     }
-    return(
+    return (
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
           <BarCodeScanner
@@ -95,19 +92,18 @@ export default class Scanner extends Component {
               {`Scanned \n type: ${type} \n Patient ID: ${this.processBarcode(data)}`}
             </Text>
           ) : (
-            <Text style={styles.scanScreenMessage}>
-              Focus the barcode to scan.
+              <Text style={styles.scanScreenMessage}>
+                Focus the barcode to scan.
             </Text>
-          )}
+            )}
         </View>
       </View>
     );
   }
-  
-    handleBarCodeScanned = ({ type, data }) => 
-    {
-      this.props.navigation.navigate("GPS", {id:this.processBarcode(data)});
-    }
+
+  handleBarCodeScanned = ({ type, data }) => {
+    this.props.navigation.navigate("GPS", { id: this.processBarcode(data) });
+  }
 }
 
 const styles = StyleSheet.create({
