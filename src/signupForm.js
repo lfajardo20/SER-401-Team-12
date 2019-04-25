@@ -39,7 +39,7 @@ export default class SignupForm extends React.Component {
           {
             submitResponse: responseJson,
           },
-          function() {
+          function () {
             console.log(JSON.stringify(accountInfo));
           }
         );
@@ -89,23 +89,25 @@ export default class SignupForm extends React.Component {
         <TextInput
           style={styles.textInput}
           onChangeText={text => this.setState({ username: text })}
-          //style={styles.borderedField}
+        //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.username} </Text>
 
         <Text>Password</Text>
         <TextInput
+          secureTextEntry={true}
           style={styles.textInput}
           onChangeText={text => this.setState({ password: text })}
-          //style={styles.borderedField}
+        //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.password} </Text>
 
         <Text>Confirm Password</Text>
         <TextInput
+          secureTextEntry={true}
           style={styles.textInput}
           onChangeText={text => this.setState({ confirmation: text })}
-          //style={styles.borderedField}
+        //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.confirmation} </Text>
 
@@ -113,7 +115,7 @@ export default class SignupForm extends React.Component {
         <TextInput
           style={styles.textInput}
           onChangeText={text => this.setState({ phoneNumber: text })}
-          //style={styles.borderedField}
+        //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.phoneNumber} </Text>
         <View style={styles.borderedPicker}>
