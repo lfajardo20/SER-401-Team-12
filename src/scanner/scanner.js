@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Alert, View, Text, Vibration, StyleSheet } from "react-native";
-import { Camera, BarCodeScanner, Permissions } from "expo";
+import { Camera, BarCodeScanner, Permissions, Location } from "expo";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 export default class Scanner extends Component {
@@ -12,6 +12,12 @@ export default class Scanner extends Component {
   };
 
   async UNSAFE_componentWillMount() {
+    let retVal = await Location.getProviderStatusAsync()
+    if (!retVal.locationServicesEnabled) {
+      alert("Please enable your device's location service and try again.");
+      this.props.navigation.navigate("Transporter");
+    }
+
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     await this.setState({ hasCameraPermission: status === "granted" });
     await this.resetScanner();

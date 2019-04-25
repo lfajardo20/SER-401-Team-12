@@ -47,7 +47,13 @@ export default class gps extends React.Component {
   };
 
   //On view mount call asynch function to get location
-  componentWillMount() {
+  async UNSAFE_componentWillMount() {
+    await Location.getProviderStatusAsync().then(function (retVal) {
+      if (!retVal.locationServicesEnabled) {
+        alert("Please enable your device's location service and try again.");
+        this.props.navigation.navigate("Transporter");
+      }
+    });
     this.getLocationAsync();
   }
 
@@ -73,6 +79,13 @@ export default class gps extends React.Component {
 
     this.setState({ location });
 
+    await Location.getProviderStatusAsync().then(function (retVal) {
+      if (!retVal.locationServicesEnabled) {
+        alert("Please enable your device's location service and try again.");
+        this.props.navigation.navigate("Transporter");
+      }
+    });
+
   };
 
   render() {
@@ -97,6 +110,7 @@ export default class gps extends React.Component {
     else if (this.state.location != null) {
       //Need both gps and network to get a more accurate location
       if (this.state.GPSenabled || this.state.NetworkEnabled) {
+
         //Long list of comparing lat and long to get current location
         //Moving to a separate function will make it prettier, so I should do that.
         if (this.state.location.coords.latitude >= this.MainPREOP.Lat2 && this.state.location.coords.latitude <= this.MainPREOP.Lat) {
