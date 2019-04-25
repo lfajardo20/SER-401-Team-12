@@ -4,17 +4,19 @@ import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-ta
 
 import SchedulePage from "../schedule/schedulePage";
 //Export StaffScreen so App.js can call it for navigation
-export default class StaffScreen extends React.Component {
-	
+export default class StaffScreen extends React.Component {	
    constructor(props){
     super(props);
     this.id = ({"id": this.props.navigation.getParam("id")});
 	this.doPostAppData();
   }
   
-  static navigationOptions = {
-
-    title: "Staff",
+ //Reading the data (title) from the previous screen
+  //This is to set the title of the screen as the username
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam("title"),
+    };
   };
   
   state = {
