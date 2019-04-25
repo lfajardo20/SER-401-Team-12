@@ -7,11 +7,16 @@ import {
   PermissionsAndroid,
   AppState,
 } from "react-native";
+import { State } from "react-native-gesture-handler";
 
 //Export TransporterScreen so App.js can call it for navigation
 export default class TransporterScreen extends React.Component {
-  static navigationOptions = {
-    title: "Transporter",
+  //Reading the data (title) from the previous screen
+  //This is to set the title of the screen as the username
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam("title"),
+    };
   };
 
   doPostConfirmationTrue() {

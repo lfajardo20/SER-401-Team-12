@@ -16,7 +16,10 @@ import TransporterScreen from "./src/views/TransporterScreen";
 import StaffScreen from "./src/views/StaffScreen";
 import ConfirmationScreen from "./src/views/ConfirmationScreen";
 import SignupForm from "./src/signupForm";
-import { TextInput, RotationGestureHandler } from "react-native-gesture-handler";
+import {
+  TextInput,
+  RotationGestureHandler,
+} from "react-native-gesture-handler";
 import gps from "./src/gps";
 
 class HomeScreen extends React.Component {
@@ -81,7 +84,7 @@ class HomeScreen extends React.Component {
 
         //load view according to user type
         if (userType.match("doctor")) {
-          this.props.navigation.navigate("Staff", { id: objResponse.Data.accountId });
+		  this.props.navigation.navigate("Staff", {id:objResponse.Data.accountId, title:this.state.user});
         } else if (userType.match("transporter")) {
           this.props.navigation.navigate("Transporter");
         }
@@ -105,15 +108,18 @@ class HomeScreen extends React.Component {
     this.postLogin(info);
   };
   componentDidMount() {
-    AppState.addEventListener('change', this._handleAppStateChange);
+    AppState.addEventListener("change", this._handleAppStateChange);
   }
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
+    AppState.removeEventListener("change", this._handleAppStateChange);
   }
 
-  _handleAppStateChange = (nextAppState) => {
-    if (this.state.appState.match("inactive|background") && nextAppState === "active") {
+  _handleAppStateChange = nextAppState => {
+    if (
+      this.state.appState.match("inactive|background") &&
+      nextAppState === "active"
+    ) {
       //Almost done.
       //ERROR/BUG: If anything was typed on the login screen and go to a different screen
       //the text will stay in the text boxes even though we reset the view to the login.
@@ -122,7 +128,7 @@ class HomeScreen extends React.Component {
       this.props.navigation.navigate("Home");
       console.log("App is back from background.");
     }
-    this.setState({ appState: nextAppState })
+    this.setState({ appState: nextAppState });
   };
 
   render() {
