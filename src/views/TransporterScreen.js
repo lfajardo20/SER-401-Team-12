@@ -8,15 +8,20 @@ export default class TransporterScreen extends React.Component {
   //Reading the data (title) from the previous screen
   //This is to set the title of the screen as the username
   static navigationOptions = ({ navigation }) => {
-    return {
-      title: navigation.getParam("title"),
-    };
-  };
-  componentDidMount() {
     resetStack = StackActions.reset({
       index: 0,
       actions: [NavigationActions.navigate({ routeName: "Home" })],
     });
+    return {
+      title: navigation.getParam("title"),
+      headerLeft: (
+        <Button
+          onPress={() => navigation.dispatch(resetStack)}
+          title="Back" />
+      )
+    };
+  };
+  componentDidMount() {
     this.backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
       this.props.navigation.dispatch(resetStack);
       return true;
@@ -47,7 +52,7 @@ export default class TransporterScreen extends React.Component {
             isLoading: false,
             dataSource: responseJson,
           },
-          function() {
+          function () {
             //Testing functions go here
             this.props.navigation.navigate("Transporter");
           }

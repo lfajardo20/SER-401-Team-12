@@ -30,8 +30,17 @@ export default class StaffScreen extends React.Component {
   //Reading the data (title) from the previous screen
   //This is to set the title of the screen as the username
   static navigationOptions = ({ navigation }) => {
+    resetStack = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: "Home" })],
+    });
     return {
       title: navigation.getParam("title"),
+      headerLeft: (
+        <Button
+          onPress={() => navigation.dispatch(resetStack)}
+          title="Back" />
+      )
     };
   };
 
@@ -42,10 +51,6 @@ export default class StaffScreen extends React.Component {
   };
 
   componentDidMount() {
-    resetStack = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: "Home" })],
-    });
     this.backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
       this.props.navigation.dispatch(resetStack);
       return true;
@@ -124,8 +129,8 @@ export default class StaffScreen extends React.Component {
           {this.state.multipleRows ? (
             <Rows data={this.state.data} textStyle={styles.text} />
           ) : (
-            <Row data={this.state.data} textStyle={styles.text} />
-          )}
+              <Row data={this.state.data} textStyle={styles.text} />
+            )}
         </Table>
       </ScrollView>
     );
