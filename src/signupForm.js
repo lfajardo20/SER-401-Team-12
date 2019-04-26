@@ -15,7 +15,7 @@ export default class SignupForm extends React.Component {
     username: "",
     password: "",
     confirmation: "",
-    userType: "",
+    userType: "doctor",
     phoneNumber: "",
     errors: {},
     submitResponse: null,
@@ -94,17 +94,19 @@ export default class SignupForm extends React.Component {
         />
         <Text style={styles.errorText}>{errors.username} </Text>
 
-        <Text style={styles.textLabel}>Password</Text>
-        <TextInput style={styles.textInput}
-
+        <Text>Password</Text>
+        <TextInput
+          secureTextEntry={true}
+          style={styles.textInput}
           onChangeText={text => this.setState({ password: text })}
         //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.password} </Text>
 
-        <Text style={styles.textLabel}>Confirm Password</Text>
-        <TextInput style={styles.textInput}
-
+        <Text>Confirm Password</Text>
+        <TextInput
+          secureTextEntry={true}
+          style={styles.textInput}
           onChangeText={text => this.setState({ confirmation: text })}
         //style={styles.borderedField}
         />

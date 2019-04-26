@@ -97,7 +97,7 @@ class HomeScreen extends React.Component {
             title: this.state.user,
           });
         } else if (userType.match("transporter")) {
-          this.props.navigation.navigate("Transporter");
+          this.props.navigation.navigate("Transporter", { title: this.state.user });
         } else {
           Alert.alert(
             "Try Again",
