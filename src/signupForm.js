@@ -84,10 +84,11 @@ export default class SignupForm extends React.Component {
       );
     }
     return (
+
       <View style={styles.container}>
-        <Text>Username</Text>
-        <TextInput
-          style={styles.textInput}
+        <Text style={styles.textLabel}>Username</Text>
+        <TextInput style={styles.textInput}
+
           onChangeText={text => this.setState({ username: text })}
         //style={styles.borderedField}
         />
@@ -111,29 +112,31 @@ export default class SignupForm extends React.Component {
         />
         <Text style={styles.errorText}>{errors.confirmation} </Text>
 
-        <Text>Phone Number</Text>
-        <TextInput
-          style={styles.textInput}
+        <Text style={styles.textLabel}>Phone Number</Text>
+        <TextInput style={styles.textInput}
+
           onChangeText={text => this.setState({ phoneNumber: text })}
         //style={styles.borderedField}
         />
         <Text style={styles.errorText}>{errors.phoneNumber} </Text>
         <View style={styles.borderedPicker}>
+
           <Picker
             selectedValue={this.state.userType}
-            //style={styles.borderedPicker}
             onValueChange={(itemValue, itemIndex) =>
               this.setState({ userType: itemValue })
             }
           >
-            <Picker.Item label="Staff" value="doctor" />
-            <Picker.Item label="Transporter" value="transporter" />
+            <Picker.Item color='black' label="Staff" value="doctor" />
+            <Picker.Item color='black' label="Transporter" value="transporter" />
           </Picker>
         </View>
         <View style={styles.buttonStyle}>
-          <Button onPress={this.submitForm} title="Submit">
+          <Button color='red'
+            onPress={this.submitForm} title="Submit">
             Submit
-          </Button>
+        </Button>
+
         </View>
       </View>
     );
@@ -205,7 +208,7 @@ const styles = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#deeff2",
+    backgroundColor: '#DC143C',
     paddingTop: 22,
     alignItems: "center",
   },
@@ -224,7 +227,7 @@ const styles = StyleSheet.create({
     height: 44,
   },
   errorText: {
-    color: "red",
+    color: "white",
     fontSize: 8,
     marginBottom: 20,
   },
@@ -234,18 +237,22 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     width: "100%",
   },
+  textLabel: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
   borderedPicker: {
     //borderColor: "black",
-    //borderWidth: 2,
-    backgroundColor: "red",
+
     height: 50,
-    width: 100,
+    width: 150,
   },
   buttonStyle: {
     height: 40,
     width: 100,
     borderRadius: 20,
-    backgroundColor: "yellow",
-    marginTop: 150,
+    backgroundColor: "#FFFFFF",
+    marginTop: 80,
   },
 });

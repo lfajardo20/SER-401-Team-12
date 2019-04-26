@@ -11,14 +11,14 @@ export default class ScheduleDay extends React.Component {
     //turns JSON props into an array of objects usable by SectionList
     let sectionData = data.events.map(event => eventTranslator(event));
     return (
-      <View style={styles.container}>
-        <Text>{data.date}</Text>
+      <View style={{ backgroundColor: "#DC143C" }}>
+        <Text style={{ color: 'white' }}>{data.date}</Text>
         <SectionList
           renderItem={({ item, index }) => (
             <ScheduleEvent key={index} event={item} style={styles.item} />
           )}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={{ fontWeight: "bold" }}>{title}</Text>
+            <Text style={{ fontWeight: "bold", color: 'white' }}>{title}</Text>
           )}
           sections={sectionData}
           keyExtractor={(item, index) => item + index}
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 22,
+    backgroundColor: "#DC143C"
   },
   sectionHeader: {
     paddingTop: 2,
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(247,247,247,1.0)",
   },
   item: {
+    color: "white",
     padding: 10,
     fontSize: 18,
     height: 44,

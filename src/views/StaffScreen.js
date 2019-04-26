@@ -1,21 +1,6 @@
 import React, { Component } from "react";
-import {
-  Button,
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  BackHandler,
-} from "react-native";
-import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-  Col,
-  Cols,
-  Cell,
-} from "react-native-table-component";
+import {Button, View, Text, StyleSheet, ScrollView, BackHandler,} from "react-native";
+import {Table, TableWrapper, Row, Rows, Col, Cols, Cell} from "react-native-table-component";
 import { StackActions, NavigationActions } from "react-navigation";
 
 import SchedulePage from "../schedule/schedulePage";
