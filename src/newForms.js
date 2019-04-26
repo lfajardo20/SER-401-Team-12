@@ -43,7 +43,7 @@ export default class NewForms extends React.Component {
     //TODO: Fetch to the API
     fetch(url, {
       method: "POST",
-      mode: "cors",
+      mode: "no-cors",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
@@ -57,6 +57,8 @@ export default class NewForms extends React.Component {
       .catch(error => {
         console.log(error);
       });
+
+    window.location.reload();
   }
 
   submitUser(event) {
@@ -83,7 +85,7 @@ export default class NewForms extends React.Component {
 
     fetch(url, {
       method: "POST",
-      mode: "cors",
+      mode: "no-cors",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
@@ -97,6 +99,8 @@ export default class NewForms extends React.Component {
       .catch(error => {
         console.log(error);
       });
+
+    window.location.reload();
   }
 
   submitPatient(event) {
@@ -114,7 +118,7 @@ export default class NewForms extends React.Component {
 
     fetch(url, {
       method: "POST",
-      mode: "cors",
+      mode: "no-cors",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
@@ -128,7 +132,9 @@ export default class NewForms extends React.Component {
       .catch(error => {
         console.log(error);
       });
-  };
+
+    window.location.reload();
+  }
 
   render() {
     const { type } = this.props;
@@ -142,14 +148,21 @@ export default class NewForms extends React.Component {
           <h3>Adding a new Patient:</h3>
           <form onSubmit={this.submitPatient}>
             First Name
-            <input id="firstname" name="firstname" placeholder="First Name" required
+            <input
+              id="firstname"
+              name="firstname"
+              placeholder="First Name"
+              required
             />
             Last Name
-            <input id="lastname" name="lastname" placeholder="Last Name" required
+            <input
+              id="lastname"
+              name="lastname"
+              placeholder="Last Name"
+              required
             />
             Age
-            <input id="age" name="age"
-            />
+            <input id="age" name="age" />
             Sex
             <select id="sex" name="sex">
               <option value="M" id="sex" name="sex">
