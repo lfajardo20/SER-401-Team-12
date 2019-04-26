@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Button, View, Text } from "react-native";
+import { Button, View, Text, BackHandler } from "react-native";
 import { State } from "react-native-gesture-handler";
+import { StackActions, NavigationActions } from "react-navigation";
 
 //Export TransporterScreen so App.js can call it for navigation
 export default class TransporterScreen extends React.Component {
@@ -11,34 +12,56 @@ export default class TransporterScreen extends React.Component {
       title: navigation.getParam("title"),
     };
   };
-  
+
+  componentDidMount() {
+    resetStack = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: "Home" })],
+    });
+    this.backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
+      this.props.navigation.dispatch(resetStack);
+      return true;
+    });
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove();
+  }
+
   doPostConfirmationTrue() {
     this.confirmationObj.location = this.state.loc;
     alert(JSON.stringify(this.confirmationObj));
-    return fetch("https://k634ch08g9.execute-api.us-west-1.amazonaws.com/test",
+    return fetch(
+      "https://k634ch08g9.execute-api.us-west-1.amazonaws.com/test",
       {
-        method: "POST", headers:
-          { Accept: "application/json", "Content-Type": "application/json" }
-        , body: JSON.stringify(this.confirmationObj),
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(this.confirmationObj),
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState(
+          {
+            isLoading: false,
+            dataSource: responseJson,
+          },
+          function() {
+            //Testing functions go here
+            this.props.navigation.navigate("Transporter");
+          }
+        );
       })
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson,
-        }, function () {
-          //Testing functions go here
-          this.props.navigation.navigate("Transporter");
-        });
-      })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
 
     // Change screen after post
   }
-  
+
   render() {
     const { navigate } = this.props.navigation;
     return (
