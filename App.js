@@ -79,9 +79,16 @@ class HomeScreen extends React.Component {
       .then(responseJson => {
         console.log(JSON.stringify(info));
         console.log(JSON.stringify(responseJson));
-
         objResponse = JSON.parse(JSON.stringify(responseJson));
-        userType = objResponse.Data.userType; //payload response with the usertype
+        arr = Object.keys(objResponse);
+        arr = '"' + arr[0] + '"';
+
+        if (arr.match("Data")) {
+          console.log("You typed the correct usr/pwd");
+          userType = objResponse.Data.userType; //payload response with the usertype
+        } else {
+          userType = "";
+        }
 
         //load view according to user type
         if (userType.match("doctor")) {
@@ -93,8 +100,8 @@ class HomeScreen extends React.Component {
           this.props.navigation.navigate("Transporter");
         } else {
           Alert.alert(
+            "Try Again",
             "Incorrect username or password",
-            "My Alert Msg",
             [{ text: "Ok" }],
             {
               cancelable: false,
