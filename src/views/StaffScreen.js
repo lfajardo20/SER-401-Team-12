@@ -37,9 +37,13 @@ export default class StaffScreen extends React.Component {
     return {
       title: navigation.getParam("title"),
       headerLeft: (
-        <Button
-          onPress={() => navigation.dispatch(resetStack)}
-          title="Back" />
+        <View style={{ marginLeft: 8 }}>
+          <Button
+            style={{ color: "white" }}
+            color="red"
+            onPress={() => navigation.dispatch(resetStack)}
+            title="Back" />
+        </View>
       )
     };
   };
@@ -138,7 +142,7 @@ export default class StaffScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 8, paddingTop: 30, backgroundColor: "#fff" },
+  container: { flex: 1, padding: 8, paddingTop: 30, backgroundColor: '#DC143C' },
   head: { height: 40, backgroundColor: "#c53b43" },
-  text: { margin: 3 },
+  text: { margin: 3, color: 'white' },
 });

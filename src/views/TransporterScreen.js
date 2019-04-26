@@ -15,9 +15,13 @@ export default class TransporterScreen extends React.Component {
     return {
       title: navigation.getParam("title"),
       headerLeft: (
-        <Button
-          onPress={() => navigation.dispatch(resetStack)}
-          title="Back" />
+        <View style={{ marginLeft: 8 }}>
+          <Button
+            style={{ color: "white" }}
+            color="red"
+            onPress={() => navigation.dispatch(resetStack)}
+            title="Back" />
+        </View>
       )
     };
   };
