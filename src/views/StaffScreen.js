@@ -1,6 +1,21 @@
 import React, { Component } from "react";
-import {Button, View, Text, StyleSheet, ScrollView, BackHandler,} from "react-native";
-import {Table, TableWrapper, Row, Rows, Col, Cols, Cell} from "react-native-table-component";
+import {
+  Button,
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  BackHandler,
+} from "react-native";
+import {
+  Table,
+  TableWrapper,
+  Row,
+  Rows,
+  Col,
+  Cols,
+  Cell,
+} from "react-native-table-component";
 import { StackActions, NavigationActions } from "react-navigation";
 
 import SchedulePage from "../schedule/schedulePage";
@@ -74,7 +89,7 @@ export default class StaffScreen extends React.Component {
           this.setState({
             multipleRows: true,
           });
-        } else {
+        } else if (objResponse.results.length == 1) {
           Obj2dArray = [
             objResponse.results[0].date
               .replace("T", " ")
@@ -84,8 +99,9 @@ export default class StaffScreen extends React.Component {
             objResponse.results[0].mrNumber,
             objResponse.results[0].accountNum,
           ];
+        } else {
+          Obj2dArray = [];
         }
-
         this.setState({
           data: Obj2dArray,
         });
