@@ -5,9 +5,10 @@ import {
   Text,
   StyleSheet,
   PermissionsAndroid,
+  Alert,
   AppState,
 } from "react-native";
-import LinearGradient from 'react-native-linear-gradient';
+import LinearGradient from "react-native-linear-gradient";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 //Need to import each of the used view classes
@@ -78,15 +79,34 @@ class HomeScreen extends React.Component {
       .then(responseJson => {
         console.log(JSON.stringify(info));
         console.log(JSON.stringify(responseJson));
+        objResponse = JSON.parse(JSON.stringify(responseJson));
+        arr = Object.keys(objResponse);
+        arr = '"' + arr[0] + '"';
 
-		    objResponse = JSON.parse(JSON.stringify(responseJson));
-        userType = objResponse.Data.userType; //payload response with the usertype
+        if (arr.match("Data")) {
+          console.log("You typed the correct usr/pwd");
+          userType = objResponse.Data.userType; //payload response with the usertype
+        } else {
+          userType = "";
+        }
 
         //load view according to user type
         if (userType.match("doctor")) {
-		  this.props.navigation.navigate("Staff", {id:objResponse.Data.accountId, title:this.state.user});
+          this.props.navigation.navigate("Staff", {
+            id: objResponse.Data.accountId,
+            title: this.state.user,
+          });
         } else if (userType.match("transporter")) {
           this.props.navigation.navigate("Transporter");
+        } else {
+          Alert.alert(
+            "Try Again",
+            "Incorrect username or password",
+            [{ text: "Ok" }],
+            {
+              cancelable: false,
+            }
+          );
         }
       })
       .catch(error => {
@@ -141,7 +161,7 @@ class HomeScreen extends React.Component {
           <Text style={styles.textNav}>Username</Text>
           <TextInput
             //style={styles.textNav}
-            style={{color:'white'}}
+            style={{ color: "white" }}
             placeholder="Enter username..."
             placeholderTextColor="#DCDCDC"
             onChangeText={user => this.setState({ user })}
@@ -150,7 +170,7 @@ class HomeScreen extends React.Component {
           <Text style={styles.textNav}>Password</Text>
           <TextInput
             //style={styles.textNav}
-            style={{color:'white'}}
+            style={{ color: "white" }}
             secureTextEntry={true}
             placeholder="Enter password..."
             placeholderTextColor="#DCDCDC"
@@ -160,16 +180,18 @@ class HomeScreen extends React.Component {
         </View>
         <View style={styles.buttonStyle}>
           <Button
-          style={{color:'white', shadowOpacity: 0}}
-          color='red'
-          onPress={this.validateUser} title="Login">
+            style={{ color: "white", shadowOpacity: 0 }}
+            color="red"
+            onPress={this.validateUser}
+            title="Login"
+          >
             Login
           </Button>
-          </View>
+        </View>
         <View style={styles.buttonStyle}>
           <Button
-            style={{color:'white', elevation: 0}}
-            color='red'
+            style={{ color: "white", elevation: 0 }}
+            color="red"
             title="Create new account"
             onPress={() => this.props.navigation.navigate("Signup")}
           />
@@ -181,26 +203,26 @@ class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'#DC143C',
-    alignItems: 'center',
-    justifyContent: "center"
+    backgroundColor: "#DC143C",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  textNav:{
-    color: '#FFFFFF',
-    fontWeight: 'bold',
+  textNav: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
     fontSize: 20,
   },
-  buttonStyle:{
+  buttonStyle: {
     height: 40,
-    width:'50%',
-    borderRadius:20,
-    backgroundColor : '#FFFFFF',
-    fontWeight: 'bold',
-    marginTop :10,
+    width: "50%",
+    borderRadius: 20,
+    backgroundColor: "#FFFFFF",
+    fontWeight: "bold",
+    marginTop: 10,
   },
-  buttontextColor:{
-    color: 'red',
-    fontWeight: 'bold',
+  buttontextColor: {
+    color: "red",
+    fontWeight: "bold",
   },
 });
 
